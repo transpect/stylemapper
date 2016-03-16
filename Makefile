@@ -97,7 +97,7 @@ stylemapper:
 	@echo "Makefile target: stylemapper"
 	@echo ""
 	HEAP=$(HEAP) $(CALABASH) -D \
-		$(call get-uri,lib/xpl/fileprocessor.xpl)\
+		$(call get-uri,stylemapper-lib/xpl/fileprocessor.xpl)\
 		file=$(IN_FILE_COPY) \
 		template=$(TEMPLATE) \
 		status-dir-uri=$(STATUS_DIR_URI) \

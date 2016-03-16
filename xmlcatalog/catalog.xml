@@ -3,7 +3,7 @@
   
   <rewriteURI uriStartString="http://this.transpect.io/" rewritePrefix="../"/>
   <rewriteURI uriStartString="http://customers.le-tex.de/generic/book-conversion/" rewritePrefix="../"/>
-  <nextCatalog catalog="../lib/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../stylemapper-lib/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../idml2xml/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../xproc-util/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../hub2html/xmlcatalog/catalog.xml"/>
@@ -17,5 +17,5 @@
   <nextCatalog catalog="../xslt-util/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../docx2hub/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../idml2xml/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../docx_modify/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../docx_modify-lib/xmlcatalog/catalog.xml"/>
 </catalog>
