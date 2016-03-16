@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping-set>
+    <mapping name="OrangeText" priority="4" target-type="para" target-style="Select Target"
+        remove-adhoc="">
+        <prop name="color" relevant="true" regex="" max-value="rgb(255, 163, 102)"
+            min-value="rgb(94, 61, 40)" color-min-h="23" color-min-s="40" color-min-l="26"
+            color-max-h="24" color-max-s="100" color-max-l="70"/>
+    </mapping>
+    <mapping name="ArialFont" priority="3" target-type="para" target-style="Select Target"
+        remove-adhoc="">
+        <prop name="font-family" relevant="true" regex="" value="Arial" max-value="" min-value=""/>
+    </mapping>
+    <mapping name="ItalicStyle" priority="2" target-type="para" target-style="Select Target"
+        remove-adhoc="">
+        <prop name="font-style" relevant="true" regex="" value="italic" max-value="" min-value=""/>
+    </mapping>
+    <mapping name="BoldAndBig" priority="1" target-type="para" target-style="Select Target"
+        remove-adhoc="">
+        <prop name="font-size" relevant="true" regex="" value="" max-value="18pt" min-value="15pt"/>
+        <prop name="font-weight" relevant="true" regex="" value="bold" max-value="" min-value=""/>
+    </mapping>
+    <mapping name="Mapping1" priority="5" target-type="para" target-style="" remove-adhoc="">
+        <prop name="color" relevant="true" max-value="rgb(61, 74, 198)" min-value="rgb(52, 108, 113)" color-min-h="185" color-min-s="37" color-min-l="32" color-max-h="234" color-max-s="55" color-max-l="51"></prop>
+    </mapping>
+    <mapping name="FontRange13-14" priority="6" target-type="para" target-style="" remove-adhoc="">
+      <prop name="font-size" relevant="true" min-value="13pt" max-value="15pt"/>
+    </mapping>
+  <mapping name="InlineCalibri" priority="7" target-type="inline" target-style="" remove-adhoc="">
+    <prop name="font-family" relevant="true" value="Calibri"/>
+  </mapping>
+  <mapping name="Mapping8" priority="8" target-type="para" target-style="" remove-adhoc="">
+    <prop name="font-size" relevant="true" min-value="10pt" max-value="14pt"/>
+    <prop name="color" relevant="true" value="rgb(79, 129, 189)" color-h="213" color-s="45" color-l="53"/>
+  </mapping>
+</mapping-set>
