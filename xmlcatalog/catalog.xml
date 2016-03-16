@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  
+  <rewriteURI uriStartString="http://this.transpect.io/" rewritePrefix="../"/>
+  <rewriteURI uriStartString="http://customers.le-tex.de/generic/book-conversion/" rewritePrefix="../"/>
+  <nextCatalog catalog="../lib/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../idml2xml/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../xproc-util/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../hub2html/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../cascade/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../map-style-names/xmlcatalog/catalog.xml"/>
+  <!--<nextCatalog catalog="../css-expand/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../css-generate/xmlcatalog/catalog.xml"/>
+  --><nextCatalog catalog="../schema/Hub/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../schema/xhtml1/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../schema/iso-schematron/catalog.xml"/>
+  <nextCatalog catalog="../xslt-util/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../docx2hub/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../idml2xml/xmlcatalog/catalog.xml"/>
+  <nextCatalog catalog="../docx_modify/xmlcatalog/catalog.xml"/>
+</catalog>

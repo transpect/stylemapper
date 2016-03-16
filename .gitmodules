@@ -1,0 +1,24 @@
+[submodule "calabash"]
+	path = calabash
+	url = https://github.com/transpect/calabash-frontend.git
+[submodule "xproc-util"]
+	path = xproc-util
+	url = https://github.com/transpect/xproc-util.git
+[submodule "cascade"]
+	path = cascade
+	url = https://github.com/transpect/cascade.git
+[submodule "xslt-util"]
+	path = xslt-util
+	url = https://github.com/transpect/xslt-util.git
+[submodule "docx_modify-lib"]
+	path = docx_modify-lib
+	url = https://github.com/transpect/docx_modify-lib.git
+[submodule "hub2html"]
+	path = hub2html
+	url = https://github.com/transpect/hub2html.git
+[submodule "idml2xml"]
+	path = idml2xml
+	url = https://github.com/transpect/idml2xml.git
+[submodule "stylemapper-lib"]
+	path = stylemapper-lib
+	url = https://github.com/transpect/stylemapper-lib.git

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html>
+  
+  <head class="sm-head">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>Stylemapper</title>
+    <link href="externals/jquery-colorpicksliders/jquery.colorpickersliders.css" rel="stylesheet"
+      type="text/css" />
+    <link href="externals/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="stylemapper.css" rel="stylesheet" type="text/css"/>
+   <!-- <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css" />
+    <link href="externals/tracelytics-pageguide-d820679/dist/css/pageguide.min.css" rel="stylesheet"
+      type="text/css" />-->
+    <style id="style-container" type="text/css"></style>
+    
+  </head>
+  <body>
+    <div id="header" class="navbar navbar-default navbar-fixed-top">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div id="logo" class="col-sm-3 col-md-3 col-lg-3"><div></div></div>
+        <div id="headernav" class="col-xs-12 col-sm-9 col-lg-9 col-md-9">
+          <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 wf">
+              <div class="wfc">
+                <div class="wstep3 wfc1">
+                  <form id="docxfile" enctype="multipart/form-data" class="wstep1 wfc1">
+                    <div class="step">Upload a Document <a class="my-popover" data-toggle="popover" tabindex="0"
+                  data-trigger="hover" title="1. Step: Upload a Word or IDML File" data-container="body"
+                  data-content="Select a DOCX or a IDML document from your local storage for the conversion via the CHOOSE A FILE.. BUTTON. &lt;br&gt; Upload it via the UPLOAD BUTTON." data-html='true'
+                  ><span class="glyphicon glyphicon-info-sign"></span></a><span id="dotsstep1"></span></div>
+                    <input id="upload-doc" class="inputfile" name="input_file"
+                      type="file"></input>
+                    <label for="upload-doc" class="label1"><span class="btn btn-default btn-inline"><span>Choose a file...</span></span></label>
+                    <button id="step1" type="submit" class="btn btn-default btn-inline btnwf2"
+                      >Upload</button>
+                  </form>
+                </div>
+                <div class="triangle"><span class="trisym glyphicon glyphicon-triangle-right"></span></div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 wf">
+              <div class="wfc">
+                <div class="wstep4 wfc1">
+                  <div class="step createrules">Create or Import Mapping Rules <a class="my-popover" data-toggle="popover" tabindex="0"
+                  data-trigger="hover" title="2. Step: Create or Import Mapping Rules" data-container="body"
+                  data-content="Create mapping rules via the CREATE RULE BUTTON or import existent mapping rules via the IMPORT MAPPING RULES BUTTON to map styles." data-html='true'
+                  ><span class="glyphicon glyphicon-info-sign"></span></a><span id="dotsstep2"></span></div>
+                  <button id="create-rule" class="btn btn-default">Create</button>
+                  <input name="file" id="mapping-import" class="mrstep1 inputfile" type="file"></input>
+                  <label for="mapping-import" class="label2"><span class="btn btn-default btn-inline"><span>Choose a file...</span></span></label>
+                  <button id="step2" class="btn btn-default">Import
+                  </button>
+                </div>
+                <div class="triangle"><span class="trisym glyphicon glyphicon-triangle-right"></span></div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 wf">
+              <div class="wfc">
+                <div class="wstep5 wfc3">
+                  <div class="step">Apply Mapping Rules <a class="my-popover" data-toggle="popover" tabindex="0"
+                  data-trigger="hover" title="3. Step: Apply Mapping Rules" data-container="body"
+                  data-content="Press the APPLY MAPPING RULES to complete the mapping workflow and let the stylemapper do its magic." data-html='true'
+                  ><span class="glyphicon glyphicon-info-sign"></span></a><span id="dotsstep3"></span></div>
+                  <div class="btnwf3c" role="group" aria-label="...">
+                    <button class="btn btn-default btnwf3" id="step3">Apply</button>
+                  </div>
+                </div>
+                <div class="dlc">
+                  <div class="triangledl"><span class="trisym glyphicon glyphicon-download"></span></div>
+                  <div>Download Results <a class="my-popover" data-toggle="popover" tabindex="0"
+                  data-trigger="hover" title="Download Area" data-placement="left"
+                  data-content="Here you will receive your mapping rules as a XML file and a modified version of your input Word or IDML file" data-html='true'
+                  ><span class="glyphicon glyphicon-info-sign"></span></a></div>
+                  <div id="download" class="btnwf3dl">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <div id="progress-bar"><div id="progress1" class="progress"></div><div id="progress2" class="progress"></div><div id="progress3" class="progress"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div id="sidebar-wrapper" class="col-sm-4 col-md-3 col-lg-3">
+        <div id="menu" class="col-sm-12 col-md-12 col-lg-12">
+          <div id="rule" class="navpoint clickable "><h1 class="navhl">Rule Editor</h1><span class="glyphicon glyphicon-menu-left navsym"></span></div>
+          <div id="rule1">
+            <table id="mapping" class="table table-striped table-condensed">
+              <tr class="estep3">
+                <td>Name*:</td>
+                <td><input class="form-control" id="name" value="" /></td>
+              </tr>
+              <tr class="estep4">
+                <td>Priority*</td>
+                <td><input class="form-control" type="number" min="0" max="0" step="1" id="priority"/></td>
+              </tr>
+              <tr class="estep5">
+                <td>Target Type*</td>
+                <td><select class="form-control" id="target-type" value="">
+                  <option value="" selected="" disabled="">Select Target Type</option>
+                  <option value="para">para</option>
+                  <option value="inline">inline</option>
+                </select></td>
+              </tr>
+              <tr class="estep6">
+                <td>Target Style <a class="my-popover" data-toggle="popover" tabindex="0"
+                  data-trigger="hover" title="What means target style?"
+                  data-content="Its a new style you can select from template document for the matching elements.">
+                  <span class="glyphicon glyphicon-info-sign"></span></a></td>
+                <td><select class="form-control" id="target-style" value="">
+                  <option value="" selected="" disabled="">Select Target Style First</option>
+                </select></td>
+              </tr>
+              <tr class="estep7">
+                <td>Remove Ad Hoc <a class="my-popover" data-toggle="popover" tabindex="0"
+                  data-trigger="hover" title="Removing External(Ad Hoc) Style Properties"
+                  data-content="Choose one or more properties whose will be deleted during the mapping process."
+                  ><span class="glyphicon glyphicon-info-sign"></span></a></td>
+                <td><span id="expandboxes" class="clickable"><span
+                  class="glyphicon glyphicon-triangle-right"></span><span>Show
+                    Properties</span></span>
+                  <span id="collapseboxes" class="clickable"><span
+                    class="glyphicon glyphicon-triangle-bottom"></span><span>Hide
+                      Properties</span></span>
+                  <ul id="remove-adhoc"></ul></td>
+              </tr>
+              <tr>
+                <td>Properties</td>
+                <td><ul id="properties"></ul></td>
+              </tr>
+            </table><div id="add-prop" class="navpoint subnavpoint clickable"><h2 class="navhl">Rule
+              Property </h2><a class="my-popover" data-toggle="popover" tabindex="0"
+                data-trigger="hover" title="New rule property"
+                data-content="Click on this bar to set up a new rule property."><span
+                  class="glyphicon glyphicon-info-sign"></span></a>
+              <span class="glyphicon glyphicon-menu-left estep8 navsym"></span></div><div
+                id="add-prop1">
+                <table id="prop_form" class="table table-striped table-condensed">
+                  <tr class="estep10">
+                    <td>Name*:</td>
+                    <td><select id="pname" class="form-control" value=""></select></td>
+                  </tr>
+                  <tr class="estep11">
+                    <td id="value_check1">Value*</td>
+                    <td><input id="pvalue" type="text" class="form-control valgroup val1" value="" /></td>
+                  </tr>
+                  <tr class="estep12 minv">
+                    <td id="value_check2">Minimum Value*</td>
+                    <td><input id="pmin-value" type="text" class="form-control valgroup val2" value="" /></td>
+                  </tr>
+                  <tr class="estep13 maxv">
+                    <td>Maximum Value*</td>
+                    <td><input id="pmax-value" type="text" class="form-control valgroup val2" value="" /></td>
+                  </tr>
+                  <tr class="estep14">
+                    <td>Filter By Regex <a class="my-popover" data-toggle="popover" tabindex="0"
+                      data-trigger="hover" title="Filter by regular expression"
+                      data-content="Type in a regular expression to match styles by filtered property values."
+                      ><span class="glyphicon glyphicon-info-sign"></span></a></td>
+                    <td><input id="pregex" class="form-control valgroup val3" type="text" value="" /></td>
+                  </tr>
+                  <tr class="estep15">
+                    <td>Is it Relevant? <a class="my-popover" data-toggle="popover" tabindex="0"
+                      data-trigger="hover" title="Does the rule property matter?"
+                      data-content="Decide whether the rule property is active during the matching process or not."
+                      ><span class="glyphicon glyphicon-info-sign"></span></a></td>
+                    <td><select id="prelevant" class="form-control">
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
+                    </select></td>
+                  </tr>
+                </table><p id="prop-buttons" class="right"><button id="attach-prop"
+                  class="btn btn-sm btn-default estep9">Add</button><button id="change-prop"
+                    class="btn btn-sm btn-default estep9">Change</button><button id="discard-prop"
+                      class="btn btn-sm btn-default estep9">Discard</button></p> </div><p
+                        class="right"><button class="btn btn-sm btn-default estep2" id="save-map"
+                          >Save</button><button id="change-map"
+                            class="btn btn-sm btn-default">Change</button><button id="discard-map"
+                              class="btn btn-sm btn-default">Discard</button></p>
+              </div>
+            <div id="rules" class="navpoint clickable "><h1 class="navhl">Rules</h1><span class="glyphicon glyphicon-menu-left navsym"></span></div>
+            <div id="rules1" class="inner-content mstep2">
+              <table class="table table-striped table-condensed"><thead><tr><th class="center">Priority</th><th>Rule</th><th class="center">Properties</th><th class="center"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"><span></span></span></th><th class="center"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"><span><input type="checkbox" class="preview-all"/></span></span></th></tr></thead><tbody class="sortable mapping-rules ui-sortable"></tbody></table>
+              <p class="right">
+                <button class="btn btn-sm btn-default estep2" id="download-rules">Download Rules</button>
+              </p>
+            </div>
+            <div id="insp" class="navpoint clickable "><h1 class="navhl">Inspector</h1><span class="glyphicon glyphicon-menu-left navsym"></span></div>
+          </div>
+          <div id="insp1" class="col-sm-12 col-md-12 col-lg-12">
+            <div id="insptable"><h1 class="navhl">Inspected style Properties</h1><span class="glyphicon glyphicon-info-sign" title="No inspected styles yet." data-content="You have nothing inspected, yet. Click on the document elements of your uploaded document to get style information."></span><span id="remove-insp" class="glyphicon glyphicon-remove navsym clickable"></span></div>
+            <div id="insp-options" class="navpoint subnavpoint clickable"><h2 class="navhl">Options</h2><span class="glyphicon glyphicon-menu-left navsym"/></div>
+            <div id="insp-options1">
+              <label class="control-label">Remove Ad Hoc Styles</label>
+              <input id="hide-adhoc" type="checkbox" value="false" class="form-group"/>
+            </div>
+            <p id="breadcrumbs"></p>
+            <div id="style-info"></div>
+            <table class="inspect-prop table table-striped table-condensed"><thead><tr><th>Property</th><th>Value</th><th>Add</th></tr></thead><tbody>
+            </tbody></table>
+          </div>
+        </div>
+             <div id="main-wrapper" class="col-sm-8 col-md-9 col-lg-9 pull-right">
+          <div id="sm-content" class="istep1 wstep2">
+            <div id="delete-content"><span class="glyphicon glyphicon-remove clickable"></span></div>
+            <div id="sm-page">
+<!--              THE PLACE FOR THE CONTENT              -->
+            </div>
+          </div>
+        </div>
+    </div>
+      <div id="help"><label class="label label-default clickable">Help</label></div>
+      <div id="ajax-temp"></div>
+      <div id="status"></div>
+      <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
+        aria-labelledby="Information">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content"> </div></div></div>
+      <script type="text/javascript" src="externals/jquery-2.1.3.js"></script>
+      <script type="text/javascript" src="externals/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="externals/jquery-ui.min.js"></script> <!--Only using sortable. Notice: optimizing jquery ui-package-->
+      <!--   <script type="text/javascript" src="externals/tracelytics-pageguide-d820679/dist/js/pageguide.min.js"></script>-->
+      <script type="text/javascript" src="externals/jquery-colorpicksliders/tinycolor.js"></script>
+      <script type="text/javascript" src="externals/jquery-colorpicksliders/jquery.colorpickersliders.js"></script>
+      <script type="text/javascript" src="stylemapper.js"></script>
+  </body>
+</html>
