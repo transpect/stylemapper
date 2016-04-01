@@ -138,3 +138,4 @@ clean_deploy:
 
 deploy: clean_deploy
 	cp -r /cygdrive/d/Praktikum/stylemapper/frontend/html/* /cygdrive/d/Programme/XAMPP/htdocs/
+
