@@ -6,7 +6,6 @@ $(document).ready( function(){
          return String.prototype.indexOf.apply(this, arguments) !== -1;
      };
 }*/
-
 Prop = function (){
   this.name = '';
   this.value = '';
@@ -34,6 +33,28 @@ Prop = function (){
   this.backgroundcolormaxs = '';
   this.backgroundcolormaxl = '';
 };
+example_target_styles = `<w:styles xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:ct="http://schemas.openxmlformats.org/package/2006/content-types">
+  <w:style target-type="para" w:type="paragraph" w:styleId="Standard"/>
+  <w:style target-type="para" w:type="paragraph" w:styleId="berschrift1"/>
+  <w:style target-type="para" w:type="paragraph" w:styleId="berschrift7"/>
+  <w:style target-type="para" w:type="paragraph" w:styleId="berschrift8"/>
+  <w:style target-type="inline" w:type="character" w:styleId="Absatz-Standardschriftart"/>
+  <w:style target-type="inline" w:type="table" w:styleId="NormaleTabelle"/>
+  <w:style target-type="inline" w:type="numbering" w:styleId="KeineListe"/>
+  <w:style target-type="inline" w:type="character" w:styleId="WW8Num7z0"/>
+  <w:style target-type="inline" w:type="character" w:styleId="mw-headline"/>
+  <w:style target-type="inline" w:type="character" w:styleId="longtext1"/>
+  <w:style target-type="inline" w:type="character" w:styleId="mediumtext1"/>
+  <w:style target-type="para" w:type="paragraph" w:styleId="berschrift"/>
+  <w:style target-type="para" w:type="paragraph" w:styleId="Textkrper"/>
+  <w:style target-type="para" w:type="paragraph" w:styleId="Liste"/>
+  <w:style target-type="para" w:type="paragraph" w:styleId="Dokumentstruktur1"/>
+  <w:style target-type="para" w:type="paragraph" w:styleId="Textkrper21"/>
+  <w:style target-type="para" w:type="paragraph" w:styleId="TabellenInhalt"/>
+  <w:style target-type="para" w:type="paragraph" w:styleId="Tabellenberschrift"/>
+  <w:style target-type="inline" w:type="character" w:styleId="TextkrperZchn"/>
+</w:styles>`
 Mapping = function(){
   this.name;
   this.priority;
@@ -45,10 +66,12 @@ Mapping = function(){
 count = 0;
 temp_props = [];
 $inspector = $('#insp1');
-$menu = $('#menu');
+$menu = $('#sm-menu');
 $sidebar = $('#sidebar-wrapper');
 $header = $('#header');
 $doc = $('#main-wrapper');
+$con_menu = $('#menu');
+$sub_menu = $('#sub-menu');
 timedrequest = null;
 resultListURI = "";
 target_styles = '';
@@ -58,7 +81,11 @@ base_uri = 'https://transpect.le-tex.de/data/stylemapper/'
 cssstyles = ['color'];
 templateuri = '';
 actual_mappings = $('#rules').find('a');
-
+con_menu_state = 0;
+sub_menu_state = 0;
+con_menu_pos = 0;
+con_menu_pos_x = 0;
+con_menu_pos_y = 0;
 /* observers for rule property list and pagecontent ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var propobserver =  new MutationObserver(function (mutations) {
     mutations.forEach(function(mutation) {
@@ -111,6 +138,7 @@ modal_form = "<div class='modal fade bs-example-modal-sm' tabindex='-1' role='di
                 "<div class='modal-dialog modal-sm'>"+
                 "<div class='modal-content'>"+"</div></div></div>"
 mapping_set = document.createElement('mapping-set');
+/* function section ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function hideAdhoc(){
   var element_arr = $('#sm-page').find('*[style]');
   $.each(element_arr, function(){
@@ -236,22 +264,29 @@ function xhrReadyStateHandler() {
   }
 }
 function checkSize(){
-    $sidebar.css('padding-top', (parseFloat($header.height()) + 1)+ 'px');
-    if ($(window).width() > '768'){
-      $doc.css('margin-top', (parseFloat($header.height()) + 1)+ 'px');
+    if ($sidebar.css('display') == "block"){
+       if ($inspector.css('display') == 'none'){
+         $sidebar[0].className = 'col-sm-4 col-md-3 col-lg-3';
+         $menu[0].className = 'col-sm-12 col-md-12 col-lg-12';
+         $doc[0].className = 'col-sm-8 col-md-9 col-lg-9 pull-right';
+       }
+       else{
+           $sidebar[0].className = 'col-sm-6 col-md-5 col-lg-5';
+           $inspector[0].className = 'col-xm-12 col-sm-6 col-md-5 col-lg-5';
+           $menu[0].className = 'col-sm-6 col-md-7 col-lg-7';
+           $doc[0].className = 'col-sm-6 col-md-7 col-lg-7 pull-right';    
+       }      
+      }
+    else{
+         $sidebar[0].className = 'col-sm-0 col-md-0 col-lg-0';
+         $doc[0].className = 'col-sm-12 col-md-12 col-lg-12';
     }
-    if ($(window).width() < '1480'){
-     if ($inspector.css('display') == 'none'){
-       $sidebar[0].className = 'col-sm-4 col-md-3 col-lg-3';
-       $menu[0].className = 'col-sm-12 col-md-12 col-lg-12';
-       $doc[0].className = 'col-sm-8 col-md-9 col-lg-9 pull-right';
-     }
-     else{
-         $sidebar[0].className = 'col-sm-6 col-md-5 col-lg-5';
-         $inspector[0].className = 'col-xm-12 col-sm-6 col-md-5 col-lg-5';
-         $menu[0].className = 'col-sm-6 col-md-7 col-lg-7';
-         $doc[0].className = 'col-sm-6 col-md-7 col-lg-7 pull-right';    
-     }      
+    if ($header.css('display') == "block"){
+    $doc.css('margin-top', (parseFloat($header.height()) + 1)+ 'px');
+    $sidebar.css('padding-top', (parseFloat($header.height()) + 1)+ 'px');
+    }else{
+     $sidebar.css('padding-top', '1px'); 
+      $doc.css('margin-top','1px');
     }
 }
 function mappingVal2classes(mapping){
@@ -386,28 +421,36 @@ function mapping2previews(mapping){
    return filtered_arr
 }
 function showMaps(){
+  $('.ul_rules').remove();
 if ($(mapping_set).children().length === 0){
         $('#rules1 > table').find('tbody').html('<td>No mapping in list.</td>');
   }
   else {
-    var mappings = mapping_set.getElementsByTagName('mapping');
+    var mappings = mapping_set.getElementsByTagName('mapping'),
+    ul_rules = document.createElement('ul');
+    ul_rules.setAttribute('class','ul_rules');
     $('#rules1 > table > tbody').children().remove();
     $('#inv').children().remove();
     for (var i=0; i < mappings.length; i++){    
       var row = document.createElement('tr'),
+          li = document.createElement('li');
           row_arr = [],
           stype = '';
-          console.log($(mappings[i]).attr('target-type'), '    Targettype', mappings[i]);
+          console.log($(mappings[i]).attr('target-type'), 'Targettype', mappings[i]);
           if ($(mappings[i]).attr('target-type') == 'para'){
             stype = "(¶)";
           }
           else if($(mappings[i]).attr('target-type') == 'inline'){
             stype = "(T)"
           }
+          
       row.innerHTML = "<td class='center drag'>"+ (mappings.length-i) +"</td><td class='mstep3 point clickable'><a id='" + mappings[i].getAttribute('name')+"' role='button' href='#'>"+mappings[i].getAttribute('name')+' '+stype+"</a></td><td class='center'>"+ $(mappings[i]).children().length+"</td><td><span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-edit edit-map mstep4'></span> <span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-remove delete-map mstep5'></span></td><td><label><input type='checkbox' name='"+mappings[i].getAttribute('name')+"' class='preview-rule mstep4'></td>"
+      li.innerHTML = "<a id='" + mappings[i].getAttribute('name')+"' role='button' href='#'>"+mappings[i].getAttribute('name')+' '+stype+"</a><span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-remove delete-map mstep5'></span>";
       $(row).addClass('ui-sortable-handle');
       $('#rules1 > table > tbody').append(row);
+      $(ul_rules).append(li);
   }
+  $sub_menu.append(ul_rules);
          $('.ui-sortable-handle > td.point > a').popover(
         {
           content: function(){
@@ -640,20 +683,20 @@ function createTargetStyles(uri, targettype){
   if (uri != ''){
     console.log(target_styles, 'TARGET STYLES');
     console.log('w:styleeeeeee', styles);
-    $(styles).each(function(style){
-    var opt = document.createElement('option'),
-    name = $(this).attr('w:styleId') |  $(this).attr('Name');
-    if ($(this).attr('target-type') == targettype){
-      if ($(this).attr('w:styleId')){
-      $(opt).html($(this).attr('w:styleId'));
-      }
-      else if
-      ($(this).attr('Name')){
-        $(opt).html($(this).attr('Name'));
-      }
-      $(select).append(opt);
-    console.log(this, 'style');
-    }
+    $(styles).each(function(){
+        var opt = document.createElement('option'),
+        name = $(this).attr('w:styleId') |  $(this).attr('Name');
+        if ($(this).attr('target-type') == targettype){
+          if ($(this).attr('w:styleId')){
+          $(opt).html($(this).attr('w:styleId'));
+          }
+          else if
+          ($(this).attr('Name')){
+            $(opt).html($(this).attr('Name'));
+          }
+          $(select).append(opt);
+        console.log(this, 'style');
+        }
     })
     console.log(select);
   }
@@ -663,10 +706,6 @@ function createTargetStyles(uri, targettype){
   }
   $('select#target-style').html($(select).html());
 }
- $('select#target-type').on('change', function(){
- console.log('hohohohohoho');
-   createTargetStyles(templateuri, $(this).val());
- });
 function getPropById(id){
      var result = $.grep(temp_props, function(e){return e.id == id})
      return result[0];
@@ -979,8 +1018,7 @@ function viewTarget(target_element){
            } 
          })
        }
-       
-         console.log('overrideArray', override_arr);
+       console.log('overrideArray', override_arr);
        $.each( override_arr, function(){
          var name = this;
          var value= style.style[this];
@@ -1494,26 +1532,9 @@ var prop1 = new Prop();
                 var data = $(list_props[i]).data();
                 console.log('step relevant', data.relevant, prop1.relevant);
                 if (data.relevant.toString() == prop1.relevant){
-        /*                console.log('this', list_props[i]);*/
                         createQuery(prop1, list_props[i]);            
                 }
-        /*        else if ((data.value == prop1.value || (data.minvalue == prop1.minvalue && data.maxvalue == prop1.maxvalue || data.regex == prop1.regex)) && (data.relevant.toString() != prop1.relevant)){
-                        console.log('same values values',$(list_props[i]).attr('id'));
-                        console.log(data.relevant, prop1.relevant);
-                        alert('2');
-                        storeProp(prop1);
-                        deleteProp($(list_props[i]).attr('id'))
-                }
-                else if ((data.value == prop1.value || (data.minvalue == prop1.minvalue && data.maxvalue == prop1.maxvalue || data.regex == prop1.regex)) &&  prop1.relevant  == 'false'){
-                         alert('2');
-                         createQuery(prop1, list_props[i]);
-                }
-                else if ((data.value != prop1.value || (data.minvalue != prop1.minvalue || data.maxvalue != prop1.maxvalue || data.regex == prop1.regex)) &&  prop1.relevant  == 'false'){
-                         createQuery(prop1, list_props[i]);
-                }
-                else {
-                       
-                }*/
+
             }
         }
         else if (type == 'change'){
@@ -1578,19 +1599,19 @@ function checkProp(prop){
 function saveMapping(override, type){
     var mapping = setMapping();
     addProps(mapping);
-    console.log('ruleobj', map_obj, 'override  ', override);
-    if (checkMapping(map_obj, override) == true && $(mapping_set).find("mapping[name='"+mapping.name+"']")[0]){
+    console.log('ruleobj', mapping, 'override  ', override);
+    if (checkMapping(mapping, override) == true && $(mapping_set).find("mapping[name='"+mapping.name+"']")[0]){
         var map_el = $(mapping_set).find("mapping[name='"+mapping.name+"']")[0];
         $(map_el).remove();
     }
-    else if (checkMapping(map_obj, override) == true && $(mapping_set).find("mapping[name='"+$('button#change-map').attr('name')+"']")[0] && type == 'change'){
+    else if (checkMapping(mapping, override) == true && $(mapping_set).find("mapping[name='"+$('button#change-map').attr('name')+"']")[0] && type == 'change'){
         deleteMapping($('button#change-map').attr('name'));
     }
     if ($(mapping_set).find("mapping[name='"+mapping.name+"']")[0] && type == 'new'){
       $(".modal-content").html("<div class='modal-header'>Attention!</div><div class='modal-body'>Mapping already exists. Do you want to change it?</div><div class='modal-footer'><button type='button' class='btn btn-default override' data-dismiss='modal'>No</button><button type='button' class='btn btn-primary override' data-dismiss='modal'>Yes</button></div>");
       $('.modal').modal('show');
     }
-    if ((checkMapping(map_obj, override) === true)){
+    if ((checkMapping(mapping, override) === true)){
     
     var mapping = document.createElement('mapping');
     mapping.setAttribute('name', map_obj.name);
@@ -1844,6 +1865,191 @@ function getAdhocs(target){
 console.log(adhcss_arr, 'adhoccss array');
   return adhcss_arr;
 }
+function toggleConMenuOn(menutype){
+  if (menutype == 'con_menu'){
+      if (con_menu_state !== 1){
+        con_menu_state = 1;
+        $con_menu.addClass('con_menu--active');
+      }
+  }else{
+      if (sub_menu_state !== 1){
+        sub_menu_state = 1;
+        $sub_menu.addClass('sub_menu--active');
+      }
+  }
+}
+function toggleConMenuOff(menutype){
+  if (menutype == 'con_menu'){
+    if (con_menu_state !== 0){
+      con_menu_state = 0;
+      $con_menu.removeClass('con_menu--active');
+    }
+  }else{
+     if (sub_menu_state !== 0){
+       sub_menu_state = 0;
+       $sub_menu.removeClass('sub_menu--active');
+     }
+  }
+}
+function clickForContext(el, attributeName){
+  if (el.hasAttribute(attributeName) == true){
+    return el
+  }else{
+    while (el = el.parentNode){
+      if (el.hasAttribute(attributeName) == true){
+        return el;
+      }
+    }
+  }
+}
+function getPosition(e) {
+  var posx = 0;
+  var posy = 0;
+
+  if (!e) var e = window.event;
+
+  if (e.pageX || e.pageY) {
+    posx = e.pageX;
+    posy = e.pageY;
+  } else if (e.clientX || e.clientY) {
+    posx = e.clientX + document.body.scrollLeft + 
+                       document.documentElement.scrollLeft;
+    posy = e.clientY + document.body.scrollTop + 
+                       document.documentElement.scrollTop;
+  }
+
+  return {
+    x: posx,
+    y: posy
+  }
+}
+function positionMenu(e) {
+  con_menu_pos = getPosition(e);
+  console.log('Menu Position:   ', con_menu_pos);
+}
+function autoCreateRule(target_el){
+  var map_obj = new Mapping(),
+  document_el = $("*[srcpath='"+ target_el.getAttribute('target-src')+"'")[0],
+  props = createPropObject(document_el);
+  var mapping = document.createElement('mapping');
+  mapping.setAttribute('name', 'Mapping'+ mapping_set.children.length);
+  mapping.setAttribute('priority', mapping_set.children.length +1);
+  mapping.setAttribute('target-type', $(target_el).attr('data-target-type'));
+  mapping.setAttribute('target-style', $(target_el).attr('target-style'));
+  mapping.setAttribute('remove-adhoc', "");
+  console.log(props, 'PROPPPPPSSSS ARRAY');
+    for (prop in props){
+      var name = prop;
+/*      place for setting up the necessary properties for the auto rule*/
+      if(name == 'font-size'|| name == 'font-weight'|| name == 'font-style' || name == 'color') {
+        var property = document.createElement('prop');
+          property.setAttribute("name",prop);
+          property.setAttribute("relevant","true");
+          console.log('NAME', name);
+        if (name == 'color' || name == 'background-color'){
+                          var ele_val = rgb2array(props[prop]),
+                          ele_val_hsl = rgb2Hsl(ele_val[0],ele_val[1],ele_val[2]);
+                          property.setAttribute("value",props[prop]);
+                          property.setAttribute(name+'-h', ele_val_hsl[0]);
+                          property.setAttribute(name+'-s', ele_val_hsl[1]);
+                          property.setAttribute(name+'-l', ele_val_hsl[2]);
+          }
+        else{
+            property.setAttribute("value",props[prop]);
+        }
+        $(mapping).append(property);
+      }else{
+        
+      }
+    };
+    $(mapping_set).append(mapping);
+      sortByPriority()
+      toggleConMenuOff('sub_menu');
+      toggleConMenuOff('con_menu');
+  
+}
+function createTargetStyleList(srcpath, targettype){
+    var target_style_names = $(document.createElement('div')).html(example_target_styles).children().children(),
+    ul = document.createElement('ul');
+    $(ul).addClass("ul_"+targettype);
+   $(target_style_names).each(function(){
+        var li = document.createElement('li'),
+        name = $(this).attr('w:styleId') || $(this).attr('Name');
+        console.log($(this).attr('w:styleId'), name);
+        $(li).attr('target-src', srcpath);
+        $(li).attr('target-style', name );
+        $(li).attr('class', 'clickable');
+        $(li).attr('data-target-type', targettype);
+        if ($(this).attr('target-type') == targettype){
+          if ($(this).attr('w:styleId')){
+            $(li).html($(this).attr('w:styleId'));
+          }
+          else if
+          ($(this).attr('Name')){
+            $(li).html($(this).attr('Name'));
+          }
+          $(ul).append(li);
+          console.log(this, 'style');
+        }
+    })
+    return ul;
+    console.log(select);
+}
+function positionMenu(e) {
+  var menu = $con_menu.get(0);
+  console.log('menu', menu);
+  clickCoords = getPosition(e);
+  clickCoordsX = clickCoords.x;
+  clickCoordsY = clickCoords.y;
+
+  menuWidth = menu.offsetWidth + 4;
+  menuHeight = menu.offsetHeight + 4;
+
+  windowWidth = window.innerWidth;
+  windowHeight = window.innerHeight;
+
+  if ((windowWidth - clickCoordsX) < menuWidth ) {
+    menu.style.left = windowWidth - menuWidth + "px";
+  } else {
+    menu.style.left = clickCoordsX + "px";
+  }
+
+  if ( (windowHeight - clickCoordsY) < menuHeight ) {
+    menu.style.top = windowHeight - menuHeight + "px";
+  } else {
+    menu.style.top = clickCoordsY + "px";
+  }
+}
+function positionSubMenu(){
+  var menu_position = $('#menu').position(),
+  menuWidth = $('#menu').width(),
+  menuHeight = $('#menu').height(),
+  sub_menu = $('#sub-menu')[0];
+  menuChoordsX = menu_position.left;
+  menuChoordsY = menu_position.top;
+  sub_menuWidth = $('#sub-menu').width();
+  sub_menuHeight = $('#sub-menu').height();
+  console.log(
+  'windowwidth',windowWidth,
+  'windowheight',windowHeight,
+  'menuwidth',menuWidth,
+  'menuheight',menuHeight,
+  'menuchoordsx',menuChoordsX,
+  'menuchoordsy',menuChoordsY,
+  sub_menuWidth,
+  sub_menuHeight,
+  sub_menu.style.left, sub_menu.style.top)
+  if (windowWidth - menuChoordsX - menuWidth < sub_menuWidth){
+     sub_menu.style.left = menuChoordsX - sub_menuWidth + "px";
+  }else{
+    sub_menu.style.left = menuChoordsX + menuWidth + "px";
+  }
+  if (windowHeight - menuChoordsY < sub_menuHeight){
+     sub_menu.style.top = menuChoordsY - sub_menuHeight + menuHeight + "px";
+  }else{
+    sub_menu.style.top = menuChoordsY + "px";
+  }
+}
 function getTargetStyleName(target_element){
   var styles_arr = $.map(document.styleSheets[3].cssRules, (x) => {return x.selectorText;}),
   style_name = "No Style";
@@ -1858,7 +2064,7 @@ function getTargetStyleName(target_element){
 function getTargetStyle(target_element, style_name){
   var styles_arr = $.map(document.styleSheets[3].cssRules, (x) => {if (x.selectorText == style_name){return x}});
   console.log(styles_arr[0]);
-  return styles_arr[0]
+  return styles_arr[0];
 }
 function generateBreadcrumbs(target_element){
   var parents = $($(target_element).parents('*[srcpath]')),
@@ -1878,12 +2084,12 @@ function generateBreadcrumbs(target_element){
            $('#breadcrumbs').append("<a href='#' class='clickable' srcp='"+ $(target_element).attr('srcpath')+"'>"+target_name+ "</a>");
         }  
 }
-/*Initialization of the application ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*initialization of the application ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 showMaps();
 clearTable();
 checkSize();
 window.addEventListener("resize", checkSize)
-/* init eventhandlers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* initialization of the eventhandlers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 $('#insp').on('click', function(evt){
   var $win = $(window);
   $inspector.toggle()
@@ -1898,6 +2104,7 @@ $('#insp').on('click', function(evt){
      $menu[0].className = 'col-sm-6 col-md-7 col-lg-7';
      $doc[0].className = 'col-sm-6 col-md-7 col-lg-7 pull-right';    
   }
+  checkSize();
 })
 ;( function( $, window, document, undefined )
 {
@@ -1925,6 +2132,9 @@ $('#insp').on('click', function(evt){
 		.on( 'blur', function(){ $input.removeClass( 'has-focus' ); });
 	});
 })( jQuery, window, document);
+$('select#target-type').on('change', function(){
+   createTargetStyles(templateuri, $(this).val());
+ });
 $('#remove-insp').on('click', function(){
   $('#insp').trigger('click')  
 })
@@ -2089,6 +2299,8 @@ $('#sm-page').on('click','span[style][srcpath], p[style][srcpath]',function(even
           $('#insp').trigger('click');
         }
         $("a[srcp='"+ this.getAttribute('srcpath')+"']").trigger('click');
+            toggleConMenuOff('sub_menu');
+            toggleConMenuOff('con_menu');
 })
 $('table.inspect-prop').on('click', 'span.add-as-prop', function(event){
             var id = $(event.target).attr('id');
@@ -2146,6 +2358,70 @@ $('#step3').on('click', function(){
 });
 $('#download-rules').on('click', function(){
   downloadRules();
+})
+$('#sm-page').on('contextmenu', $(this).find('*'), function(evt){
+  if (clickForContext(evt.target, 'srcpath')){
+    $sub_menu.children().not('.ul_rules').remove();
+    evt.preventDefault();
+/*    generating target styles, not shure if thats the best place yet */
+    ul_para = createTargetStyleList($(evt.target).attr('srcpath'), 'para');
+    ul_inline = createTargetStyleList($(evt.target).attr('srcpath'), 'inline');
+    $con_menu.attr('target-src', $(evt.target).attr('srcpath'));
+    $sub_menu.append(ul_para, ul_inline);
+    
+    positionMenu(evt);
+    toggleConMenuOn('con_menu');
+    $('#sm-page *[srcpath]').removeClass('inspected');
+    $("*[srcpath='"+$(evt.target).attr("srcpath")+"']").addClass('inspected');
+  }else{
+    toggleConMenuOff('con_menu');
+  }
+})
+$('#menu > ul > li').on('click', function(evt){
+  var target_type = $(evt.target).attr('data-target-type');
+   $('.ul_'+target_type).show();
+/*   showMaps();*/
+   positionSubMenu();
+   toggleConMenuOn('sub_menu');
+})
+$('#menu > ul > li[data-target-type]').hover(function(evt){
+  $(evt.target).trigger('click')}, function(evt){
+   var target_type = $(evt.target).attr('data-target-type');
+   $('.ul_'+target_type).hide();
+   if ($('#sub-menu').is(":hover") === true){
+   }else{
+    toggleConMenuOff('sub_menu');  
+   }; 
+})
+$('#sm-page > *').on('click', function(){
+  toggleConMenuOff('sub_menu');
+  toggleConMenuOff('con_menu');
+})
+$('#sub-menu').on('click', $('.ul_para > li, .ul_inline > li'), function(evt){
+  autoCreateRule(evt.target);
+  showMaps();
+})
+$('#hide-sidebar > input').on('change',function(){
+  if ($(this).is(':checked')){
+   $sidebar.hide();
+   checkSize();
+  }else{
+    $sidebar.show();
+    checkSize();
+  }
+})
+$('#hide-workflow > input').on('change',function(){
+  if ($(this).is(':checked')){
+   $header.hide();
+   checkSize();
+  }else{
+    $header.show();
+    checkSize();
+  }
+})
+$(document).not('#menu').on("click", function(){
+console.log('deimudderalda');
+  toggleConMenuOff('con_menu');
 })
 /*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
 var saveAs=saveAs||function(view){"use strict";if(typeof navigator!=="undefined"&&/MSIE [1-9]\./.test(navigator.userAgent)){return}var doc=view.document,get_URL=function(){return view.URL||view.webkitURL||view},save_link=doc.createElementNS("http://www.w3.org/1999/xhtml","a"),can_use_save_link="download"in save_link,click=function(node){var event=new MouseEvent("click");node.dispatchEvent(event)},is_safari=/Version\/[\d\.]+.*Safari/.test(navigator.userAgent),webkit_req_fs=view.webkitRequestFileSystem,req_fs=view.requestFileSystem||webkit_req_fs||view.mozRequestFileSystem,throw_outside=function(ex){(view.setImmediate||view.setTimeout)(function(){throw ex},0)},force_saveable_type="application/octet-stream",fs_min_size=0,arbitrary_revoke_timeout=500,revoke=function(file){var revoker=function(){if(typeof file==="string"){get_URL().revokeObjectURL(file)}else{file.remove()}};if(view.chrome){revoker()}else{setTimeout(revoker,arbitrary_revoke_timeout)}},dispatch=function(filesaver,event_types,event){event_types=[].concat(event_types);var i=event_types.length;while(i--){var listener=filesaver["on"+event_types[i]];if(typeof listener==="function"){try{listener.call(filesaver,event||filesaver)}catch(ex){throw_outside(ex)}}}},auto_bom=function(blob){if(/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)){return new Blob(["\ufeff",blob],{type:blob.type})}return blob},FileSaver=function(blob,name,no_auto_bom){if(!no_auto_bom){blob=auto_bom(blob)}var filesaver=this,type=blob.type,blob_changed=false,object_url,target_view,dispatch_all=function(){dispatch(filesaver,"writestart progress write writeend".split(" "))},fs_error=function(){if(target_view&&is_safari&&typeof FileReader!=="undefined"){var reader=new FileReader;reader.onloadend=function(){var base64Data=reader.result;target_view.location.href="data:attachment/file"+base64Data.slice(base64Data.search(/[,;]/));filesaver.readyState=filesaver.DONE;dispatch_all()};reader.readAsDataURL(blob);filesaver.readyState=filesaver.INIT;return}if(blob_changed||!object_url){object_url=get_URL().createObjectURL(blob)}if(target_view){target_view.location.href=object_url}else{var new_tab=view.open(object_url,"_blank");if(new_tab==undefined&&is_safari){view.location.href=object_url}}filesaver.readyState=filesaver.DONE;dispatch_all();revoke(object_url)},abortable=function(func){return function(){if(filesaver.readyState!==filesaver.DONE){return func.apply(this,arguments)}}},create_if_not_found={create:true,exclusive:false},slice;filesaver.readyState=filesaver.INIT;if(!name){name="download"}if(can_use_save_link){object_url=get_URL().createObjectURL(blob);setTimeout(function(){save_link.href=object_url;save_link.download=name;click(save_link);dispatch_all();revoke(object_url);filesaver.readyState=filesaver.DONE});return}if(view.chrome&&type&&type!==force_saveable_type){slice=blob.slice||blob.webkitSlice;blob=slice.call(blob,0,blob.size,force_saveable_type);blob_changed=true}if(webkit_req_fs&&name!=="download"){name+=".download"}if(type===force_saveable_type||webkit_req_fs){target_view=view}if(!req_fs){fs_error();return}fs_min_size+=blob.size;req_fs(view.TEMPORARY,fs_min_size,abortable(function(fs){fs.root.getDirectory("saved",create_if_not_found,abortable(function(dir){var save=function(){dir.getFile(name,create_if_not_found,abortable(function(file){file.createWriter(abortable(function(writer){writer.onwriteend=function(event){target_view.location.href=file.toURL();filesaver.readyState=filesaver.DONE;dispatch(filesaver,"writeend",event);revoke(file)};writer.onerror=function(){var error=writer.error;if(error.code!==error.ABORT_ERR){fs_error()}};"writestart progress write abort".split(" ").forEach(function(event){writer["on"+event]=filesaver["on"+event]});writer.write(blob);filesaver.abort=function(){writer.abort();filesaver.readyState=filesaver.DONE};filesaver.readyState=filesaver.WRITING}),fs_error)}),fs_error)};dir.getFile(name,{create:false},abortable(function(file){file.remove();save()}),abortable(function(ex){if(ex.code===ex.NOT_FOUND_ERR){save()}else{fs_error()}}))}),fs_error)}),fs_error)},FS_proto=FileSaver.prototype,saveAs=function(blob,name,no_auto_bom){return new FileSaver(blob,name,no_auto_bom)};if(typeof navigator!=="undefined"&&navigator.msSaveOrOpenBlob){return function(blob,name,no_auto_bom){if(!no_auto_bom){blob=auto_bom(blob)}return navigator.msSaveOrOpenBlob(blob,name||"download")}}FS_proto.abort=function(){var filesaver=this;filesaver.readyState=filesaver.DONE;dispatch(filesaver,"abort")};FS_proto.readyState=FS_proto.INIT=0;FS_proto.WRITING=1;FS_proto.DONE=2;FS_proto.error=FS_proto.onwritestart=FS_proto.onprogress=FS_proto.onwrite=FS_proto.onabort=FS_proto.onerror=FS_proto.onwriteend=null;return saveAs}(typeof self!=="undefined"&&self||typeof window!=="undefined"&&window||this.content);if(typeof module!=="undefined"&&module.exports){module.exports.saveAs=saveAs}else if(typeof define!=="undefined"&&define!==null&&define.amd!=null){define([],function(){return saveAs})}
