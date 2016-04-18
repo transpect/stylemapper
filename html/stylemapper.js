@@ -121,11 +121,13 @@ var tableelement = $('#rules1 > table > tbody').get(0);
         initPriority();
         if ($(mapping_set).find('mapping').length > 0) {
           doProgress('2', 33.33, 'success');
+          $('#con-rules').removeClass('disabled02');
           $('#download-rules').show();
         }
         else if ($(mapping_set).find('mapping').length == 0){
             doProgress('2', 0, 'failure');
             $('#download-rules').hide();
+            $('#con-rules').addClass('disabled02');
         }
         else{
                      
@@ -420,41 +422,8 @@ function mapping2previews(mapping){
    }
    return filtered_arr
 }
-function showMaps(){
-  $('.ul_rules').remove();
-if ($(mapping_set).children().length === 0){
-        $('#rules1 > table').find('tbody').html('<td>No mapping in list.</td>');
-  }
-  else {
-    var mappings = mapping_set.getElementsByTagName('mapping'),
-    ul_rules = document.createElement('ul');
-    ul_rules.setAttribute('class','ul_rules');
-    $('#rules1 > table > tbody').children().remove();
-    $('#inv').children().remove();
-    for (var i=0; i < mappings.length; i++){    
-      var row = document.createElement('tr'),
-          li = document.createElement('li');
-          row_arr = [],
-          stype = '';
-          console.log($(mappings[i]).attr('target-type'), 'Targettype', mappings[i]);
-          if ($(mappings[i]).attr('target-type') == 'para'){
-            stype = "(¶)";
-          }
-          else if($(mappings[i]).attr('target-type') == 'inline'){
-            stype = "(T)"
-          }
-          
-      row.innerHTML = "<td class='center drag'>"+ (mappings.length-i) +"</td><td class='mstep3 point clickable'><a id='" + mappings[i].getAttribute('name')+"' role='button' href='#'>"+mappings[i].getAttribute('name')+' '+stype+"</a></td><td class='center'>"+ $(mappings[i]).children().length+"</td><td><span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-edit edit-map mstep4'></span> <span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-remove delete-map mstep5'></span></td><td><label><input type='checkbox' name='"+mappings[i].getAttribute('name')+"' class='preview-rule mstep4'></td>"
-      li.innerHTML = "<a id='" + mappings[i].getAttribute('name')+"' role='button' href='#'>"+mappings[i].getAttribute('name')+' '+stype+"</a><span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-remove delete-map mstep5'></span>";
-      $(row).addClass('ui-sortable-handle');
-      $('#rules1 > table > tbody').append(row);
-      $(ul_rules).append(li);
-  }
-  $sub_menu.append(ul_rules);
-         $('.ui-sortable-handle > td.point > a').popover(
-        {
-          content: function(){
-                var obj = getMapping(this.id),
+function createPopover(id){
+  var obj = getMapping(id),
                     table = document.createElement('table');
                 table.setAttribute('class', 'spec table table-striped');
                 for (var l=0; l < obj.props.length; l++){
@@ -479,11 +448,62 @@ if ($(mapping_set).children().length === 0){
                 table.appendChild(prop_row);
               }
               return table
+}
+function showMaps(){
+  $('.ul_rules').remove();
+if ($(mapping_set).children().length === 0){
+        $('#rules1 > table').find('tbody').html('<td>No mapping in list.</td>');
+  }
+  else {
+    var mappings = mapping_set.getElementsByTagName('mapping'),
+    ul_rules = document.createElement('ul');
+    ul_rules.setAttribute('class','ul_rules');
+    $('#rules1 > table > tbody').children().remove();
+    $('#inv').children().remove();
+    for (var i=0; i < mappings.length; i++){    
+      var row = document.createElement('tr'),
+          li = document.createElement('li');
+          row_arr = [],
+          stype = '';
+/*          console.log($(mappings[i]).attr('target-type'), 'Targettype', mappings[i]);*/
+          if ($(mappings[i]).attr('target-type') == 'para'){
+            stype = "(¶)";
+          }
+          else if($(mappings[i]).attr('target-type') == 'inline'){
+            stype = "(T)"
+          }
+          
+      row.innerHTML = "<td class='center drag'>"+ (mappings.length-i) +"</td><td class='mstep3 point clickable'><a id='" + mappings[i].getAttribute('name')+"' role='button' href='#'>"+mappings[i].getAttribute('name')+' '+stype+"</a></td><td class='center'>"+ $(mappings[i]).children().length+"</td><td><span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-edit edit-map mstep4'></span> <span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-remove delete-map mstep5'></span></td><td><label><input type='checkbox' name='"+mappings[i].getAttribute('name')+"' class='preview-rule mstep4'></td>"
+      li.innerHTML = "<a id='" + mappings[i].getAttribute('name')+"' role='button' href='#'>"+mappings[i].getAttribute('name')+' '+stype+"</a><span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-remove delete-map clickable'></span>";
+      $(row).addClass('ui-sortable-handle');
+      $('#rules1 > table > tbody').append(row);
+      $(ul_rules).append(li);
+  }
+  $sub_menu.append(ul_rules);
+         $('.ui-sortable-handle > td.point > a').popover(
+        {
+          content: function(){
+           table = createPopover(this.id)
+           return table;
           },
           html: 'true',
           toggle:'popover',
           placement:'right',
           trigger:'focus',
+          title:'Rule Properties'
+        }
+       );
+       $('.ul_rules > li > a').popover(
+        {
+          content: function(){
+           table = createPopover(this.id)
+           return table;
+          },
+          container: 'body',
+          html: 'true',
+          toggle:'popover',
+          placement:'left',
+          trigger:'hover',
           title:'Rule Properties'
         }
        );
@@ -1865,7 +1885,7 @@ function getAdhocs(target){
 console.log(adhcss_arr, 'adhoccss array');
   return adhcss_arr;
 }
-function toggleConMenuOn(menutype){
+function toggleConMenuOn(menutype, nav_selection){
   if (menutype == 'con_menu'){
       if (con_menu_state !== 1){
         con_menu_state = 1;
@@ -1875,10 +1895,11 @@ function toggleConMenuOn(menutype){
       if (sub_menu_state !== 1){
         sub_menu_state = 1;
         $sub_menu.addClass('sub_menu--active');
+        $(nav_selection).css("background-color", "#ddd");
       }
   }
 }
-function toggleConMenuOff(menutype){
+function toggleConMenuOff(menutype, nav_selection){
   if (menutype == 'con_menu'){
     if (con_menu_state !== 0){
       con_menu_state = 0;
@@ -1888,7 +1909,9 @@ function toggleConMenuOff(menutype){
      if (sub_menu_state !== 0){
        sub_menu_state = 0;
        $sub_menu.removeClass('sub_menu--active');
-     }
+       $('.ul_rules, .ul_inline, .ul_para').hide();
+       $(nav_selection).css("background-color", "#efefef");
+    }
   }
 }
 function clickForContext(el, attributeName){
@@ -1968,10 +1991,16 @@ function autoCreateRule(target_el){
       toggleConMenuOff('con_menu');
   
 }
-function createTargetStyleList(srcpath, targettype){
-    var target_style_names = $(document.createElement('div')).html(example_target_styles).children().children(),
-    ul = document.createElement('ul');
-    $(ul).addClass("ul_"+targettype);
+function createTargetStyleList(srcpath, target_type){
+/*    distinguish whether target style are available after from template document after conversion. if not, some example styles were taken.*/
+    if (target_styles == "" && templateuri == ""){
+     var target_style_names = $(document.createElement('div')).html(example_target_styles).children().children();
+    }else{
+      var target_style_names = target_styles.children[0].children;
+    }
+    console.log('TARGETSTYLLLEES', target_styles);
+    var ul = document.createElement('ul');
+    $(ul).addClass("ul_"+target_type);
    $(target_style_names).each(function(){
         var li = document.createElement('li'),
         name = $(this).attr('w:styleId') || $(this).attr('Name');
@@ -1979,8 +2008,8 @@ function createTargetStyleList(srcpath, targettype){
         $(li).attr('target-src', srcpath);
         $(li).attr('target-style', name );
         $(li).attr('class', 'clickable');
-        $(li).attr('data-target-type', targettype);
-        if ($(this).attr('target-type') == targettype){
+        $(li).attr('data-target-type', target_type);
+        if ($(this).attr('target-type') == target_type){
           if ($(this).attr('w:styleId')){
             $(li).html($(this).attr('w:styleId'));
           }
@@ -2020,7 +2049,7 @@ function positionMenu(e) {
     menu.style.top = clickCoordsY + "px";
   }
 }
-function positionSubMenu(){
+function positionSubMenu($sub_nav){
   var menu_position = $('#menu').position(),
   menuWidth = $('#menu').width(),
   menuHeight = $('#menu').height(),
@@ -2047,7 +2076,7 @@ function positionSubMenu(){
   if (windowHeight - menuChoordsY < sub_menuHeight){
      sub_menu.style.top = menuChoordsY - sub_menuHeight + menuHeight + "px";
   }else{
-    sub_menu.style.top = menuChoordsY + "px";
+    sub_menu.style.top = menuChoordsY + $sub_nav.position().top + "px";
   }
 }
 function getTargetStyleName(target_element){
@@ -2227,7 +2256,7 @@ $('button#discard-map').on('click', function(){
         $('button#save-map').hide();
         handleContent('rule', 'open');
 });
-$('div#rules1 > table').on('click', 'tbody > tr > td > span.delete-map', function(){
+$('div#rules1 > table, #sub-menu').on('click', 'tbody > tr > td > span.delete-map, .ul_rules > li > span.delete-map', function(){
         deleteMapping($(this).attr('name'));
 });
 $('#expandboxes, #collapseboxes').on("click","span", function(){
@@ -2352,7 +2381,7 @@ $('#step3').on('click', function(){
     sendMapping()
   }
 });
-    $('.clickable').on('click', function(){
+$('.clickable').on('click', function(){
 /*  $(this).find('*').animate({fontSize: '95%', width: '99%', height: '99%'}, 200);*/
 /*TODO - CLICK FEEDBACK FOR CLICKABLE ELEMENTS*/
 });
@@ -2380,9 +2409,8 @@ $('#sm-page').on('contextmenu', $(this).find('*'), function(evt){
 $('#menu > ul > li').on('click', function(evt){
   var target_type = $(evt.target).attr('data-target-type');
    $('.ul_'+target_type).show();
-/*   showMaps();*/
-   positionSubMenu();
-   toggleConMenuOn('sub_menu');
+   positionSubMenu($('#con-'+target_type));
+   toggleConMenuOn('sub_menu', "#con-"+target_type);
 })
 $('#menu > ul > li[data-target-type]').hover(function(evt){
   $(evt.target).trigger('click')}, function(evt){
@@ -2390,16 +2418,16 @@ $('#menu > ul > li[data-target-type]').hover(function(evt){
    $('.ul_'+target_type).hide();
    if ($('#sub-menu').is(":hover") === true){
    }else{
-    toggleConMenuOff('sub_menu');  
+    toggleConMenuOff('sub_menu', "#con-rules, #con-inline, #con-para");  
    }; 
 })
-$('#sm-page > *').on('click', function(){
-  toggleConMenuOff('sub_menu');
-  toggleConMenuOff('con_menu');
+$('div').not('#menu, #sub-menu').on('click', function(){
+  toggleConMenuOff('sub_menu', "#con-rules, #con-inline, #con-para");
+  toggleConMenuOff('con_menu', "#con-rules, #con-inline, #con-para");
 })
-$('#sub-menu').on('click', $('.ul_para > li, .ul_inline > li'), function(evt){
-  autoCreateRule(evt.target);
-  showMaps();
+$('#sub-menu').on('click', '.ul_para > li, .ul_inline > li', function(evt){
+    autoCreateRule(evt.target);
+    showMaps();
 })
 $('#hide-sidebar > input').on('change',function(){
   if ($(this).is(':checked')){
@@ -2420,8 +2448,7 @@ $('#hide-workflow > input').on('change',function(){
   }
 })
 $(document).not('#menu').on("click", function(){
-console.log('deimudderalda');
-  toggleConMenuOff('con_menu');
+  toggleConMenuOff('con_menu', "#con-rules, #con-inline, #con-para");
 })
 /*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
 var saveAs=saveAs||function(view){"use strict";if(typeof navigator!=="undefined"&&/MSIE [1-9]\./.test(navigator.userAgent)){return}var doc=view.document,get_URL=function(){return view.URL||view.webkitURL||view},save_link=doc.createElementNS("http://www.w3.org/1999/xhtml","a"),can_use_save_link="download"in save_link,click=function(node){var event=new MouseEvent("click");node.dispatchEvent(event)},is_safari=/Version\/[\d\.]+.*Safari/.test(navigator.userAgent),webkit_req_fs=view.webkitRequestFileSystem,req_fs=view.requestFileSystem||webkit_req_fs||view.mozRequestFileSystem,throw_outside=function(ex){(view.setImmediate||view.setTimeout)(function(){throw ex},0)},force_saveable_type="application/octet-stream",fs_min_size=0,arbitrary_revoke_timeout=500,revoke=function(file){var revoker=function(){if(typeof file==="string"){get_URL().revokeObjectURL(file)}else{file.remove()}};if(view.chrome){revoker()}else{setTimeout(revoker,arbitrary_revoke_timeout)}},dispatch=function(filesaver,event_types,event){event_types=[].concat(event_types);var i=event_types.length;while(i--){var listener=filesaver["on"+event_types[i]];if(typeof listener==="function"){try{listener.call(filesaver,event||filesaver)}catch(ex){throw_outside(ex)}}}},auto_bom=function(blob){if(/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)){return new Blob(["\ufeff",blob],{type:blob.type})}return blob},FileSaver=function(blob,name,no_auto_bom){if(!no_auto_bom){blob=auto_bom(blob)}var filesaver=this,type=blob.type,blob_changed=false,object_url,target_view,dispatch_all=function(){dispatch(filesaver,"writestart progress write writeend".split(" "))},fs_error=function(){if(target_view&&is_safari&&typeof FileReader!=="undefined"){var reader=new FileReader;reader.onloadend=function(){var base64Data=reader.result;target_view.location.href="data:attachment/file"+base64Data.slice(base64Data.search(/[,;]/));filesaver.readyState=filesaver.DONE;dispatch_all()};reader.readAsDataURL(blob);filesaver.readyState=filesaver.INIT;return}if(blob_changed||!object_url){object_url=get_URL().createObjectURL(blob)}if(target_view){target_view.location.href=object_url}else{var new_tab=view.open(object_url,"_blank");if(new_tab==undefined&&is_safari){view.location.href=object_url}}filesaver.readyState=filesaver.DONE;dispatch_all();revoke(object_url)},abortable=function(func){return function(){if(filesaver.readyState!==filesaver.DONE){return func.apply(this,arguments)}}},create_if_not_found={create:true,exclusive:false},slice;filesaver.readyState=filesaver.INIT;if(!name){name="download"}if(can_use_save_link){object_url=get_URL().createObjectURL(blob);setTimeout(function(){save_link.href=object_url;save_link.download=name;click(save_link);dispatch_all();revoke(object_url);filesaver.readyState=filesaver.DONE});return}if(view.chrome&&type&&type!==force_saveable_type){slice=blob.slice||blob.webkitSlice;blob=slice.call(blob,0,blob.size,force_saveable_type);blob_changed=true}if(webkit_req_fs&&name!=="download"){name+=".download"}if(type===force_saveable_type||webkit_req_fs){target_view=view}if(!req_fs){fs_error();return}fs_min_size+=blob.size;req_fs(view.TEMPORARY,fs_min_size,abortable(function(fs){fs.root.getDirectory("saved",create_if_not_found,abortable(function(dir){var save=function(){dir.getFile(name,create_if_not_found,abortable(function(file){file.createWriter(abortable(function(writer){writer.onwriteend=function(event){target_view.location.href=file.toURL();filesaver.readyState=filesaver.DONE;dispatch(filesaver,"writeend",event);revoke(file)};writer.onerror=function(){var error=writer.error;if(error.code!==error.ABORT_ERR){fs_error()}};"writestart progress write abort".split(" ").forEach(function(event){writer["on"+event]=filesaver["on"+event]});writer.write(blob);filesaver.abort=function(){writer.abort();filesaver.readyState=filesaver.DONE};filesaver.readyState=filesaver.WRITING}),fs_error)}),fs_error)};dir.getFile(name,{create:false},abortable(function(file){file.remove();save()}),abortable(function(ex){if(ex.code===ex.NOT_FOUND_ERR){save()}else{fs_error()}}))}),fs_error)}),fs_error)},FS_proto=FileSaver.prototype,saveAs=function(blob,name,no_auto_bom){return new FileSaver(blob,name,no_auto_bom)};if(typeof navigator!=="undefined"&&navigator.msSaveOrOpenBlob){return function(blob,name,no_auto_bom){if(!no_auto_bom){blob=auto_bom(blob)}return navigator.msSaveOrOpenBlob(blob,name||"download")}}FS_proto.abort=function(){var filesaver=this;filesaver.readyState=filesaver.DONE;dispatch(filesaver,"abort")};FS_proto.readyState=FS_proto.INIT=0;FS_proto.WRITING=1;FS_proto.DONE=2;FS_proto.error=FS_proto.onwritestart=FS_proto.onprogress=FS_proto.onwrite=FS_proto.onabort=FS_proto.onerror=FS_proto.onwriteend=null;return saveAs}(typeof self!=="undefined"&&self||typeof window!=="undefined"&&window||this.content);if(typeof module!=="undefined"&&module.exports){module.exports.saveAs=saveAs}else if(typeof define!=="undefined"&&define!==null&&define.amd!=null){define([],function(){return saveAs})}
