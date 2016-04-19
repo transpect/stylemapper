@@ -44,11 +44,13 @@
         </options>
     </meta>
     <projectTree name="stylemapper.xpr">
-        <file name="lib/xpl/docx2html.xpl"/>
-        <file name="lib/xpl/fileprocessor.xpl"/>
-        <file name="lib/xpl/idml2html.xpl"/>
-        <file name="lib/schema/mapping.rng"/>
-        <file name="mapping_example.xml"/>
-        <file name="lib/xpl/stylemapper.xpl"/>
+        <folder masterFiles="true" name="Master Files">
+            <file name="stylemapper-lib/xpl/docx2html.xpl"/>
+            <file name="stylemapper-lib/xpl/fileprocessor.xpl"/>
+            <file name="stylemapper-lib/xpl/idml2html.xpl"/>
+            <file name="html/stylemapper.html"/>
+            <file name="html/stylemapper.js"/>
+            <file name="stylemapper-lib/xpl/stylemapper.xpl"/>
+        </folder>
     </projectTree>
 </project>

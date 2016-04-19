@@ -510,7 +510,7 @@ if ($(mapping_set).children().length === 0){
        makeMapsSortable();
   }
           $('.preview-rule').change(function(event){
-              var bg_color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+/*              var bg_color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);  <--- */
               var filtered_arr = [],
               rule_name = $(event.target).attr('name'),
               rule = getMapping(rule_name);
@@ -577,7 +577,7 @@ if ($(mapping_set).children().length === 0){
                         
               }
               else {
-                  $("*[data-active-rule='" + rule.name + "'").attr('data-active-rule', "");
+                  $("*[data-active-rule='" +rule.name+ "'").attr('data-active-rule', "");
 /*                  $('*[data-view-priority]').removeAttr('data-view-priority');   */
                   $('.'+rule_name).removeClass(rule_name);
                   $('.preview-all').prop('checked', false);
