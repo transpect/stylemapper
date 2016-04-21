@@ -495,3 +495,9 @@ bottom:0px;
 .ul_para, .ul_inline, .ul_rules{
   display:none;
 }
+img{
+ width:100%; 
+}
+a[srcpath]{
+  pointer-events:none;
+}

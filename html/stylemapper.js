@@ -511,11 +511,21 @@ if ($(mapping_set).children().length === 0){
   }
           $('.preview-rule').change(function(event){
 /*              var bg_color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);  <--- */
+                var bg_color = [
+                    '#86BCFF','#D568FD','#3DE4FC','#5FFEF7','#FF66FF',
+                    '#8ADCFF','#59DF00','#59955C','#2DC800','#1FCB4A',	
+                    '#FF5353','#48FB0D','#B6BA18','#33FDC0','#C8B400',
+                    '#BABA21','#7979FF','#DFA800','#DB9900','#9669FE',
+                    '#FFB428','#FF9331','#FF800D','#DD597D','#CA00CA',
+                    '#29AFD6','#FF6666','#A41CC6','#7373FF','#74BAAC',
+                    '#FF6600','#FF6633','#FF6699','#4BFE78','#FF66CC',
+                    '#9D9D00'
+                    ];
               var filtered_arr = [],
               rule_name = $(event.target).attr('name'),
               rule = getMapping(rule_name);
-              var style = $("<style>."+rule_name+ " { border: dashed"+ bg_color +"; border-radius: 3px }</style>");
-              document.styleSheets[0].addRule("."+rule_name, " border: dashed"+ bg_color +"; border-radius: 2px");
+              var style = $("<style>."+rule_name+ " { border-left: solid 5px"+ bg_color[rule.priority] +"; border-radius: 3px }</style>");
+              document.styleSheets[0].addRule("."+rule_name, " border-left: solid 5px"+ bg_color[rule.priority] +"; border-radius: 2px");
               $('html > head').append(style);
                 if (this.checked == true){
                 var filtered_arr = mapping2previews(rule);
@@ -1160,7 +1170,7 @@ function doProgress(step, progress, status){
             }
 }
 function initDocxStatusRequest(URI){
-doProgress('1', 10, 'progress');
+doProgress('1', 0, 'progress');
 statusRequest = function(){
           $.ajax({
             url:URI,
@@ -1179,19 +1189,18 @@ statusRequest = function(){
                       var fileuri = base_uri + username +'/'+filename+'/out/temp/source-content.xhtml';
                       templateuri = base_uri + username +'/'+filename+'/out/temp/template_styles.xml';
                       var container = document.createElement('div');
+                      var body = '';
                       target_styles = $(container).load(templateuri)[0], 
-                      doProgress('1', 33.33, 'success');
-                      
-                      $('#ajax-temp').load(fileuri)
-                      window.setTimeout(function(){
-                       var body = '',
-                       styles = $('#ajax-temp').find('style')[0];
-                       body = $('#ajax-temp').children('*:not(title, style, link)');    
-                       $('#sm-page').html(body);
-                       $('#style-container').html($(styles).html());
-                       $('#ajax-temp').children().remove();
+                      styles = $('#ajax-temp').find('style')[0];
+                      body = $('#ajax-temp').children('*:not(title, style, link)');    
+                      $('#sm-page').html(body);
+                      $('#style-container').html($(styles).html());
+                      $('#ajax-temp').children().remove();
+                      $('#sm-page').load(fileuri, function(){
+                         doProgress('1', 33.33, 'success');
+                         console.log('lalahallo');
+                      });
                       clearTable();
-                      }, 1000)
                       $('.createrules').removeClass('disabled02');  
                       $('*[role=presentation]').removeClass('disabled02');
                       resultListURI1 = data['result_list_uri'];
@@ -1853,6 +1862,9 @@ console.log($('#'+id).children('span')[0]);
 function asOverride(prop, adhoc_arr, target_element, style){
  var styles_arr = $.map(document.styleSheets[3].cssRules, (x) => {return x.selectorText});     
 /* console.log('styles array', styles_arr, target_element);*/
+ if ( typeof style == 'undefined'){
+   return bool = false;
+ }
  var bool = false;
   $.each(styles_arr, function(index){
      var property_arr = style.style;   
@@ -2316,10 +2328,11 @@ $('#prop_form > tbody').on('click', 'tr > td >#r1, tr > td > #r2, tr > td > #r3,
   makeValueLonely(evt.target);
 /*  $(this).next().trigger('change');*/
 })
-$('#sm-page').on('click', 'a', function(event){
+/* event.preventDefault() doesnt work for dynamically created anchors from the html conversion, yet. Whereas all jquery conventions to do so are correct. clumsy workaround: disabling click action via css.
+$('#sm-page').on('click', '*[srcpath] > a', function(event){
       event.preventDefault();
       console.log('prevented');
-})
+})*/
 $('#sm-page').on('click','span[style][srcpath], p[style][srcpath]',function(event) {
         event.stopImmediatePropagation();
         generateBreadcrumbs(this);

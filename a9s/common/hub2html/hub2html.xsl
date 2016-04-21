@@ -17,7 +17,7 @@
   xmlns="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#all">
   
   <xsl:import href="http://transpect.io/hub2html/xsl/hub2html.xsl"/>
-<!--  essentially to get access to the images of the html-conversion in the frontend -->
+<!--  essentially to get access to the images of the html-conversion in the frontend, but its bound on standard authorization -->
   <xsl:param name="image-path" select="'https://transpect.le-tex.de/data/stylemapper/admin'"/>
 <!--  important function change to have a style attribute instead of an element (e.g. span style="italic"> instead of <i>) -->
   <xsl:function name="css:map-att-to-elt" as="xs:string?">
@@ -29,8 +29,9 @@
   <xsl:variable name="att-regex" as="xs:string" select="'^(css:|(background-)?color-)'"/>
   
   <xsl:template match="*" mode="class-att">
-    <xsl:if test="@role">
-      <xsl:variable name="overrides" as="attribute(*)*" select="@adhcss:*"/>
+    <xsl:variable name="overrides" as="attribute(*)*" select="@adhcss:*"/>
+    <xsl:choose>
+    <xsl:when test="@role">
         <xsl:variable name="atts" as="xs:string*">
           <xsl:apply-templates select="key('role2atts', @role)/@*[matches(name(), $att-regex)][not(local-name() = $overrides/local-name())], 
             @*[matches(local-name(), $att-regex)], $overrides" mode="css-classes"/>
@@ -38,7 +39,19 @@
       <xsl:attribute name="class">
         <xsl:sequence select="string-join((@role, $atts), ' ')"/>
       </xsl:attribute>
-    </xsl:if>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:variable name="atts" as="xs:string*">
+        <xsl:apply-templates
+          select=" @*[matches(local-name(), $att-regex)], $overrides"
+          mode="css-classes"/>
+      </xsl:variable>
+      <xsl:attribute name="class">
+        <xsl:sequence select="string-join($atts, ' ')"/>
+      </xsl:attribute>
+    </xsl:otherwise>
+    </xsl:choose>
+    
   </xsl:template>
   
   <xsl:template match="@*[matches(name(), $att-regex)]" mode="hub2htm-default"/>
