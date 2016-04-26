@@ -72,7 +72,9 @@ $header = $('#header');
 $doc = $('#main-wrapper');
 $con_menu = $('#menu');
 $sub_menu = $('#sub-menu');
+$rlist = $("#rulename-list");
 timedrequest = null;
+matching_arr = []
 resultListURI = "";
 target_styles = '';
 username='admin';
@@ -86,6 +88,21 @@ sub_menu_state = 0;
 con_menu_pos = 0;
 con_menu_pos_x = 0;
 con_menu_pos_y = 0;
+document_stat = {
+  para: 0,
+  inline: 0,
+  tables: 0
+}
+bg_color = [
+'#86BCFF','#A41CC6','#3DE4FC','#5FFEF7','#FF66FF',
+'#8ADCFF','#59DF00','#59955C','#2DC800','#1FCB4A',	
+'#FF5353','#48FB0D','#B6BA18','#33FDC0','#C8B400',
+'#BABA21','#7979FF','#DFA800','#DB9900','#9669FE',
+'#FFB428','#FF9331','#FF800D','#DD597D','#CA00CA',
+'#29AFD6','#FF6666','#7373FF','#74BAAC','#D568FD',
+'#FF6600','#FF6633','#FF6699','#4BFE78','#FF66CC',
+'#9D9D00'
+];
 /* observers for rule property list and pagecontent ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var propobserver =  new MutationObserver(function (mutations) {
     mutations.forEach(function(mutation) {
@@ -96,11 +113,11 @@ var propobserver =  new MutationObserver(function (mutations) {
 /*              console.log('observed li', this, prop);*/
               temp_props.push(prop);
           });
-            console.log('temp_props', temp_props)
+/*            console.log('temp_props', temp_props)*/
           })
 })
 var page_content = $('#sm-page').get(0);
-    var contentobserver =  new MutationObserver(function (mutations) {
+var contentobserver =  new MutationObserver(function (mutations) {
         mutations.forEach(function(mutation) {
           if ($('#sm-page').children().length == 0) {
               doProgress('1', 0, 'failure');
@@ -114,9 +131,10 @@ var page_content = $('#sm-page').get(0);
         })
 /*       initGuide('mrules');*/
     })
+mapping_set = document.createElement('mapping-set');
 contentobserver.observe(page_content, {childList: true});
 var tableelement = $('#rules1 > table > tbody').get(0);
-  var ruleobserver =  new MutationObserver(function (mutations) {
+var ruleobserver =  new MutationObserver(function (mutations) {
       mutations.forEach(function(mutation) {
         initPriority();
         if ($(mapping_set).find('mapping').length > 0) {
@@ -130,16 +148,20 @@ var tableelement = $('#rules1 > table > tbody').get(0);
             $('#con-rules').addClass('disabled02');
         }
         else{
-                     
+                      
         }
+/*        in live mode the countDocElements should in the ajax fallback*/
+        countDocElements();
+        computeMatching();
+        watchProgress();
+        showMaps();
       })
 /*       initGuide('mrules');*/
-  })
- ruleobserver.observe(tableelement, {childList: true});
+})
+ ruleobserver.observe(mapping_set, {childList: true});
 modal_form = "<div class='modal fade bs-example-modal-sm' tabindex='-1' role='dialog' aria-labelledby=''>"+
                 "<div class='modal-dialog modal-sm'>"+
                 "<div class='modal-content'>"+"</div></div></div>"
-mapping_set = document.createElement('mapping-set');
 /* function section ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function hideAdhoc(){
   var element_arr = $('#sm-page').find('*[style]');
@@ -294,7 +316,7 @@ function checkSize(){
 function mappingVal2classes(mapping){
     var str_arr = []; 
     for (i = 0; i < mapping.props.length; i++){
-        console.log('rrr ', mapping.props[i].name);
+/*        console.log('rrr ', mapping.props[i].name);*/
         var prop = mapping.props[i];
         if (prop.value != ''){
             if (prop.name == 'font-weight' && prop.value != ''){
@@ -349,7 +371,7 @@ function mappingRange2classes(mapping, pre_filtered_elements){
         var prop = mapping.props[i];
             if (hasRange(mapping) == true){
 /*              Generate range classes refering to hsl color values*/
-                console.log('PROPNAME', prop.name, typeof prop.value);
+/*                console.log('PROPNAME', prop.name, typeof prop.value);*/
                 if (prop.name == 'color' && (prop.value == "")){
                     var class_arr =[],
                     h_arr=[],
@@ -424,6 +446,7 @@ function mapping2previews(mapping){
 }
 function createPopover(id){
   var obj = getMapping(id),
+      row_arr = [],
                     table = document.createElement('table');
                 table.setAttribute('class', 'spec table table-striped');
                 for (var l=0; l < obj.props.length; l++){
@@ -449,170 +472,86 @@ function createPopover(id){
               }
               return table
 }
+function countDocElements(){
+  var count_p = $('#sm-page').find('p[srcpath]').length,
+      count_span = $('#sm-page').find('span[srcpath]').length;
+      document_stat.para = count_p;
+      document_stat.inline = count_span;
+}
 function showMaps(){
-  $('.ul_rules').remove();
+    $('#rulename-list').children('ul').remove();
+    $('#rules1 > table > tbody').children().remove();
+    $('.ul_rules').remove();
 if ($(mapping_set).children().length === 0){
         $('#rules1 > table').find('tbody').html('<td>No mapping in list.</td>');
   }
   else {
-    var mappings = mapping_set.getElementsByTagName('mapping'),
-    ul_rules = document.createElement('ul');
-    ul_rules.setAttribute('class','ul_rules');
-    $('#rules1 > table > tbody').children().remove();
-    $('#inv').children().remove();
-    for (var i=0; i < mappings.length; i++){    
-      var row = document.createElement('tr'),
-          li = document.createElement('li');
-          row_arr = [],
-          stype = '';
-/*          console.log($(mappings[i]).attr('target-type'), 'Targettype', mappings[i]);*/
-          if ($(mappings[i]).attr('target-type') == 'para'){
-            stype = "(¶)";
-          }
-          else if($(mappings[i]).attr('target-type') == 'inline'){
-            stype = "(T)"
-          }
-          
-      row.innerHTML = "<td class='center drag'>"+ (mappings.length-i) +"</td><td class='mstep3 point clickable'><a id='" + mappings[i].getAttribute('name')+"' role='button' href='#'>"+mappings[i].getAttribute('name')+' '+stype+"</a></td><td class='center'>"+ $(mappings[i]).children().length+"</td><td><span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-edit edit-map mstep4'></span> <span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-remove delete-map mstep5'></span></td><td><label><input type='checkbox' name='"+mappings[i].getAttribute('name')+"' class='preview-rule mstep4'></td>"
-      li.innerHTML = "<a id='" + mappings[i].getAttribute('name')+"' role='button' href='#'>"+mappings[i].getAttribute('name')+' '+stype+"</a><span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-remove delete-map clickable'></span>";
-      $(row).addClass('ui-sortable-handle');
-      $('#rules1 > table > tbody').append(row);
-      $(ul_rules).append(li);
-  }
-  $sub_menu.append(ul_rules);
-         $('.ui-sortable-handle > td.point > a').popover(
-        {
-          content: function(){
-           table = createPopover(this.id)
-           return table;
-          },
-          html: 'true',
-          toggle:'popover',
-          placement:'right',
-          trigger:'focus',
-          title:'Rule Properties'
+          var mappings = mapping_set.getElementsByTagName('mapping'),
+          ul_rules = document.createElement('ul');
+          ul_rules.setAttribute('class','ul_rules');
+          ul_rnames = document.createElement('ul');
+          ul_rnames.setAttribute('class','ul_rulenames');
+      /*    $('#inv').children().remove();*/
+          for (var i=0; i < mappings.length; i++){    
+            var row = document.createElement('tr'),
+                li = document.createElement('li'),
+                li_name = document.createElement('li'),
+                stype = '';
+            $(li_name).attr('id', "prev"+mappings[i].getAttribute('name'));
+            $(row).attr('name', mappings[i].getAttribute('name'));
+            $(row).attr('data-priority', mappings[i].getAttribute('priority'));
+            if ($(mappings[i]).attr('target-type') == 'para'){
+              stype = "(¶)";
+            }
+            else if($(mappings[i]).attr('target-type') == 'inline'){
+              stype = "(T)"
+            }
+      /*      rule entry for rule table in the editor*/
+            row.innerHTML = "<td class='center drag'>"+ (mappings.length-i) +"</td><td class='mstep3 point clickable'><a id='" + mappings[i].getAttribute('name')+"' role='button' href='#'>"+mappings[i].getAttribute('name')+' '+stype+"</a></td><td class='center'>"+ $(mappings[i]).children().length+"</td><td><span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-edit edit-map mstep4'></span> <span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-remove delete-map mstep5'></span></td><td><label><input type='checkbox' name='"+mappings[i].getAttribute('name')+"' class='preview-rule mstep4'></td>"
+      /*      rule entry for rule list in the context menu */
+            li.innerHTML = "<a id='" + mappings[i].getAttribute('name')+"' role='button' href='#'>"+mappings[i].getAttribute('name')+' '+stype+"</a><span name='"+mappings[i].getAttribute('name')+"' class='glyphicon glyphicon-remove delete-map clickable'></span>";
+      /*      rule entry for the key chart list */
+            li_name.innerHTML = "<div class='colorbox-prev form-control' style='background-color:"+ bg_color[mappings[i].getAttribute('priority')] +";'></div>"+mappings[i].getAttribute('name')+' '+stype;
+            $(row).addClass('ui-sortable-handle');
+            $('#rules1 > table > tbody').append(row);
+            $(ul_rules).append(li);
+            $(ul_rnames).append(li_name);
         }
-       );
-       $('.ul_rules > li > a').popover(
-        {
-          content: function(){
-           table = createPopover(this.id)
-           return table;
-          },
-          container: 'body',
-          html: 'true',
-          toggle:'popover',
-          placement:'left',
-          trigger:'hover',
-          title:'Rule Properties'
-        }
-       );
-       makeMapsSortable();
+        $sub_menu.append(ul_rules);
+        $rlist.append(ul_rnames);
+            $('.ui-sortable-handle > td.point > a').popover(
+              {
+                content: function(){
+                 table = createPopover(this.id)
+                 return table;
+                },
+                container: 'body',
+                html: 'true',
+                toggle:'popover',
+                placement:'right',
+                trigger:'focus',
+                title:'Rule Properties'
+              }
+             );
+             $('.ul_rules > li > a').popover(
+              {
+                content: function(){
+                 table = createPopover(this.id)
+                 return table;
+                },
+                container: 'body',
+                html: 'true',
+                toggle:'popover',
+                placement:'left',
+                trigger:'hover',
+                title:'Rule Properties'
+              }
+             );
+             makeMapsSortable();
+             if ($(".preview-all").prop('checked') === true){
+               $(".preview-all").first().trigger('change');
+             }
   }
-          $('.preview-rule').change(function(event){
-/*              var bg_color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);  <--- */
-                var bg_color = [
-                    '#86BCFF','#D568FD','#3DE4FC','#5FFEF7','#FF66FF',
-                    '#8ADCFF','#59DF00','#59955C','#2DC800','#1FCB4A',	
-                    '#FF5353','#48FB0D','#B6BA18','#33FDC0','#C8B400',
-                    '#BABA21','#7979FF','#DFA800','#DB9900','#9669FE',
-                    '#FFB428','#FF9331','#FF800D','#DD597D','#CA00CA',
-                    '#29AFD6','#FF6666','#A41CC6','#7373FF','#74BAAC',
-                    '#FF6600','#FF6633','#FF6699','#4BFE78','#FF66CC',
-                    '#9D9D00'
-                    ];
-              var filtered_arr = [],
-              rule_name = $(event.target).attr('name'),
-              rule = getMapping(rule_name);
-              var style = $("<style>."+rule_name+ " { border-left: solid 5px"+ bg_color[rule.priority] +"; border-radius: 3px }</style>");
-              document.styleSheets[0].addRule("."+rule_name, " border-left: solid 5px"+ bg_color[rule.priority] +"; border-radius: 2px");
-              $('html > head').append(style);
-                if (this.checked == true){
-                var filtered_arr = mapping2previews(rule);
-/*                console.log(filtered_arr, filtered_arr.length, 'FILTERED ELEMENTS FOR MAPPING');*/
-                if (filtered_arr.length !=0){
-                $('#'+rule_name).addClass(rule_name);
-              /*   $.each(filtered_arr, function(index){
-                 console.log($(this).css('height'));
-                             var i = index;
-                             if (this != window){
-                              if ($(this).css('height') == '0px'){
-                                  filtered_arr.splice(i, 1);
-                              }   
-                             }
-                 })
-*/               }
-                         $.each(filtered_arr, function(){
-/*                         wenn priority höher als die aktuelle, dann .... */
-                        console.log(rule.priority, 'RULEPRIORITY', $(this).attr('data-view-priority'));
-                        if (this.hasAttribute('data-view-priority')){
-                          if ($(this).attr('data-view-priority') <= rule.priority || $(this).attr('data-active-rule') == ""){
-                            $(this).addClass(rule_name);
-                            $(this).attr('data-active-rule', rule.name);
-                            $(this).attr('data-view-priority', rule.priority);
-                          }
-                        }
-                        else{
-                         $(this).attr('data-active-rule', rule.name);
-                         $(this).attr('data-view-priority', rule.priority);
-                         $(this).addClass(rule_name);
-                        }
-                          /*  var width = $(this).width(),
-                                height = $(this).height(),
-                                margin_top = $(this).css('margin-top');
-                                padding = $(this).css('padding');
-                                margin_bottom = $(this).css('margin-bottom');
-                                position = $(this).position(),
-                                font_size = $(this).css('font-size');
-                                $div = $(document.createElement('div'));
-                                $div2 = $(document.createElement('div'));
-                                $div_container = $(document.createElement('div'))
-                                $div2.html('Matching rule: '+rule_name);
-                                $div2.addClass('step');
-                                $div_container.css('padding', padding);
-                                $div_container.css('width', width);
-                                $div_container.css('height', height);
-                                $div_container.css('margin-top', margin_top);
-                                $div_container.css('margin-bottom', margin_bottom);
-                                $div_container.css('top', position.top);
-                                $div.addClass('preview-overlay');
-                                $div.css('background-color', bg_color);
-                                $div2.addClass('preview-overlay-text');
-                                $div2.css('font-size', font_size);
-                                $div_container.addClass('preview '+rule_name);
-                                $div_container.attr('data-priority',rule.priority);
-                                $($div_container).append($div, $div2);
-                                $('#sm-page').append($div_container);*/
-                         })
-                        
-              }
-              else {
-                  $("*[data-active-rule='" +rule.name+ "'").attr('data-active-rule', "");
-/*                  $('*[data-view-priority]').removeAttr('data-view-priority');   */
-                  $('.'+rule_name).removeClass(rule_name);
-                  $('.preview-all').prop('checked', false);
-                  $('.preview-rule:checked').trigger('change');
-                  console.log('checked checkboxes', $('.preview-rule:checked'));
-              }
-          })
-          $('.preview-all').change(function(event){
-                var checkboxes = $(document).find('input.preview-rule').toArray();
-                console.log('checkboxes', checkboxes);
-                if (this.checked == true){
-                 $.each(checkboxes, function(){
-                    if ($(this).prop('checked') == false){
-                        $(this).prop('checked', true);
-                        $(this).trigger('change');
-                    }
-                 })
-                }
-                else{
-                    $.each(checkboxes, function(){
-                        $(this).prop('checked', false)
-                        $(this).trigger('change');
-                    })
-                }
-          })
 }
 /*function handlePreviews(){
     var element = document.getElementById('sm-page');
@@ -664,7 +603,7 @@ function importMappings(file, event){
       }
   }
   sortByPriority();
-  showMaps();
+/*  showMaps();*/
   if (len){
       handleContent('rules', 'open');
       createSuccess('Rules successfully imported.');
@@ -711,8 +650,8 @@ function createTargetStyles(uri, targettype){
         plholder = $("<option value='' disabled='' selected=''>Select Target Style</option>");
     $(select).append(plholder);
   if (uri != ''){
-    console.log(target_styles, 'TARGET STYLES');
-    console.log('w:styleeeeeee', styles);
+/*    console.log(target_styles, 'TARGET STYLES');*/
+/*    console.log('w:styleeeeeee', styles);*/
     $(styles).each(function(){
         var opt = document.createElement('option'),
         name = $(this).attr('w:styleId') |  $(this).attr('Name');
@@ -725,10 +664,10 @@ function createTargetStyles(uri, targettype){
             $(opt).html($(this).attr('Name'));
           }
           $(select).append(opt);
-        console.log(this, 'style');
+/*        console.log(this, 'style');*/
         }
     })
-    console.log(select);
+/*    console.log(select);*/
   }
   else if (targettype == 'clear'){
     plholder = $("<option value='' disabled='' selected=''>Select Target Type First</option>");
@@ -801,7 +740,7 @@ function updatePropTable(){
 }
 function makeValueLonely(target){
       class_name = '.'+ target.getAttribute('class').replace(/.*\s/, '');
-      console.log('classname', class_name, $(target).attr('type'), 'target val: ', $(target).val());
+/*      console.log('classname', class_name, $(target).attr('type'), 'target val: ', $(target).val());*/
       if ($(target).attr('type') == 'radio'){
           console.log('all but this if checked', class_name, $('input.valgroup').not(class_name));
           $(class_name).next().removeClass('disabled02');
@@ -899,7 +838,7 @@ function isMatching(target_element,rule_id){
                                         min_val_hsl = rgb2Hsl(min_val[0],min_val[1], min_val[2]);
                                         max_val = rgb2array(rule.props[l]['maxvalue']);
                                         max_val_hsl = rgb2Hsl(max_val[0],max_val[1],max_val[2]);
-                                        console.log('vergleichswerte', ele_val, min_val, max_val);
+/*                                        console.log('vergleichswerte', ele_val, min_val, max_val);*/
                                          if (min_val_hsl[0] <= ele_val_hsl[0] && ele_val_hsl[0] <= max_val_hsl[0]){
                                             if (min_val_hsl[1] <= ele_val_hsl[1] && ele_val_hsl[1] <= max_val_hsl[1]) {
                                                 if (min_val_hsl[2] <= ele_val_hsl[2] && ele_val_hsl[2] <= max_val_hsl[2]){
@@ -922,14 +861,14 @@ function isMatching(target_element,rule_id){
             }
           }
       }
-      console.log('counts ends', count_matching);
-      console.log(element_obj);
+/*      console.log('counts ends', count_matching);*/
+/*      console.log(element_obj);*/
       if (count_matching > 0){
-          console.log('its NOT matching!');
+/*          console.log('its NOT matching!');*/
           return false
       }
       else{
-          console.log('its matching!');
+/*          console.log('its matching!');*/
           return true
       }
 }
@@ -939,7 +878,6 @@ function rgb2array(rgb){
     string_arr =  string.split(', ');
     for (str in string_arr){
        rgb_num = parseFloat(string_arr[str])
-       console.log(str, rgb_num);    
        rgb_arr.push(rgb_num);
     }
     return rgb_arr
@@ -1028,7 +966,7 @@ function viewTarget(target_element){
            override_arr.push(prop)
          }
          if(prop === 'color'){
-           arr1.push("<tr><td>"+ prop + adhoc_status +": "+"</td><td> " + props[prop] +"<div class='form-control' style='background-color:"+props[prop]+";width:25px;height:25px;float:right;padding-right:5px;'></div> " +"</td><td><span id='"+prop+"' value='"+props[prop]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")    
+           arr1.push("<tr><td>"+ prop + adhoc_status +": "+"</td><td> " + props[prop] +"<div class='form-control colorbox-insp' style='background-color:"+props[prop]+"'></div> " +"</td><td><span id='"+prop+"' value='"+props[prop]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")    
          }
          else {
            arr1.push("<tr><td>"+ prop + adhoc_status +": "+"</td><td>" + props[prop] +"</td><td><span id='"+prop+"' value='"+props[prop]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")
@@ -1036,19 +974,18 @@ function viewTarget(target_element){
        }
        }
        else{
-         console.log('STYLE', style);
          var props_arr = $.map(style.style, (x) => {return x});
-         console.log('PPROPS', props_arr);
+/*         console.log('PPROPS', props_arr);*/
          $.each(props_arr, function(){
            if(prop === 'color'){
-             arr1.push("<tr><td>"+ this +": "+"</td><td> " + style.style[this] +"<div class='form-control' style='background-color:"+style.style[this]+";width:25px;height:25px;float:right;padding-right:5px;'></div> " +"</td><td><span id='"+this+"' value='"+style.style[this]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")    
+             arr1.push("<tr><td>"+ this +": "+"</td><td> " + style.style[this] +"<div class='form-control colorbox-insp' style='background-color:"+style.style[this]+"'></div> " +"</td><td><span id='"+this+"' value='"+style.style[this]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")    
            }
            else {
              arr1.push("<tr><td>"+ this +": "+"</td><td>" + style.style[this] +"</td><td><span id='"+this+"' value='"+style.style[this]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")
            } 
          })
        }
-       console.log('overrideArray', override_arr);
+/*       console.log('overrideArray', override_arr);*/
        $.each( override_arr, function(){
          var name = this;
          var value= style.style[this];
@@ -1068,7 +1005,6 @@ function viewTarget(target_element){
 }
 function readSingleFile(evt){
   var file = evt.target.files[0]; 
-  console.log('import_event', evt);
    if (file) {
      var r = new FileReader();
      r.onload = function(e) { 
@@ -1099,10 +1035,11 @@ function basicHTTPAuthString(user, passwd){
   return xhr.responseXML;
 }*/
 function updateList(){
+      console.log("UPDATELIST");
       var arr = $('#rules1 > table > tbody').children();
       $.each(arr, function(index){
         $(this).val(arr.length-index);
-        $(mapping_set).find("mapping[name='"+ $(this).children(1).eq(1).text() +"']").attr('priority', $(this).val());
+        $(mapping_set).find("mapping[name='"+ $(this).attr('name') +"']").attr('priority', $(this).val());
         $(this).children(1).eq(0).html(arr.length-index);
       });
 /*      Vergleichen der Prioritäten angefangen mit dem letzten Element. Sofern ein Wert gleich ist, wird bekommt das momentante Element, sowie alle nachfolgenden Elemente, einen nächstgrößeren Wert.*/
@@ -1111,7 +1048,6 @@ function updateList(){
       for (var l=len; l < 0; l--){
             if (li_arr.get(len-1).getAttribute('value') === li_arr.get(l).getAttribute('value')){
             li_arr.get(len-1).setAttribute('value', li_arr.get(l).getAttribute('value'));
-
             for (var m=l; m < len-1; m++){
               li_arr.get(m).setAttribute('value', m+2 );
             }
@@ -1198,7 +1134,7 @@ statusRequest = function(){
                       $('#ajax-temp').children().remove();
                       $('#sm-page').load(fileuri, function(){
                          doProgress('1', 33.33, 'success');
-                         console.log('lalahallo');
+                         countDocElements();
                       });
                       clearTable();
                       $('.createrules').removeClass('disabled02');  
@@ -1292,7 +1228,7 @@ function getResultList(URI){
               for(var file in files){
                 if(files.hasOwnProperty(file)){
                 var fileLink = files[file]["download_uri"];
-                  console.log('file', file);
+/*                  console.log('file', file);*/
                 if (file.includes('.mod')){
                 var fileLinkObject = $("<a role='button' target=\"_blank\" href=\"" + fileLink + "\">Modified Document</a>");
                   $('#download').append(fileLinkObject[0]);
@@ -1311,6 +1247,7 @@ $('.sortable').sortable({
     stop: function(event, ui) {
         $( event.originalEvent.target ).on('click', function(e){ e.stopImmediatePropagation(); } );},
     update: function(event, ui){
+      console.log('AFTER SORT');
       updateList();
       $('.preview-all').prop('checked', false);
       $('.preview-all').trigger('change');
@@ -1370,12 +1307,12 @@ function editMapping(name){
   $('#target-type').trigger('change');
   $('#target-style').val(map_obj.targetstyle);
   var adhoc_arr = map_obj.removeadhoc.split(" ");
-  console.log(adhoc_arr);
+/*  console.log(adhoc_arr);*/
   for (var i=0; i < cssstyles.length; i++){
       for ( var j=0; j < adhoc_arr.length; j++){
           if (cssstyles[i] == adhoc_arr[j]) {
-               console.log(cssstyles[i]);
-             console.log($("#mapping > li > input[name="+cssstyles[i]+"]"));
+/*               console.log(cssstyles[i]);*/
+/*             console.log($("#mapping > li > input[name="+cssstyles[i]+"]"));*/
              $("input[name="+cssstyles[i]+"]").attr('checked', true)
           }
       }
@@ -1388,7 +1325,7 @@ function editMapping(name){
 }
 function editProp(id){
   $li_prop = $("li[id='"+ id + "']");
-  console.log('list_property', $li_prop);
+/*  console.log('list_property', $li_prop);*/
   updatePropTable();
   $('select#pname').val($li_prop.attr('data-name'));
   $('select#pname').trigger('change');
@@ -1479,15 +1416,13 @@ function getMapping(name){
 }
 function deleteMapping(name){
   $(mapping_set).find("mapping[name='"+name+"']")[0].remove();
-  showMaps();
+  $("."+name).removeClass(name)
 }
 function addProps(map_obj){
  var proplinks = $('#properties').find('li');
  for (var i=0; i < proplinks.length; i++){
    /*var prop = getPropById(proplinks[i].id);*/
    var prop = li2prop(proplinks[i]);
-   console.log('single li during function addProps()', proplinks[i]);
-   console.log('single prop during function addProps()', prop);
    map_obj.props.push(prop);
    
  }
@@ -1495,7 +1430,6 @@ function addProps(map_obj){
 function deleteProp(id){
   var listitem = document.getElementById(id);
   var listindex = $('#properties > li').index(listitem);
-  console.log('id', id)
   $('#'+id).remove();
   temp_props.splice(listindex, 1)
 }
@@ -1505,10 +1439,7 @@ var prop1 = new Prop();
     prop1.name =  $('select#pname').val();
     prop1.relevant =  $('#prelevant').val();
     prop1.id = guid();
-    console.log('prop vor der bedingung', prop1);
     if (prop1.name == 'color' || prop1.name == 'background-color'){
-    console.log('propchecked', $('#r1').prop('checked'));
-    console.log(prop1, 'nach der bedingung');
             var name = prop1.name.replace(/-/, '');    
             if ($('#pregex').val() != ""){
              prop1.regex =  $('#pregex').val();
@@ -1532,7 +1463,6 @@ var prop1 = new Prop();
                 prop1[maxh] = hsl_max_arr[0];
                 prop1[maxs] = hsl_max_arr[1];
                 prop1[maxl] = hsl_max_arr[2];
-                    console.log('colors', prop1[minh], prop1[mins]);
             }
             else if ($('#r1').prop('checked') == true){
                 prop1.value =  $('#pvalue').val();
@@ -1559,7 +1489,6 @@ var prop1 = new Prop();
             for (var i=0; i < list_props_true.length; i++){
                 list_props = list_props_true;
                 var data = $(list_props[i]).data();
-                console.log('step relevant', data.relevant, prop1.relevant);
                 if (data.relevant.toString() == prop1.relevant){
                         createQuery(prop1, list_props[i]);            
                 }
@@ -1576,7 +1505,6 @@ var prop1 = new Prop();
             console.log('no type attribute was set');
         }
         if (($('#properties').find('li').length == 0) || ($('#properties').find('li').length != 0 && type == 'new')){
-                console.log('prop1 kurz vor der speicherung'); 
                 storeProp(prop1);
         }
         else{
@@ -1597,7 +1525,6 @@ function createQuery(prop, conflict_li){
 }
 function checkProp(prop){
     var table_rows = $('#add-prop1 > table > tbody').find('tr');
-    console.log(prop, '  ', prop.name);
     if (prop.name === null){
     createError('Error: Missing prop name.');
     table_rows[0].setAttribute('class','form-group has-error has-feedback');
@@ -1628,7 +1555,7 @@ function checkProp(prop){
 function saveMapping(override, type){
     var mapping = setMapping();
     addProps(mapping);
-    console.log('ruleobj', mapping, 'override  ', override);
+/*    console.log('ruleobj', mapping, 'override  ', override);*/
     if (checkMapping(mapping, override) == true && $(mapping_set).find("mapping[name='"+mapping.name+"']")[0]){
         var map_el = $(mapping_set).find("mapping[name='"+mapping.name+"']")[0];
         $(map_el).remove();
@@ -1691,7 +1618,7 @@ function saveMapping(override, type){
     createSuccess('Mapping rule saved!');
     mapping_set.appendChild(mapping);
     sortByPriority()
-    showMaps();
+/*    showMaps();*/
     handleContent('rules', 'open');
     clearTable();
     }
@@ -1848,7 +1775,7 @@ function rgb2Hsl(r, g, b){
 }
 function handleContent(id, task){
 /* function to open or close a menu*/
-console.log($('#'+id).children('span')[0]);
+/*console.log($('#'+id).children('span')[0]);*/
     if ($('#'+id).children('span').hasClass('glyphicon-menu-left') && task == 'open'){
         $('#'+id).trigger('click');
     }
@@ -1876,12 +1803,21 @@ function asOverride(prop, adhoc_arr, target_element, style){
  })
 return bool;
 }
+function watchProgress(){
+      var $progress = $('p.progress_stats'),
+      count_matched_p = $(matching_arr).filter('p').length;
+      count_matched_inline = $(matching_arr).filter('span').length;
+      para_perc = Math.floor(count_matched_p / document_stat.para * 100);
+      inline_perc = Math.floor(count_matched_inline / document_stat.inline * 100);
+      $progress.html("Matched Elements: <span>¶["+para_perc+"%]</span><span>T["+inline_perc+"%]</span>");
+      
+}
 function asAdhoc(prop, target_element){
   var bool = false;
   adhoc_arr = getAdhocs(target_element);
   $.each(adhoc_arr, function(index){
     if (this == prop){
-       console.log('this', this, 'prop', prop);
+/*       console.log('this', this, 'prop', prop);*/
       return bool = true;
     }
   })
@@ -1894,7 +1830,6 @@ function getAdhocs(target){
        adhcss_arr.push(this.name.replace(/^adhcss\:/, '').replace(/\:.+/, ''));
      }
   });
-console.log(adhcss_arr, 'adhoccss array');
   return adhcss_arr;
 }
 function toggleConMenuOn(menutype, nav_selection){
@@ -1960,7 +1895,6 @@ function getPosition(e) {
 }
 function positionMenu(e) {
   con_menu_pos = getPosition(e);
-  console.log('Menu Position:   ', con_menu_pos);
 }
 function autoCreateRule(target_el){
   var map_obj = new Mapping(),
@@ -1972,7 +1906,6 @@ function autoCreateRule(target_el){
   mapping.setAttribute('target-type', $(target_el).attr('data-target-type'));
   mapping.setAttribute('target-style', $(target_el).attr('target-style'));
   mapping.setAttribute('remove-adhoc', "");
-  console.log(props, 'PROPPPPPSSSS ARRAY');
     for (prop in props){
       var name = prop;
 /*      place for setting up the necessary properties for the auto rule*/
@@ -1980,21 +1913,18 @@ function autoCreateRule(target_el){
         var property = document.createElement('prop');
           property.setAttribute("name",prop);
           property.setAttribute("relevant","true");
-          console.log('NAME', name);
         if (name == 'color' || name == 'background-color'){
-                          var ele_val = rgb2array(props[prop]),
-                          ele_val_hsl = rgb2Hsl(ele_val[0],ele_val[1],ele_val[2]);
-                          property.setAttribute("value",props[prop]);
-                          property.setAttribute(name+'-h', ele_val_hsl[0]);
-                          property.setAttribute(name+'-s', ele_val_hsl[1]);
-                          property.setAttribute(name+'-l', ele_val_hsl[2]);
-          }
+            var ele_val = rgb2array(props[prop]),
+            ele_val_hsl = rgb2Hsl(ele_val[0],ele_val[1],ele_val[2]);
+            property.setAttribute("value",props[prop]);
+            property.setAttribute(name+'-h', ele_val_hsl[0]);
+            property.setAttribute(name+'-s', ele_val_hsl[1]);
+            property.setAttribute(name+'-l', ele_val_hsl[2]);
+        }
         else{
             property.setAttribute("value",props[prop]);
         }
         $(mapping).append(property);
-      }else{
-        
       }
     };
     $(mapping_set).append(mapping);
@@ -2010,13 +1940,12 @@ function createTargetStyleList(srcpath, target_type){
     }else{
       var target_style_names = target_styles.children[0].children;
     }
-    console.log('TARGETSTYLLLEES', target_styles);
     var ul = document.createElement('ul');
     $(ul).addClass("ul_"+target_type);
    $(target_style_names).each(function(){
         var li = document.createElement('li'),
         name = $(this).attr('w:styleId') || $(this).attr('Name');
-        console.log($(this).attr('w:styleId'), name);
+/*        console.log($(this).attr('w:styleId'), name);*/
         $(li).attr('target-src', srcpath);
         $(li).attr('target-style', name );
         $(li).attr('class', 'clickable');
@@ -2030,15 +1959,13 @@ function createTargetStyleList(srcpath, target_type){
             $(li).html($(this).attr('Name'));
           }
           $(ul).append(li);
-          console.log(this, 'style');
+/*          console.log(this, 'style');*/
         }
     })
     return ul;
-    console.log(select);
 }
 function positionMenu(e) {
   var menu = $con_menu.get(0);
-  console.log('menu', menu);
   clickCoords = getPosition(e);
   clickCoordsX = clickCoords.x;
   clickCoordsY = clickCoords.y;
@@ -2069,7 +1996,7 @@ function positionSubMenu($sub_nav){
   menuChoordsX = menu_position.left;
   menuChoordsY = menu_position.top;
   sub_menuWidth = $('#sub-menu').width();
-  sub_menuHeight = $('#sub-menu').height();
+  sub_menuHeight = $('#sub-menu').height();/*
   console.log(
   'windowwidth',windowWidth,
   'windowheight',windowHeight,
@@ -2079,7 +2006,7 @@ function positionSubMenu($sub_nav){
   'menuchoordsy',menuChoordsY,
   sub_menuWidth,
   sub_menuHeight,
-  sub_menu.style.left, sub_menu.style.top)
+  sub_menu.style.left, sub_menu.style.top)*/
   if (windowWidth - menuChoordsX - menuWidth < sub_menuWidth){
      sub_menu.style.left = menuChoordsX - sub_menuWidth + "px";
   }else{
@@ -2091,10 +2018,23 @@ function positionSubMenu($sub_nav){
     sub_menu.style.top = menuChoordsY + $sub_nav.position().top + "px";
   }
 }
+function computeMatching(){
+  matching_arr = []
+  $.each($(mapping_set).find('mapping'), function(){
+    var par_arr = [];
+    rule = getMapping(this.getAttribute('name'));
+    part_arr = mapping2previews(rule);
+    $.each(part_arr, function(){
+      matching_arr.push(this);
+    })
+  })
+  matching_arr = jQuery.unique(matching_arr)
+/*  console.log('ALL Matching Elements', arr);*/
+}
 function getTargetStyleName(target_element){
   var styles_arr = $.map(document.styleSheets[3].cssRules, (x) => {return x.selectorText;}),
   style_name = "No Style";
-  console.log(styles_arr, 'Stylearr');
+/*  console.log(styles_arr, 'Stylearr');*/
   $.each(styles_arr, function(index){
      if ($(target_element).hasClass(this.replace(/^\./, ''))){
        return style_name = this;
@@ -2104,7 +2044,7 @@ function getTargetStyleName(target_element){
 }
 function getTargetStyle(target_element, style_name){
   var styles_arr = $.map(document.styleSheets[3].cssRules, (x) => {if (x.selectorText == style_name){return x}});
-  console.log(styles_arr[0]);
+/*  console.log(styles_arr[0]);*/
   return styles_arr[0];
 }
 function generateBreadcrumbs(target_element){
@@ -2298,6 +2238,16 @@ $('#insp-options1').on('change', 'input#hide-adhoc', function(){
     }
     $("*[srcpath='"+ this.getAttribute('srcp')+"']").trigger('click');
 });
+$('input.show-type').on('change', function(){
+    if (this.checked === false){
+      $('input.show-type').prop('checked', false);
+      $('.prev, #unmatched').hide();
+    }else if(this.checked === true){
+      $('input.show-type').prop('checked', true);
+      $('.prev, #unmatched').show();
+    }
+    $("*[srcpath='"+ this.getAttribute('srcp')+"']").trigger('click');
+});
 $('div.modal-content').on('click', 'div.modal-footer > button.override', function(event){
      if (event.target.innerHTML === 'Yes'){
       saveMapping(true, 'change');
@@ -2328,12 +2278,11 @@ $('#prop_form > tbody').on('click', 'tr > td >#r1, tr > td > #r2, tr > td > #r3,
   makeValueLonely(evt.target);
 /*  $(this).next().trigger('change');*/
 })
-/* event.preventDefault() doesnt work for dynamically created anchors from the html conversion, yet. Whereas all jquery conventions to do so are correct. clumsy workaround: disabling click action via css.
-$('#sm-page').on('click', '*[srcpath] > a', function(event){
-      event.preventDefault();
-      console.log('prevented');
-})*/
-$('#sm-page').on('click','span[style][srcpath], p[style][srcpath]',function(event) {
+$('#sm-page').on('click','span[style][srcpath], p[style][srcpath], *[srcpath] > a, a[srcpath]',function(event) {
+        console.log($(this), 'clicked element', event.target);
+        if ($(this).is('span') && $(this).parent('a')){
+          event.preventDefault();
+        }
         event.stopImmediatePropagation();
         generateBreadcrumbs(this);
         $('#hide-adhoc').attr('srcp', this.getAttribute('srcpath'));
@@ -2398,6 +2347,165 @@ $('.clickable').on('click', function(){
 /*  $(this).find('*').animate({fontSize: '95%', width: '99%', height: '99%'}, 200);*/
 /*TODO - CLICK FEEDBACK FOR CLICKABLE ELEMENTS*/
 });
+$('tbody.mapping-rules').on('change', 'tr > td > label > input.preview-rule', function(event){
+/*  var bg_color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);  <--- */
+    var filtered_arr = [],
+    rule_name = $(event.target).attr('name'),
+    rule = getMapping(rule_name);
+    var style = $("<style>."+rule_name+ " { border-left: solid 5px"+ bg_color[rule.priority] +"; border-radius: 3px }</style>");
+    document.styleSheets[0].addRule("."+rule_name, " border-left: solid 5px"+ bg_color[rule.priority] +"; border-radius: 2px");
+    $('html > head').append(style);
+    if (this.checked == true){
+      var filtered_arr = mapping2previews(rule);
+      if (filtered_arr.length !=0){
+       $('#'+rule_name).addClass(rule_name);
+       $('#prev'+rule_name).show()
+      }else{
+        $('#prev'+rule_name).hide()
+      }
+      $.each(filtered_arr, function(){
+/*        console.log(rule.priority, 'RULEPRIORITY', $(this).attr('data-view-priority'));*/
+        if (this.hasAttribute('data-view-priority')){
+          if ($(this).attr('data-view-priority') <= rule.priority || $(this).attr('data-active-rule') == ""){
+            $(this).addClass(rule_name);
+            $(this).addClass('matched');
+            $(this).attr('data-active-rule', rule.name);
+            $(this).attr('data-view-priority', rule.priority);
+          }
+        }
+        else{
+         $(this).attr('data-active-rule', rule.name);
+         $(this).attr('data-view-priority', rule.priority);
+         $(this).addClass(rule_name);
+         $(this).removeClass('matched');
+        }
+      })
+    }
+    else {
+        $("*[data-active-rule='" +rule.name+ "'").attr('data-active-rule', "");
+     /* $('*[data-view-priority]').removeAttr('data-view-priority');   */
+        $('.'+rule_name).removeClass(rule_name);
+        $('.preview-all').prop('checked', false);
+        $('.preview-rule:checked').trigger('change');
+        $('#prev'+rule_name).hide()
+/*        console.log('checked checkboxes', $('.preview-rule:checked'));*/
+    }
+})
+$('.preview-all').change(function(event){
+      var checkboxes = $(document).find('input.preview-rule').toArray();
+/*      console.log('checkboxes', checkboxes);*/
+      if (this.checked == true){
+      $('.preview-all').prop('checked', true);
+          $.each(checkboxes, function(){
+          if ($(this).prop('checked') == false){
+              $(this).prop('checked', true);
+              $(this).trigger('change');
+          }
+       })
+      }
+      else{
+          $('.preview-all').prop('checked', false);
+          $.each(checkboxes, function(){
+              $(this).prop('checked', false)
+              $(this).trigger('change');
+          })
+      }
+})
+/*$('tbody.mapping-rules').on('change', 'tr > td > label > input.preview-rule', function(event){
+/\*  var bg_color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);  <--- *\/
+    var filtered_arr = [],
+    rule_name = $(event.target).attr('name'),
+    rule = getMapping(rule_name);
+    var style = $("<style>."+rule_name+ " { border-left: solid 5px"+ bg_color[rule.priority] +"; border-radius: 3px }</style>");
+    document.styleSheets[0].addRule("."+rule_name, " border-left: solid 5px"+ bg_color[rule.priority] +"; border-radius: 2px");
+    $('html > head').append(style);
+      if (this.checked == true){
+      var filtered_arr = mapping2previews(rule);
+/\*    console.log(filtered_arr, filtered_arr.length, 'FILTERED ELEMENTS FOR MAPPING');*\/
+      if (filtered_arr.length !=0){
+        $('#'+rule_name).addClass(rule_name);
+/\* $.each(filtered_arr, function(index){
+       console.log($(this).css('height'));
+                   var i = index;
+                   if (this != window){
+                    if ($(this).css('height') == '0px'){
+                        filtered_arr.splice(i, 1);
+                    }   
+                   }
+       })
+*\/           
+      }
+               $.each(filtered_arr, function(){
+/\*             wenn priority höher als die aktuelle, dann .... *\/
+              console.log(rule.priority, 'RULEPRIORITY', $(this).attr('data-view-priority'));
+              if (this.hasAttribute('data-view-priority')){
+                if ($(this).attr('data-view-priority') <= rule.priority || $(this).attr('data-active-rule') == ""){
+                  $(this).addClass(rule_name);
+                  $(this).attr('data-active-rule', rule.name);
+                  $(this).attr('data-view-priority', rule.priority);
+                }
+              }
+              else{
+               $(this).attr('data-active-rule', rule.name);
+               $(this).attr('data-view-priority', rule.priority);
+               $(this).addClass(rule_name);
+              }
+                /\*  var width = $(this).width(),
+                      height = $(this).height(),
+                      margin_top = $(this).css('margin-top');
+                      padding = $(this).css('padding');
+                      margin_bottom = $(this).css('margin-bottom');
+                      position = $(this).position(),
+                      font_size = $(this).css('font-size');
+                      $div = $(document.createElement('div'));
+                      $div2 = $(document.createElement('div'));
+                      $div_container = $(document.createElement('div'))
+                      $div2.html('Matching rule: '+rule_name);
+                      $div2.addClass('step');
+                      $div_container.css('padding', padding);
+                      $div_container.css('width', width);
+                      $div_container.css('height', height);
+                      $div_container.css('margin-top', margin_top);
+                      $div_container.css('margin-bottom', margin_bottom);
+                      $div_container.css('top', position.top);
+                      $div.addClass('preview-overlay');
+                      $div.css('background-color', bg_color);
+                      $div2.addClass('preview-overlay-text');
+                      $div2.css('font-size', font_size);
+                      $div_container.addClass('preview '+rule_name);
+                      $div_container.attr('data-priority',rule.priority);
+                      $($div_container).append($div, $div2);
+                      $('#sm-page').append($div_container);*\/
+               })
+              
+    }
+    else {
+        $("*[data-active-rule='" +rule.name+ "'").attr('data-active-rule', "");
+     /\* $('*[data-view-priority]').removeAttr('data-view-priority');   *\/
+        $('.'+rule_name).removeClass(rule_name);
+        $('.preview-all').prop('checked', false);
+        $('.preview-rule:checked').trigger('change');
+        console.log('checked checkboxes', $('.preview-rule:checked'));
+    }
+})
+$('.preview-all').change(function(event){
+      var checkboxes = $(document).find('input.preview-rule').toArray();
+      console.log('checkboxes', checkboxes);
+      if (this.checked == true){
+       $.each(checkboxes, function(){
+          if ($(this).prop('checked') == false){
+              $(this).prop('checked', true);
+              $(this).trigger('change');
+          }
+       })
+      }
+      else{
+          $.each(checkboxes, function(){
+              $(this).prop('checked', false)
+              $(this).trigger('change');
+          })
+      }
+})*/
 $('#download-rules').on('click', function(){
   downloadRules();
 })
@@ -2410,7 +2518,6 @@ $('#sm-page').on('contextmenu', $(this).find('*'), function(evt){
     ul_inline = createTargetStyleList($(evt.target).attr('srcpath'), 'inline');
     $con_menu.attr('target-src', $(evt.target).attr('srcpath'));
     $sub_menu.append(ul_para, ul_inline);
-    
     positionMenu(evt);
     toggleConMenuOn('con_menu');
     $('#sm-page *[srcpath]').removeClass('inspected');
@@ -2421,6 +2528,7 @@ $('#sm-page').on('contextmenu', $(this).find('*'), function(evt){
 })
 $('#menu > ul > li').on('click', function(evt){
   var target_type = $(evt.target).attr('data-target-type');
+/*   console.log($('.ul_'+target_type)[0], 'hallooooo');*/
    $('.ul_'+target_type).show();
    positionSubMenu($('#con-'+target_type));
    toggleConMenuOn('sub_menu', "#con-"+target_type);
@@ -2433,14 +2541,26 @@ $('#menu > ul > li[data-target-type]').hover(function(evt){
    }else{
     toggleConMenuOff('sub_menu', "#con-rules, #con-inline, #con-para");  
    }; 
-})
+  }
+)
+$('#unmatched').on('click', function(e){
+    $unmatched_element = $('*[srcpath]').not('.matched').first();
+    $unmatched_element.trigger('click');
+    if ($unmatched_element.is('span, a')){
+      $unmatched_element = $unmatched_element.parent('p');
+    };
+/*    console.log('UNMATCHED ELEMENT', $unmatched_element.get(0));*/
+    $('#main-wrapper').animate({
+        scrollTop: $unmatched_element.get(0).scrollHeight + 30
+    }, 1000);
+    return false;
+});
 $('div').not('#menu, #sub-menu').on('click', function(){
   toggleConMenuOff('sub_menu', "#con-rules, #con-inline, #con-para");
   toggleConMenuOff('con_menu', "#con-rules, #con-inline, #con-para");
 })
 $('#sub-menu').on('click', '.ul_para > li, .ul_inline > li', function(evt){
     autoCreateRule(evt.target);
-    showMaps();
 })
 $('#hide-sidebar > input').on('change',function(){
   if ($(this).is(':checked')){

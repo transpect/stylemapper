@@ -102,7 +102,7 @@
               </tr>
               <tr class="estep5">
                 <td>Target Type*</td>
-                <td><select class="form-control" id="target-type" value="">
+                <td><select class="form-control" id="target-type">
                   <option value="" selected="" disabled="">Select Target Type</option>
                   <option value="para">para</option>
                   <option value="inline">inline</option>
@@ -113,7 +113,7 @@
                   data-trigger="hover" title="What means target style?"
                   data-content="Its a new style you can select from template document for the matching elements.">
                   <span class="glyphicon glyphicon-info-sign"></span></a></td>
-                <td><select class="form-control" id="target-style" value="">
+                <td><select class="form-control" id="target-style">
                   <option value="" selected="" disabled="">Select Target Style First</option>
                 </select></td>
               </tr>
@@ -144,7 +144,7 @@
                 <table id="prop_form" class="table table-striped table-condensed">
                   <tr class="estep10">
                     <td>Name*:</td>
-                    <td><select id="pname" class="form-control" value=""></select></td>
+                    <td><select id="pname" class="form-control"></select></td>
                   </tr>
                   <tr class="estep11">
                     <td id="value_check1">Value*</td>
@@ -186,6 +186,9 @@
               </div>
             <div id="rules" class="navpoint clickable "><h1 class="navhl">Rules</h1><span class="glyphicon glyphicon-menu-left navsym"></span></div>
             <div id="rules1" class="inner-content mstep2">
+              <div class="progress_stats">
+                <p class="progress_stats"></p>
+              </div>
               <table class="table table-striped table-condensed"><thead><tr><th class="center">Priority</th><th>Rule</th><th class="center">Properties</th><th class="center"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"><span></span></span></th><th class="center"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"><span><input type="checkbox" class="preview-all"/></span></span></th></tr></thead><tbody class="sortable mapping-rules ui-sortable"></tbody></table>
               <p class="right">
                 <button class="btn btn-sm btn-default estep2" id="download-rules">Download Rules</button>
@@ -197,8 +200,14 @@
             <div id="insptable"><h1 class="navhl">Inspected style Properties</h1><span class="glyphicon glyphicon-info-sign" title="No inspected styles yet." data-content="You have nothing inspected, yet. Click on the document elements of your uploaded document to get style information."></span><span id="remove-insp" class="glyphicon glyphicon-remove navsym clickable"></span></div>
             <div id="insp-options" class="navpoint subnavpoint clickable"><h2 class="navhl">Options</h2><span class="glyphicon glyphicon-menu-left navsym"/></div>
             <div id="insp-options1">
-              <label class="control-label">Remove Ad Hoc Styles</label>
-              <input id="hide-adhoc" type="checkbox" value="false" class="form-group"/>
+              <p>
+                <label class="control-label">Remove Ad Hoc Styles</label>
+                <input id="hide-adhoc" type="checkbox" value="false" class="form-group hide-adhoc" />
+              </p>
+              <p>
+                <label class="control-label">Advanced View</label>
+                <input type="checkbox" value="false" class="form-group show-type" />
+              </p>
             </div>
             <p id="breadcrumbs"></p>
             <div id="style-info"></div>
@@ -206,483 +215,517 @@
             </tbody></table>
           </div>
         </div>
-             <div id="main-wrapper" class="col-sm-8 col-md-9 col-lg-9 pull-right">
-          <div id="sm-content" class="istep1 wstep2">
-            <div id="delete-content"><span class="glyphicon glyphicon-remove clickable"></span></div>
-            <div id="sm-page">
-<!--              THE PLACE FOR THE CONTENT              -->
-              
-              
-              <body><div class="info"> </div><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="_berschrift_1 c_h_213 r_c_h_210 c_s_46 r_c_s_40 c_l_39 r_c_l_30 fm_Cambria fs_14 r_fs_14 fw_bold c_h_213 r_c_h_210 c_s_46 r_c_s_40 c_l_39 r_c_l_30"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 24pt; margin-bottom: 0pt; text-align: left; font-family: Cambria; color: #365F91; font-size: 14pt; font-weight: bold"
+      <div id="main-wrapper" class="col-sm-8 col-md-9 col-lg-9 pull-right">
+        <div id="sm-content" class="istep1 wstep2">
+          <div id="delete-content"><span class="glyphicon glyphicon-remove clickable"></span></div>
+          <div id="sm-page">
+            <!--              THE PLACE FOR THE CONTENT              -->
+           <p xmlns:adhcss="http://transpect.io/adhcss"
+              class="_berschrift_1 fm_Cambria fs_14 r_fs_14 fw_bold c_h_0 r_c_h_0 c_s_0 r_c_s_0 c_l_0 r_c_l_0"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 24pt; margin-bottom: 0pt; text-align: left; font-family: Cambria; color: #000000; font-size: 14pt; font-weight: bold"
               xml:lang="de" adhcss:margin-top="24pt" adhcss:margin-bottom="0pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[1]">le-tex transpect</p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[1]"><span xmlns="" class="prev pa"> ¶ </span>le-tex
+              transpect</p><p class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
               style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[2]">transpect ist ein Framework für
-              die Prüfung und Konvertierung von XML-Dateien und XML-basierten Dateiformaten wie OOXML (.docx), IDML und
-              EPUB.</p><p
-              class="_berschrift_2 c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50 fm_Cambria fs_13 r_fs_13 fw_bold c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 10pt; margin-bottom: 0pt; text-align: left; font-family: Cambria; color: #4F81BD; font-size: 13pt; font-weight: bold"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[3]">Motivation</p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[2]"><span xmlns="" class="prev pa"> ¶
+              </span>transpect ist ein Framework für die Prüfung und Konvertierung von XML-Dateien und XML-basierten
+              Dateiformaten wie OOXML (.docx), IDML und EPUB.</p><p
+              class="_berschrift_2 fm_Cambria fs_13 r_fs_13 fw_bold c_h_0 r_c_h_0 c_s_100 r_c_s_100 c_l_60 r_c_l_60"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 10pt; margin-bottom: 0pt; text-align: left; font-family: Cambria; color: #FF3333; font-size: 13pt; font-weight: bold"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[3]"><span xmlns="" class="prev pa"> ¶
+              </span>Motivation</p><p class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
               style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[4]">Verlage möchten medienübergreifend
-              produzieren. Neben PDF-Output sollen bei möglichst allen Satztiteln EPUB-Daten und evtl. auch XML gemäß
-              Verlagsschema herauskommen. Ein Ansatz ist XML first: zunächst den Input nach XML konvertieren und dann alle
-              Formate daraus generieren. Leider gibt es bei diesem Ansatz praktische Schwierigkeiten, wie z.B.:</p><p
-              xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[4]"><span xmlns="" class="prev pa"> ¶
+              </span>Verlage möchten medienübergreifend produzieren. Neben PDF-Output sollen bei möglichst allen Satztiteln
+              EPUB-Daten und evtl. auch XML gemäß Verlagsschema herauskommen. Ein Ansatz ist XML first: zunächst den Input nach
+              XML konvertieren und dann alle Formate daraus generieren. Leider gibt es bei diesem Ansatz praktische
+              Schwierigkeiten, wie z.B.:</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[5]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Wie kommt man möglichst automatisch aus heterogenem Input (meistens jedoch Word) zu sauberem XML?<span
-                class="footnote" id="fn-d5768e41"><sup class="footnote"><a href="#en-d5768e41"></a></sup></span></p><p
-              xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[5]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Wie kommt man möglichst automatisch aus
+              heterogenem Input (meistens jedoch Word) zu sauberem XML?<span class="footnote" id="fn-d3851e41"><sup
+                  class="footnote"><a href="#en-d3851e41"></a></sup></span></p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[6]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Kann man Autoren, technische <span class="Benutzereingabe fm_LiberationMono fs_13"
-                style="font-family: &#34;Liberation Mono&#34;; font-size: 13pt" adhcss:font-size="13pt"
-                srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[6]/w:r[2]">Hersteller</span> und Copy-Editoren,
-              die in Word arbeiten, mit Selbstbedienungstools unterstützen, die Feedback auf dem Weg zur perfekt
-              strukturierbaren Worddatei geben (Prüfung) und vielleicht gleich das XML erzeugen (Konvertierung)?</p><p
-              xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[6]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Kann man Autoren, technische <span
+                class="Benutzereingabe fm_LiberationMono fs_13"
+                style="font-family: &#34;Liberation Mono&#34;; font-size: 13pt; display: inline" adhcss:font-size="13pt"
+                srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[6]/w:r[2]"><span xmlns="" class="prev in"> T
+                </span>Hersteller</span> und Copy-Editoren, die in Word arbeiten, mit Selbstbedienungstools unterstützen, die
+              Feedback auf dem Weg zur perfekt strukturierbaren Worddatei geben (Prüfung) und vielleicht gleich das XML erzeugen
+              (Konvertierung)?</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[7]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Unzureichende XML-Unterstützung von InDesign: Wie geht man mit Autoren um, die einen Umbruch in finaler
-              Anmutung erwarten, bevor sie intensiv korrekturlesen? Bzw. was bedeutet es für den Umbruch? Trägt man die
-              unvermeidlichen Korrekturen ins XML ein und erzeugt und umbricht die InDesign-Datei neu? Lässt man den Setzer
-              neben dem Text und dem Layout das mitgeführte Tagging korrigieren, was ja leider bei InDesign ein Eigenleben neben
-              dem Layout führen kann? Wie stellt man bei mitgeführtem XML sicher, dass z.B. eine Kursivierung auch im Tagging
-              entfernt wurde und nicht unverhofft im erzeugten EPUB wieder auftaucht? Überhaupt: wie lassen sich stark
-              strukturierte Daten wie Literaturangaben oder Inhaltsklassifizierungen als XML mitführen? Das alles verursacht <a
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[7]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Unzureichende XML-Unterstützung von
+              InDesign: Wie geht man mit Autoren um, die einen Umbruch in finaler Anmutung erwarten, bevor sie intensiv
+              korrekturlesen? Bzw. was bedeutet es für den Umbruch? Trägt man die unvermeidlichen Korrekturen ins XML ein und
+              erzeugt und umbricht die InDesign-Datei neu? Lässt man den Setzer neben dem Text und dem Layout das mitgeführte
+              Tagging korrigieren, was ja leider bei InDesign ein Eigenleben neben dem Layout führen kann? Wie stellt man bei
+              mitgeführtem XML sicher, dass z.B. eine Kursivierung auch im Tagging entfernt wurde und nicht unverhofft im
+              erzeugten EPUB wieder auftaucht? Überhaupt: wie lassen sich stark strukturierte Daten wie Literaturangaben oder
+              Inhaltsklassifizierungen als XML mitführen? Das alles verursacht <a class=""
                 srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[7]/w:hyperlink[1]"
                 href="http://publishinggeekly.com/2010/11/xml-first-workflows-in-indesign-trugerische-sicherheit/?lang=de"><span
-                  class="Internetlink c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50"
-                  style="color: #0000FF; text-decoration-style: solid; text-decoration-line: underline" xml:lang="zxx"
-                  srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[7]/w:hyperlink[1]/w:r[1]">Kosten und
-                  Qualitätsprobleme</span></a>.</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
-              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[8]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Wenn man auf Grund der Probleme bei der InDesign-Produktion auf XML first verzichtet: Wie stellt man
-              sicher, dass beim <span style="font-family: Courier; font-size: 14pt" adhcss:font-family="Courier"
-                adhcss:font-size="14pt" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[8]/w:r[2]">Export
-              </span>kein Inhalt verloren geht oder verdoppelt wird, dass das Tagging den Verlagsrichtlinien entspricht, und wie
-              erhält man EPUBs, die den Verlags- und Distributorenanforderungen genügen?</p><p
+                  class="Internetlink c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50"
+                  style="color: #0000FF; text-decoration-style: solid; text-decoration-line: underline; display: inline"
+                  xml:lang="zxx" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[7]/w:hyperlink[1]/w:r[1]"><span
+                    xmlns="" class="prev in"> T </span>Kosten und Qualitätsprobleme</span></a>.</p><p
               xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[9]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Kann man, ähnlich wie dem Word-Bearbeiter, dem InDesign-Setzer ein Selbstbedienungstool an die Hand
-              geben, das mögliche Fehler wie unverankerte Bilder, unverlinkte Literaturverweise oder händisch formatierte
-              Überschriften (die dann nicht im EPUB-Inhaltsverzeichnis auftauchen) anzeigt und gleich auch noch Verlags-XML
-              erzeugt, validiert und daraus ein EPUB erzeugt?</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[8]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Wenn man auf Grund der Probleme bei der
+              InDesign-Produktion auf XML first verzichtet: Wie stellt man sicher, dass beim <span class="fm_Courier fs_14"
+                style="font-family: Courier; font-size: 14pt; display: inline" adhcss:font-family="Courier"
+                adhcss:font-size="14pt" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[8]/w:r[2]"><span xmlns=""
+                  class="prev in"> T </span>Export </span>kein Inhalt verloren geht oder verdoppelt wird, dass das Tagging den
+              Verlagsrichtlinien entspricht, und wie erhält man EPUBs, die den Verlags- und Distributorenanforderungen
+              genügen?</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[10]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Wie geht man mit abweichenden Satzanweisungen, Formatvorlagenbenennungen und Strukturmerkmalen um? Muss
-              man alle Daten über einen Kamm scheren, was Prüf- und Konvertierregeln angeht, oder kann man diese Regeln pro<span
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[9]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Kann man, ähnlich wie dem Word-Bearbeiter,
+              dem InDesign-Setzer ein Selbstbedienungstool an die Hand geben, das mögliche Fehler wie unverankerte Bilder,
+              unverlinkte Literaturverweise oder händisch formatierte Überschriften (die dann nicht im EPUB-Inhaltsverzeichnis
+              auftauchen) anzeigt und gleich auch noch Verlags-XML erzeugt, validiert und daraus ein EPUB erzeugt?</p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[10]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Wie geht man mit abweichenden
+              Satzanweisungen, Formatvorlagenbenennungen und Strukturmerkmalen um? Muss man alle Daten über einen Kamm scheren,
+              was Prüf- und Konvertierregeln angeht, oder kann man diese Regeln pro<span
                 class="Benutzereingabe fm_LiberationMono fs_28 r_fs_28 fst_italic"
-                style="font-family: &#34;Liberation Mono&#34;; font-size: 28pt; font-style: italic" adhcss:font-style="italic"
-                srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[10]/w:r[2]"> Imprint</span>, Reihe oder gar im
-              Notfall pro Einzeltitel anpassen?</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+                style="font-family: &#34;Liberation Mono&#34;; font-size: 28pt; font-style: italic; display: inline"
+                adhcss:font-style="italic" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[10]/w:r[2]"><span
+                  xmlns="" class="prev in"> T </span> Imprint</span>, Reihe oder gar im Notfall pro Einzeltitel anpassen?</p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[11]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Wie kann man möglichst die bewährten Satzbetriebe oder In-House-Kräfte weiterbeschäftigen, ohne dass sie
-              Experten in XML und EPUB werden müssen?</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[11]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Wie kann man möglichst die bewährten
+              Satzbetriebe oder In-House-Kräfte weiterbeschäftigen, ohne dass sie Experten in XML und EPUB werden müssen?</p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[12]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Wie verteilt man Prüf- und Konvertiertools? Interaktive Plugins für Word und InDesign erscheinen
-              attraktiv, bereiten aber Probleme bei der Installation (Rechte), Kompatibilität (Updates der Anwendungen,
-              Wechselwirkung mit anderen Plugins) und bei der Aktualisierung der Prüf- und Konvertierregeln.</p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[12]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Wie verteilt man Prüf- und Konvertiertools?
+              Interaktive Plugins für Word und InDesign erscheinen attraktiv, bereiten aber Probleme bei der Installation
+              (Rechte), Kompatibilität (Updates der Anwendungen, Wechselwirkung mit anderen Plugins) und bei der Aktualisierung
+              der Prüf- und Konvertierregeln.</p><p
+              class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
               style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[13]">Unsere Antwort auf diese Fragen
-              lautet le-tex transpect.</p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[13]"><span xmlns="" class="prev pa"> ¶
+              </span>Unsere Antwort auf diese Fragen lautet le-tex transpect.</p><p
+              class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
               style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[14]"><img
-                src="file:/D:/frontend/output/transpect_wp_de.docx/transpect_wp_de.docx.tmp/word/media/image1.png"
-                alt="file:/D:/frontend/output/transpect_wp_de.docx/transpect_wp_de.docx.tmp/word/media/image1.png"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[14]"><span xmlns="" class="prev pa"> ¶
+                </span><img
+                src="file:/D:/projects/stylemepper/output/transpect_wp_de_colornames.docx/transpect_wp_de_colornames.docx.tmp/word/media/image1.png"
+                alt="file:/D:/projects/stylemepper/output/transpect_wp_de_colornames.docx/transpect_wp_de_colornames.docx.tmp/word/media/image1.png"
                 srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[14]/w:r[1]/w:drawing[1]" /></p><p
-              class="caption c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50 fm_Calibri fs_9 r_fs_9 fw_bold c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50"
+              class="caption fm_Calibri fs_9 r_fs_9 fw_bold c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50"
               style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #4F81BD; font-size: 9pt; font-weight: bold"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[15]">Abbildung 1 Schematischer Ablauf
-              einer transpect-Konvertierungspipeline</p><p
-              class="_berschrift_3 c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50 fm_Cambria fs_11 r_fs_11 fw_bold c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[15]"><span xmlns="" class="prev pa"> ¶
+              </span>Abbildung 1 Schematischer Ablauf einer transpect-Konvertierungspipeline</p><p
+              class="_berschrift_3 fm_Cambria fs_11 r_fs_11 fw_bold c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50"
               style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 10pt; margin-bottom: 0pt; text-align: left; font-family: Cambria; color: #4F81BD; font-size: 11pt; font-weight: bold"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[16]">Lösung</p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[16]"><span xmlns="" class="prev pa"> ¶
+              </span>Lösung</p><p class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
               style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[17]">transpect bietet</p><p
-              xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[17]"><span xmlns="" class="prev pa"> ¶
+              </span>transpect bietet</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[18]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>eine Infrastruktur zur Konvertierung aus XML und aus XML-basierten Dateiformaten wie IDML (InDesign) und
-              OOXML (.docx) sowie zur Generierung von IDML, HTML+CSS, EPUB, .docx und anderer XML-Dialekte;</p><p
-              xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[18]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>eine Infrastruktur zur Konvertierung aus XML
+              und aus XML-basierten Dateiformaten wie IDML (InDesign) und OOXML (.docx) sowie zur Generierung von IDML,
+              HTML+CSS, EPUB, .docx und anderer XML-Dialekte;</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[19]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Konverter in Standard-Technologien: <a
-                srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[19]/w:hyperlink[1]"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[19]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Konverter in Standard-Technologien: <a
+                class="" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[19]/w:hyperlink[1]"
                 href="http://www.w3.org/TR/xslt20/"><span
-                  class="Internetlink c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50"
-                  style="color: #0000FF; text-decoration-style: solid; text-decoration-line: underline" xml:lang="zxx"
-                  srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[19]/w:hyperlink[1]/w:r[1]">XSLT 2</span></a> zur
-              XML-Transformation und <a srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[19]/w:hyperlink[2]"
+                  class="Internetlink c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50"
+                  style="color: #0000FF; text-decoration-style: solid; text-decoration-line: underline; display: inline"
+                  xml:lang="zxx" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[19]/w:hyperlink[1]/w:r[1]"><span
+                    xmlns="" class="prev in"> T </span>XSLT 2</span></a> zur XML-Transformation und <a class=""
+                srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[19]/w:hyperlink[2]"
                 href="http://www.w3.org/TR/xproc/"><span
-                  class="Internetlink c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50"
-                  style="color: #0000FF; text-decoration-style: solid; text-decoration-line: underline" xml:lang="zxx"
-                  srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[19]/w:hyperlink[2]/w:r[1]">XProc</span></a> zur
-              „Orchestrierung“ mitunter komplexer Konvertier- und Prüf-Pipelines;</p><p
-              xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+                  class="Internetlink c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50"
+                  style="color: #0000FF; text-decoration-style: solid; text-decoration-line: underline; display: inline"
+                  xml:lang="zxx" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[19]/w:hyperlink[2]/w:r[1]"><span
+                    xmlns="" class="prev in"> T </span>XProc</span></a> zur „Orchestrierung“ mitunter komplexer Konvertier- und
+              Prüf-Pipelines;</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[20]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>neutrales Zwischenformat („<a
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[20]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>neutrales Zwischenformat („<a class=""
                 srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[20]/w:hyperlink[1]"
                 href="https://github.com/gimsieke/Hub"><span
-                  class="Internetlink c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50"
-                  style="color: #0000FF; text-decoration-style: solid; text-decoration-line: underline" xml:lang="zxx"
-                  srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[20]/w:hyperlink[1]/w:r[1]">Hub XML</span></a>“),
-              in dem die Layout-Eigenschaften als <a xmlns:xlink="http://www.w3.org/1999/xlink"
+                  class="Internetlink c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50"
+                  style="color: #0000FF; text-decoration-style: solid; text-decoration-line: underline; display: inline"
+                  xml:lang="zxx" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[20]/w:hyperlink[1]/w:r[1]"><span
+                    xmlns="" class="prev in"> T </span>Hub XML</span></a>“), in dem die Layout-Eigenschaften als <a
+                xmlns:xlink="http://www.w3.org/1999/xlink" class=""
                 href="#http://archive.xmlprague.cz/2013/presentations/Conveying_Layout_Information_with_CSSa/CSSa_xmlprague_gimsieke.html"
                 xlink:title="/step-1" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[20]/w:r[4]"><span
-                  class="Internetlink c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50"
-                  style="color: #0000FF; text-decoration-style: solid; text-decoration-line: underline" xml:lang="zxx"
-                  srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[20]/w:r[6]">CSS-Properties in
-                  XML-Attributen</span></a> (CSSa) dargestellt werden. Diese Repräsentation in CSS-Vokabular hat u.a. den
-              Vorteil, dass Ad-Hoc-Formatierung (z.B. Tabellen¬zellen¬hintergrund¬farbe, Abstand nach Absatz) selektiv über die
-              Prozesskette bis ins EPUB transportiert werden kann. Das erspart aufwändiges Mapping von sporadisch auftretender
-              Spezialformatierung ins Verlags-XML und von dort ins EPUB. Außerdem erlaubt es tiefgehende Schematron-Prüfungen,
-              wie z.B. die Kompatibilität des EPUB mit Kindle oder das Vorhandensein von normalen Absätzen, die wie
-              Überschriften formatiert sind.</p><p
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: 0pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[21]">Hub-XML-Dateien können so flach
-              sein, wie sie aus Word oder InDesign exportiert werden (alle Absätze, Tabellen etc. auf einer Ebene), oder sie
-              können hierarchisiert sein. Mit hierarchisieren meinen wir nicht nur die Herstellung einer Gliederungshierarchie,
-              sondern auch Listenerkennung, Gruppierung von Abbildungen/Tabellen mit ihren Legenden, Literaturstrukturierung
-              etc, wie es bei so gut wie allen Verlags-XML-Dialekten verlangt wird.</p><p
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: 0pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[22]">In diesen Konvertierschritt von
-              flach nach wertvoll fließen die meisten Konfigurationsinformationen ein. Die Konvertierung von hierarchisiertem
-              Hub (welches im Wesentlichen DocBook 5.1 ist) in andere XML-Dialekte wie TEI oder JATS/BITS ist dann
-              vergleichsweise einfach. Es wäre jedoch aufwändig, die komplexen Hochkonvertierungen für alle diese Formate
-              separat einzurichten, so dass wir hierfür das neutrale Hub-Format auf DocBook-Basis entwickelt haben, innerhalb
-              dessen wir hochkonvertieren.</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+                  class="Internetlink c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_50 r_c_l_50"
+                  style="color: #0000FF; text-decoration-style: solid; text-decoration-line: underline; display: inline"
+                  xml:lang="zxx" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[20]/w:r[6]"><span xmlns=""
+                    class="prev in"> T </span>CSS-Properties in XML-Attributen</span></a> (CSSa) dargestellt werden. Diese
+              Repräsentation in CSS-Vokabular hat u.a. den Vorteil, dass Ad-Hoc-Formatierung (z.B.
+              Tabellen¬zellen¬hintergrund¬farbe, Abstand nach Absatz) selektiv über die Prozesskette bis ins EPUB transportiert
+              werden kann. Das erspart aufwändiges Mapping von sporadisch auftretender Spezialformatierung ins Verlags-XML und
+              von dort ins EPUB. Außerdem erlaubt es tiefgehende Schematron-Prüfungen, wie z.B. die Kompatibilität des EPUB mit
+              Kindle oder das Vorhandensein von normalen Absätzen, die wie Überschriften formatiert sind.</p><p
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: 0pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[21]"><span xmlns="" class="prev pa"> ¶
+              </span>Hub-XML-Dateien können so flach sein, wie sie aus Word oder InDesign exportiert werden (alle Absätze,
+              Tabellen etc. auf einer Ebene), oder sie können hierarchisiert sein. Mit hierarchisieren meinen wir nicht nur die
+              Herstellung einer Gliederungshierarchie, sondern auch Listenerkennung, Gruppierung von Abbildungen/Tabellen mit
+              ihren Legenden, Literaturstrukturierung etc, wie es bei so gut wie allen Verlags-XML-Dialekten verlangt
+              wird.</p><p class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: 0pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[22]"><span xmlns="" class="prev pa"> ¶
+              </span>In diesen Konvertierschritt von flach nach wertvoll fließen die meisten Konfigurationsinformationen ein.
+              Die Konvertierung von hierarchisiertem Hub (welches im Wesentlichen DocBook 5.1 ist) in andere XML-Dialekte wie
+              TEI oder JATS/BITS ist dann vergleichsweise einfach. Es wäre jedoch aufwändig, die komplexen Hochkonvertierungen
+              für alle diese Formate separat einzurichten, so dass wir hierfür das neutrale Hub-Format auf DocBook-Basis
+              entwickelt haben, innerhalb dessen wir hochkonvertieren.</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[23]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Schema- und Schematron-Prüfungen, die sich an verschiedenen Punkte einer Konvertierpipeline einklinken
-              lassen und deren Fehler- und Warnmeldungen in einer HTML-Ansicht des konvertierten Dokuments am Ort des Fehlers
-              angezeigt werden. Neben den klassischen Schema-Validierungen (incl. DTD) kommt Schematron eine bedeutende Rolle
-              zu, weil man damit viel spezifischer prüfen kann. So mag eine IDML-Datei gegen das IDML-Schema validieren, aber
-              nur mit zusätzlichen Schematron-Regeln erkennt man unverankerte Textrahmen. Die Überprüfung, ob nur Formatvorlagen
-              verwendet werden, die in einem Referenztemplate vorkommen, gelingt ebenfalls mit Schematron. Oder man kann
-              heuristisch eine Warnung ausgeben, wenn eine Überschrift mit „Inhalt“ beginnt, aber wie eine normale
-              Kapitelüberschrift und nicht als IHV-Überschrift ausgezeichnet ist. Solche Warnungen haben sich auch bewährt, um
-              manuelle Trennungen oder harte Zeilenumbrüche in Tabellenzellen oder Legenden zu erkennen und mit einer Warnung zu
-              versehen. </p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
-              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[24]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Kaskadierende Konfiguration: man kann Prüf- und Konvertierregeln global, pro Imprint, pro Reihe und pro
-              Werk hinterlegen; die jeweils spezifischste wird ausgewählt. Typischerweise erben spezifische Konfigurationen die
-              nächst generelleren Regeln und überschreiben sie selektiv. Diese vierstufige Konfigurationskaskade ist dabei nicht
-              in Stein gemeißelt, sondern erweiter- oder reduzierbar.</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
-              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[25]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Konfiguriert wird das System mit XSLT-, XProc-, Schematron-, Schema- und sonstigen XML-Dateien. Es gibt
-              also kein Administrations-GUI. transpect ist keine Standardsoftware mit einheitlicher Oberfläche. Es ist vielmehr
-              ein Framework (Sammlung von Softwarebibliotheken und Methodologien), mit dem sich schnell auf Kundenbedürfnisse
-              angepasste Konverter erstellen lassen. </p><p
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: 0pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[26]">Im Zusammenspiel mit anderen
-              Tools (z.B. le-tex aspect oder anderen Web-Anwendungen) kann transpect durchaus eine Administrationsoberfläche
-              erhalten, mit der man Projekte, Nutzerrechte, Rollen und Regeln konfiguriert, aber dies sind eher Bestandteile
-              einer umfassenderen Content-Management- oder Workflow-Lösung. Im Lieferumfang des Prüf- und Konvertier-Frameworks
-              transpect ist derlei nicht enthalten.</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
-              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[27]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Die Nutzer bekommen in der Regel ein einfaches Web-Formular zum Upload ihrer Dateien bzw. einen
-              überwachten Ordner als WebDAV-Netzwerklaufwerk. Aber auch Aufruf per Kommandozeile ist möglich (Voraussetzung:
-              Java 1.6 oder neuer). Auf Wunsch kann das Prüf- und Konvertiertool auch als ausführbare Datei zum Drag&amp;Drop
-              bereitgestellt werden (gegen Mehrkosten). Wir empfehlen aber die Benutzung als Webdienst, weil so die neuesten
-              Prüf- und Konvertierregeln jederzeit aktuell vorgehalten werden können.</p><p
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[23]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Schema- und Schematron-Prüfungen, die sich
+              an verschiedenen Punkte einer Konvertierpipeline einklinken lassen und deren Fehler- und Warnmeldungen in einer
+              HTML-Ansicht des konvertierten Dokuments am Ort des Fehlers angezeigt werden. Neben den klassischen
+              Schema-Validierungen (incl. DTD) kommt Schematron eine bedeutende Rolle zu, weil man damit viel spezifischer
+              prüfen kann. So mag eine IDML-Datei gegen das IDML-Schema validieren, aber nur mit zusätzlichen Schematron-Regeln
+              erkennt man unverankerte Textrahmen. Die Überprüfung, ob nur Formatvorlagen verwendet werden, die in einem
+              Referenztemplate vorkommen, gelingt ebenfalls mit Schematron. Oder man kann heuristisch eine Warnung ausgeben,
+              wenn eine Überschrift mit „Inhalt“ beginnt, aber wie eine normale Kapitelüberschrift und nicht als IHV-Überschrift
+              ausgezeichnet ist. Solche Warnungen haben sich auch bewährt, um manuelle Trennungen oder harte Zeilenumbrüche in
+              Tabellenzellen oder Legenden zu erkennen und mit einer Warnung zu versehen. </p><p
               xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[28]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>transpect ist integrierbar in das verlagsweite Content Management. Falls es dafür noch keine Lösung gibt,
-              kann ein Versionskontrollsystem (Subversion) als Content Repository installiert werden, in das die Nutzer mit frei
-              verfügbaren Tools Daten einspielen und von dort auschecken können. Beim Einspielen können automatisch die Tests
-              und Konvertierungen, z.B. in Kunden-XML und EPUB, erfolgen, und fehlerhafte Dateien (Prüfung mit Fehlern,
-              Dateiname entspricht nicht Konventionen, falsches Dateiformat, …) werden zurückgewiesen.</p><p
-              class="_berschrift_3 c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50 fm_Cambria fs_11 r_fs_11 fw_bold c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[24]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Kaskadierende Konfiguration: man kann Prüf-
+              und Konvertierregeln global, pro Imprint, pro Reihe und pro Werk hinterlegen; die jeweils spezifischste wird
+              ausgewählt. Typischerweise erben spezifische Konfigurationen die nächst generelleren Regeln und überschreiben sie
+              selektiv. Diese vierstufige Konfigurationskaskade ist dabei nicht in Stein gemeißelt, sondern erweiter- oder
+              reduzierbar.</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[25]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Konfiguriert wird das System mit XSLT-,
+              XProc-, Schematron-, Schema- und sonstigen XML-Dateien. Es gibt also kein Administrations-GUI. transpect ist keine
+              Standardsoftware mit einheitlicher Oberfläche. Es ist vielmehr ein Framework (Sammlung von Softwarebibliotheken
+              und Methodologien), mit dem sich schnell auf Kundenbedürfnisse angepasste Konverter erstellen lassen. </p><p
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: 0pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[26]"><span xmlns="" class="prev pa"> ¶
+              </span>Im Zusammenspiel mit anderen Tools (z.B. le-tex aspect oder anderen Web-Anwendungen) kann transpect
+              durchaus eine Administrationsoberfläche erhalten, mit der man Projekte, Nutzerrechte, Rollen und Regeln
+              konfiguriert, aber dies sind eher Bestandteile einer umfassenderen Content-Management- oder Workflow-Lösung. Im
+              Lieferumfang des Prüf- und Konvertier-Frameworks transpect ist derlei nicht enthalten.</p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[27]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Die Nutzer bekommen in der Regel ein
+              einfaches Web-Formular zum Upload ihrer Dateien bzw. einen überwachten Ordner als WebDAV-Netzwerklaufwerk. Aber
+              auch Aufruf per Kommandozeile ist möglich (Voraussetzung: Java 1.6 oder neuer). Auf Wunsch kann das Prüf- und
+              Konvertiertool auch als ausführbare Datei zum Drag&amp;Drop bereitgestellt werden (gegen Mehrkosten). Wir
+              empfehlen aber die Benutzung als Webdienst, weil so die neuesten Prüf- und Konvertierregeln jederzeit aktuell
+              vorgehalten werden können.</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[28]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>transpect ist integrierbar in das
+              verlagsweite Content Management. Falls es dafür noch keine Lösung gibt, kann ein Versionskontrollsystem
+              (Subversion) als Content Repository installiert werden, in das die Nutzer mit frei verfügbaren Tools Daten
+              einspielen und von dort auschecken können. Beim Einspielen können automatisch die Tests und Konvertierungen, z.B.
+              in Kunden-XML und EPUB, erfolgen, und fehlerhafte Dateien (Prüfung mit Fehlern, Dateiname entspricht nicht
+              Konventionen, falsches Dateiformat, …) werden zurückgewiesen.</p><p
+              class="_berschrift_3 fm_Cambria fs_11 r_fs_11 fw_bold c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50"
               style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 10pt; margin-bottom: 0pt; text-align: left; font-family: Cambria; color: #4F81BD; font-size: 11pt; font-weight: bold"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[29]">Leistungen</p><p
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[29]"><span xmlns="" class="prev pa"> ¶
+              </span>Leistungen</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[30]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Basis-Tools: Open Source</p><p
               xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[30]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Basis-Tools: Open Source</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
-              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[31]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Beratung und Systemintegration: je nach Umfang. Typischerweise geht mit einem solchen Projekt die
-              Systematisierung der Formatvorlagennamen einher. Evtl. auch die Definition oder Weiterentwicklung eines
-              Verlags-Schemas bzw. die Auswahl und ggf. Anpassung eines existierenden verbreiteten Schemas, wie DocBook, TEI,
-              JATS/BITS, Hinterlegung von Standard-CSS für EPUBs, ggf. Einführung eines Content Repository; Schulungen.
-              Größenordnung: ca. 4–30 Personentage.</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
-              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[32]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Laufender Support (bei problematischen Daten) und Weiterentwicklung (z.B. neue Schematron-Regel): pro
-              angefangene 5 Minuten.</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
-              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[33]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Laufender Betrieb auf Hosting- oder Kundenserver (auf Wunsch incl. Versionskontroll-CMS)</p><p
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[31]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Beratung und Systemintegration: je nach
+              Umfang. Typischerweise geht mit einem solchen Projekt die Systematisierung der Formatvorlagennamen einher. Evtl.
+              auch die Definition oder Weiterentwicklung eines Verlags-Schemas bzw. die Auswahl und ggf. Anpassung eines
+              existierenden verbreiteten Schemas, wie DocBook, TEI, JATS/BITS, Hinterlegung von Standard-CSS für EPUBs, ggf.
+              Einführung eines Content Repository; Schulungen. Größenordnung: ca. 4–30 Personentage.</p><p
               xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[34]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Aufnahme in Continuous Integration-Server: Überwachung, ob Änderungen an den Basiskonvertern zu Problemen
-              bei den installierten Konvertern führen: Jahrespauschale (analog Wartungsgebühr bei proprietärer Software). </p><p
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: 0pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[35]">Die Basistools werden ständig
-              weiterentwickelt. Der Kunde kann natürlich jederzeit neue Versionen der Open-Source-Software installieren.
-              Vermeintlich unschuldige Änderungen bei Basis-Konvertern zeitigen jedoch manchmal unerwartete Effekte bei
-              bestimmten Konvertierungen. Um das aufzuspüren, werden repräsentative Testdaten aus den Kundenworkflows bei le-tex
-              hinterlegt. Bei jeder Aktualisierung eines Basistools werden die Konvertierungsergebnisse mit der beim Kunden
-              installierten Konfiguration mit den Ergebnissen verglichen, die sich bei Update auf die neuesten Versionen ergäbe.
-              Dies geschieht vollautomatisch. Im Fall von Unterschieden gibt es eine Warnung, und der Kunde kann entscheiden, ob
-              bei seiner Konvertierung etwas an die neuen Tools angepasst werden muss, so dass er updaten kann, oder ob die
-              Konverter bis auf Weiteres unverändert bleiben. Nach Möglichkeit versuchen die le-tex-Entwickler schon im Vorfeld,
-              die Bibliotheken mit den Kundeninstallationen kompatibel weiterzuentwickeln. Das kann aber nur gelingen, wenn die
-              Kundeninstallation und Referenzdaten im Continuous-Integration-System hinterlegt sind.</p><p
-              class="_berschrift_2 c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50 fm_Cambria fs_13 r_fs_13 fw_bold c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 10pt; margin-bottom: 0pt; text-align: left; font-family: Cambria; color: #4F81BD; font-size: 13pt; font-weight: bold"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[36]">Warum Open Source?</p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[37]">Gerade der letzte Punkt im
-              voranstehenden Abschnitt schafft Produktionssicherheit und macht den Unterschied zwischen Konvertierung zu
-              Experimentier- oder Privatzwecken und gesicherter Produktion im industriellen Maßstab aus. Die Weiterentwicklung
-              wird finanziert aus diesen Jahrespauschalen, aus der kostenpflichtigen Umsetzung von Feature Requests der Kunden
-              und aus der Erbringung von Support.</p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[38]">Dies ist das Geschäftsmodell von
-              le-tex transpect. </p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[39]">Die Software wurde unter der
-              permissiven BSD-Lizenz veröffentlicht. Das heißt, dass jeder die Software für eigene Zwecke anpassen kann, sofern
-              er den ursprünglichen Urheber (le-tex) nennt. Im Unterschied zur GPL müssen Änderungen nicht unter derselben
-              Open-Source-Lizenz veröffentlicht werden.</p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[40]">Wir haben mit uns gerungen, ob
-              wir die Software freigeben sollten. Vor allem gab es Bedenken unter dem Gesichtspunkt Fairness: wir haben fünf-
-              bis sechsstellige Beträge in die Entwicklung investiert, und alle Wettbewerber sollen die Früchte unserer Arbeit
-              kostenlos nutzen dürfen? Ebenso kann es Bedenken beim Kunden geben, wenn wir einen Feature Request umsetzen
-              sollen, der später jedem Nutzer zugute kommen wird, und wenn aber nur der Kunde, der zuerst danach gefragt hat,
-              dafür zahlen soll. </p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[41]">Wir denken, beides ist fair:
-              Gerade wenn Wettbewerber die Methodologie übernehmen, rechtfertigt das unseren XSLT-2-/XProc-basierten
-              Batch-Processing-Ansatz im Zoo der verfügbaren Tools. Als Initiator des Produkts kommt le-tex unter den möglichen
-              Dienstleistern eine herausgehoben Stellung zu, und Wettbewerber werden nicht unbedingt jeden Feature Request ihrer
-              Kunden selbst umsetzen wollen, sondern le-tex beauftragen.</p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[42]">Und wenn Kunden es für unfair
-              halten, dass sie die Entwicklung eines Features finanzieren, so sollten sie bedenken, dass andere Kunden und
-              le-tex den Rest der Software zuvor bereits finanziert haben. Und Kunden sollten diese übersichtlichen
-              Entwicklungskosten vergleichen mit Lizenzkosten und sonstigen Einschränkungen proprietärer Software. (Abgesehen
-              davon ist uns keine proprietäre Standardsoftware für derartige Prüf- und Konvertierpipelines bekannt.)</p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[43]">Der Open-Source-Ansatz soll
-              außerdem Bedenken seitens des Kunden adressieren, die sich um die Wartung und Weiterentwicklung von Software
-              sorgen, die ein Dienstleister neben seinem Hauptgeschäft programmiert hat. Selbst wenn le-tex mit ca. 100
-              Mitarbeitern nicht ganz klein ist: Die Entwickler könnten abspringen, die Firma könnte das Interesse an der
-              Weiterentwicklung verlieren oder ganz aus dem Markt verschwinden, etc. In diesen Fällen (von denen wir nicht
-              ausgehen, aber aus Sicht des Kunden ist die Entscheidung für die Lösung eines kleinen Softwareanbieters natürlich
-              riskanter) kann der Kunde die Lösung selbst weiterpflegen oder einen anderen Anbieter beauftragen. Auch unter
-              diesem Gesichtspunkt hat le-tex ein Interesse daran, dass gerade auch Wettbewerber die Tools nutzen, denn das
-              senkt aus Sicht des Kunden das Investitionsrisiko und erleichtert somit die Entscheidung für eine solche
-              Lösung.</p><p
-              class="_berschrift_2 c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50 fm_Cambria fs_13 r_fs_13 fw_bold c_h_213 r_c_h_210 c_s_45 r_c_s_40 c_l_53 r_c_l_50"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 10pt; margin-bottom: 0pt; text-align: left; font-family: Cambria; color: #4F81BD; font-size: 13pt; font-weight: bold"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[44]">Module</p><p
-              class="Normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[45]">Die Module besitzen einen
-              unterschiedlichen Reifegrad. Produktiv einsetzbare Module sind in der folgenden Liste nicht speziell
-              gekennzeichnet, während * ausbaubedürftig bedeutet, und ** bedeutet: Modul im Planungsstadium. Weitere Module
-              entstehen in der Regel, wenn ein Kunde ein spezielles Feature benötigt (s.o.).</p><p
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[32]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Laufender Support (bei problematischen
+              Daten) und Weiterentwicklung (z.B. neue Schematron-Regel): pro angefangene 5 Minuten.</p><p
               xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[46]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>IDML→XML-Konverter</p><p
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: 0pt"
-              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[47]">Herausziehen von XML-Tagging oder
-              Erzeugung von Hub-Format</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[33]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Laufender Betrieb auf Hosting- oder
+              Kundenserver (auf Wunsch incl. Versionskontroll-CMS)</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[48]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>.docx→Hub-XML-Konverter</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[34]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Aufnahme in Continuous Integration-Server:
+              Überwachung, ob Änderungen an den Basiskonvertern zu Problemen bei den installierten Konvertern führen:
+              Jahrespauschale (analog Wartungsgebühr bei proprietärer Software). </p><p
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: 0pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[35]"><span xmlns="" class="prev pa"> ¶
+              </span>Die Basistools werden ständig weiterentwickelt. Der Kunde kann natürlich jederzeit neue Versionen der
+              Open-Source-Software installieren. Vermeintlich unschuldige Änderungen bei Basis-Konvertern zeitigen jedoch
+              manchmal unerwartete Effekte bei bestimmten Konvertierungen. Um das aufzuspüren, werden repräsentative Testdaten
+              aus den Kundenworkflows bei le-tex hinterlegt. Bei jeder Aktualisierung eines Basistools werden die
+              Konvertierungsergebnisse mit der beim Kunden installierten Konfiguration mit den Ergebnissen verglichen, die sich
+              bei Update auf die neuesten Versionen ergäbe. Dies geschieht vollautomatisch. Im Fall von Unterschieden gibt es
+              eine Warnung, und der Kunde kann entscheiden, ob bei seiner Konvertierung etwas an die neuen Tools angepasst
+              werden muss, so dass er updaten kann, oder ob die Konverter bis auf Weiteres unverändert bleiben. Nach Möglichkeit
+              versuchen die le-tex-Entwickler schon im Vorfeld, die Bibliotheken mit den Kundeninstallationen kompatibel
+              weiterzuentwickeln. Das kann aber nur gelingen, wenn die Kundeninstallation und Referenzdaten im
+              Continuous-Integration-System hinterlegt sind.</p><p
+              class="_berschrift_2 fm_Cambria fs_13 r_fs_13 fw_bold c_h_0 r_c_h_0 c_s_100 r_c_s_100 c_l_60 r_c_l_60"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 10pt; margin-bottom: 0pt; text-align: left; font-family: Cambria; color: #FF3333; font-size: 13pt; font-weight: bold"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[36]"><span xmlns="" class="prev pa"> ¶
+              </span>Warum Open Source?</p><p
+              class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[37]"><span xmlns="" class="prev pa"> ¶
+              </span>Gerade der letzte Punkt im voranstehenden Abschnitt schafft Produktionssicherheit und macht den Unterschied
+              zwischen Konvertierung zu Experimentier- oder Privatzwecken und gesicherter Produktion im industriellen Maßstab
+              aus. Die Weiterentwicklung wird finanziert aus diesen Jahrespauschalen, aus der kostenpflichtigen Umsetzung von
+              Feature Requests der Kunden und aus der Erbringung von Support.</p><p
+              class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[38]"><span xmlns="" class="prev pa"> ¶
+              </span>Dies ist das Geschäftsmodell von le-tex transpect. </p><p
+              class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[39]"><span xmlns="" class="prev pa"> ¶
+              </span>Die Software wurde unter der permissiven BSD-Lizenz veröffentlicht. Das heißt, dass jeder die Software für
+              eigene Zwecke anpassen kann, sofern er den ursprünglichen Urheber (le-tex) nennt. Im Unterschied zur GPL müssen
+              Änderungen nicht unter derselben Open-Source-Lizenz veröffentlicht werden.</p><p
+              class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[40]"><span xmlns="" class="prev pa"> ¶
+              </span>Wir haben mit uns gerungen, ob wir die Software freigeben sollten. Vor allem gab es Bedenken unter dem
+              Gesichtspunkt Fairness: wir haben fünf- bis sechsstellige Beträge in die Entwicklung investiert, und alle
+              Wettbewerber sollen die Früchte unserer Arbeit kostenlos nutzen dürfen? Ebenso kann es Bedenken beim Kunden geben,
+              wenn wir einen Feature Request umsetzen sollen, der später jedem Nutzer zugute kommen wird, und wenn aber nur der
+              Kunde, der zuerst danach gefragt hat, dafür zahlen soll. </p><p
+              class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[41]"><span xmlns="" class="prev pa"> ¶
+              </span>Wir denken, beides ist fair: Gerade wenn Wettbewerber die Methodologie übernehmen, rechtfertigt das unseren
+              XSLT-2-/XProc-basierten Batch-Processing-Ansatz im Zoo der verfügbaren Tools. Als Initiator des Produkts kommt
+              le-tex unter den möglichen Dienstleistern eine herausgehoben Stellung zu, und Wettbewerber werden nicht unbedingt
+              jeden Feature Request ihrer Kunden selbst umsetzen wollen, sondern le-tex beauftragen.</p><p
+              class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[42]"><span xmlns="" class="prev pa"> ¶
+              </span>Und wenn Kunden es für unfair halten, dass sie die Entwicklung eines Features finanzieren, so sollten sie
+              bedenken, dass andere Kunden und le-tex den Rest der Software zuvor bereits finanziert haben. Und Kunden sollten
+              diese übersichtlichen Entwicklungskosten vergleichen mit Lizenzkosten und sonstigen Einschränkungen proprietärer
+              Software. (Abgesehen davon ist uns keine proprietäre Standardsoftware für derartige Prüf- und Konvertierpipelines
+              bekannt.)</p><p class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[43]"><span xmlns="" class="prev pa"> ¶
+              </span>Der Open-Source-Ansatz soll außerdem Bedenken seitens des Kunden adressieren, die sich um die Wartung und
+              Weiterentwicklung von Software sorgen, die ein Dienstleister neben seinem Hauptgeschäft programmiert hat. Selbst
+              wenn le-tex mit ca. 100 Mitarbeitern nicht ganz klein ist: Die Entwickler könnten abspringen, die Firma könnte das
+              Interesse an der Weiterentwicklung verlieren oder ganz aus dem Markt verschwinden, etc. In diesen Fällen (von
+              denen wir nicht ausgehen, aber aus Sicht des Kunden ist die Entscheidung für die Lösung eines kleinen
+              Softwareanbieters natürlich riskanter) kann der Kunde die Lösung selbst weiterpflegen oder einen anderen Anbieter
+              beauftragen. Auch unter diesem Gesichtspunkt hat le-tex ein Interesse daran, dass gerade auch Wettbewerber die
+              Tools nutzen, denn das senkt aus Sicht des Kunden das Investitionsrisiko und erleichtert somit die Entscheidung
+              für eine solche Lösung.</p><p
+              class="_berschrift_2 fm_Cambria fs_13 r_fs_13 fw_bold c_h_0 r_c_h_0 c_s_100 r_c_s_100 c_l_60 r_c_l_60"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 10pt; margin-bottom: 0pt; text-align: left; font-family: Cambria; color: #FF3333; font-size: 13pt; font-weight: bold"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[44]"><span xmlns="" class="prev pa"> ¶
+              </span>Module</p><p class="Normal fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[45]"><span xmlns="" class="prev pa"> ¶
+              </span>Die Module besitzen einen unterschiedlichen Reifegrad. Produktiv einsetzbare Module sind in der folgenden
+              Liste nicht speziell gekennzeichnet, während * ausbaubedürftig bedeutet, und ** bedeutet: Modul im
+              Planungsstadium. Weitere Module entstehen in der Regel, wenn ein Kunde ein spezielles Feature benötigt
+              (s.o.).</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[49]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>IDML-Synthese aus XML *</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[46]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>IDML→XML-Konverter</p><p
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: 0pt"
+              xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[47]"><span xmlns="" class="prev pa"> ¶
+              </span>Herausziehen von XML-Tagging oder Erzeugung von Hub-Format</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[50]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>.docx-Synthese aus XML *</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[48]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>.docx→Hub-XML-Konverter</p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[51]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Kaskadiertes Laden von Konfigurationen </p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[49]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>IDML-Synthese aus XML *</p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[52]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Darstellung von Prüfungsfehlern (Schematron, Schema/DTD) in HTML-Rendering des Quelldokuments
-              (Schema/DTD: *)</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[50]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>.docx-Synthese aus XML *</p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[53]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Konverter von flachem Hub-XML in hierarchisches Hub-XML</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[51]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Kaskadiertes Laden von Konfigurationen
+              </p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[54]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Hub-XML→DocBook-Konverter</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[52]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Darstellung von Prüfungsfehlern (Schematron,
+              Schema/DTD) in HTML-Rendering des Quelldokuments (Schema/DTD: *)</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[55]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Hub-XML→TEI-Konverter *</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[53]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Konverter von flachem Hub-XML in
+              hierarchisches Hub-XML</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[56]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>Hub-XML→BITS/JATS-Konverter</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[54]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Hub-XML→DocBook-Konverter</p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[57]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>XML→HTML-Konverter (aus den o.g. XML-Formaten) mit der Möglichkeit, neben zentralem CSS selektiv die
-              Layouteigenschaften der Quelldateien durchzureichen</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[55]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Hub-XML→TEI-Konverter *</p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
-              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[58]"><span class="hub:identifier fm_CambriaMath"
-                style="font-family: &#34;Cambria Math&#34;" adhcss:font-family="Cambria Math">•</span><span class="tab"
-              > </span>EPUB-Generator (EPUB 2 und 3) mit Unterstützung von custom Fonts, Page Lists, Fixed Layout,
-              Read-Aloud-Synchronisation und Zugriff auf externe Metadaten (die als XML im Dateisystem oder per HTTP verfügbar
-              sind)</p><p xmlns:adhcss="http://transpect.io/adhcss"
-              class="List_Paragraph c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
-              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[56]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Hub-XML→BITS/JATS-Konverter</p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[57]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>XML→HTML-Konverter (aus den o.g.
+              XML-Formaten) mit der Möglichkeit, neben zentralem CSS selektiv die Layouteigenschaften der Quelldateien
+              durchzureichen</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
+              xml:lang="de" adhcss:margin-left="36pt" adhcss:text-indent="-18pt"
+              srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[58]"><span xmlns="" class="prev pa"> ¶ </span><span
+                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;; display: inline"
+                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>EPUB-Generator (EPUB 2 und 3) mit
+              Unterstützung von custom Fonts, Page Lists, Fixed Layout, Read-Aloud-Synchronisation und Zugriff auf externe
+              Metadaten (die als XML im Dateisystem oder per HTTP verfügbar sind)</p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="List_Paragraph fm_Calibri fs_11 r_fs_11 c_h_100 r_c_h_100 c_s_100 r_c_s_100 c_l_70 r_c_l_70"
+              style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #99FF66; font-size: 11pt; margin-left: 36pt; text-indent: -18pt"
               xml:lang="de" adhcss:margin-top="0pt" adhcss:margin-bottom="10pt" adhcss:margin-left="36pt"
-              adhcss:text-indent="-18pt" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[59]"><span
-                class="hub:identifier fm_CambriaMath" style="font-family: &#34;Cambria Math&#34;"
-                adhcss:font-family="Cambria Math">•</span><span class="tab"> </span>Crossref-Lookups von Literaturzitaten
-              (Voraussetzung: Verlag ist Crossref-Mitglied)</p><div class="BC_endnotes"><h1 title="Endnoten"
-                class=" endnotes-head">Endnoten</h1><dl class="endnote-list">
-                <dt id="en-d5768e41" class="endnote"><a href="#fn-d5768e41"></a></dt>
-                <dd class="endnote-text" srcpath="word/footnotes.xml?xpath=/w:footnotes[1]/w:footnote[3]"><p
+              adhcss:text-indent="-18pt" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[59]"><span xmlns=""
+                class="prev pa"> ¶ </span><span class="hub:identifier fm_CambriaMath"
+                style="font-family: &#34;Cambria Math&#34;; display: inline" adhcss:font-family="Cambria Math">•</span><span
+                class="tab"> </span>Crossref-Lookups von Literaturzitaten (Voraussetzung: Verlag ist Crossref-Mitglied)</p><div
+              class="BC_endnotes"><h1 title="Endnoten" class=" endnotes-head">Endnoten</h1><dl class="endnote-list">
+                <dt id="en-d3851e41" class="endnote"><a href="#fn-d3851e41"></a></dt>
+                <dd class="" srcpath="word/footnotes.xml?xpath=/w:footnotes[1]/w:footnote[3]"><p
                     xmlns:adhcss="http://transpect.io/adhcss"
-                    class="Fu_note c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0 fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+                    class="Fu_note fm_Calibri fs_11 r_fs_11 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
                     style="orphans: 2; widows: 2; hyphens: manual; direction: ltr; line-height: 1.15; margin-top: 0pt; margin-bottom: 10pt; text-align: left; font-family: Calibri; color: #00000A; font-size: 11pt"
                     xml:lang="de" adhcss:margin-top="0pt" adhcss:margin-bottom="10pt"
-                    srcpath="word/footnotes.xml?xpath=/w:footnotes[1]/w:footnote[3]/w:p[1]"><span class="hub:identifier"><span
-                        class="footnote_reference"
-                        srcpath="word/footnotes.xml?xpath=/w:footnotes[1]/w:footnote[3]/w:p[1]/w:r[1]">1</span></span><span
-                      class="tab hub:separator"> </span> Hier ist eine Fußnote</p></dd>
-              </dl></div></body>
-              
-            </div>
+                    srcpath="word/footnotes.xml?xpath=/w:footnotes[1]/w:footnote[3]/w:p[1]"><span xmlns="" class="prev pa"> ¶
+                      </span><span class="hub:identifier"><span class="footnote_reference"
+                        srcpath="word/footnotes.xml?xpath=/w:footnotes[1]/w:footnote[3]/w:p[1]/w:r[1]"><span xmlns=""
+                          class="prev in"> T </span>1</span></span><span class="tab hub:separator"> </span> Hier ist eine
+                    Fußnote</p></dd>
+              </dl></div>
+            
           </div>
         </div>
+      </div>
+    </div>
+    <div id="rulename-list">
+      <p id="unmatched" class="clickable">Jump To Unmatched Element</p>
     </div>
     <div id="help"><label class="label label-default clickable">Help</label></div>
     <div id="ajax-temp"></div>
@@ -702,6 +745,15 @@
         </li>
         <li  id="hide-workflow" class="con_menu_item">
           <span>Hide Workflow</span><input type="checkbox"></input>          
+        </li>
+        <li class="con_menu_item">
+          <span>Advanced View</span><input class="show-type" type="checkbox"/>          
+        </li>
+        <li class="con_menu_item">
+          <span>Show Matching Rules</span><input class="preview-all" type="checkbox"/>
+        </li>
+        <li class="con_menu_item">
+                <p class="progress_stats"></p>
         </li>
       </ul>
     </div>
