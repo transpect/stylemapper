@@ -63,8 +63,9 @@ Mapping = function(){
   this.removeadhoc;
   this.props = [];
 }
-count = 0;
-temp_props = [];
+/*~~~~~~~~~~ global variables section*/
+g_count = 0;
+g_temp_props = [];
 $inspector = $('#insp1');
 $menu = $('#sm-menu');
 $sidebar = $('#sidebar-wrapper');
@@ -80,9 +81,10 @@ target_styles = '';
 username='admin';
 password='admin';
 base_uri = 'https://transpect.le-tex.de/data/stylemapper/'
-cssstyles = ['color'];
+cssstyles = ['color', 'font-size', 'color', 'font-weight', 'background-color', 'text-indent', 'margin-left', 'font-style', 'line-height', 'font-family', 'text-align'];
 templateuri = '';
 actual_mappings = $('#rules').find('a');
+temp_rule = null;
 con_menu_state = 0;
 sub_menu_state = 0;
 con_menu_pos = 0;
@@ -106,14 +108,14 @@ bg_color = [
 /* observers for rule property list and pagecontent ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var propobserver =  new MutationObserver(function (mutations) {
     mutations.forEach(function(mutation) {
-          temp_props = [];
+          g_temp_props = [];
           li_props = $('#properties').find('li');
           $.each(li_props, function(){
               var prop = li2prop(this);
 /*              console.log('observed li', this, prop);*/
-              temp_props.push(prop);
+              g_temp_props.push(prop);
           });
-/*            console.log('temp_props', temp_props)*/
+/*            console.log('g_temp_props', g_temp_props)*/
           })
 })
 var page_content = $('#sm-page').get(0);
@@ -150,10 +152,6 @@ var ruleobserver =  new MutationObserver(function (mutations) {
         else{
                       
         }
-/*        in live mode the countDocElements should in the ajax fallback*/
-        countDocElements();
-        computeMatching();
-        watchProgress();
         showMaps();
       })
 /*       initGuide('mrules');*/
@@ -411,38 +409,48 @@ function mappingRange2classes(mapping, pre_filtered_elements){
    }
     return el_arr.toArray();
 }
-function mapping2previews(mapping){
+function getPreviewsArray(mapping){
+    console.time('getPreviewsArray')
     var el_arr = [],
     classes_arr =[],
     filtered_arr = [];
+/*~~~~~~~~~~ sort out ir(relevant rule properties */
     for (i = 0; i < mapping.props.length; i++){
         if (mapping.props[i].relevant == 'false'){
            mapping.props = mapping.props.splice(i,1); 
         }   
     }
+ if (mapping.props.length != 0){
     if (el_arr.length === 0 &&  mapping.targettype == 'para'){
-        el_arr = $('#sm-page > p');
+        el_arr = g_p_arr;
     }
     else if (el_arr.length === 0 &&  mapping.targettype == 'inline'){
-        el_arr = $('#sm-page').find('span[style]');
+        el_arr = g_span_arr;
     }
     else {
-      console.log('Error: No element or target type detected');
+      console.log('Error: No element detected');
     }
    var classes = mappingVal2classes(mapping)
-     /*     console.log('klassen ', classes, mapping.props.length ,classes.length);
-          console.log('range?', hasRange(mapping));*/
+          console.log('klassen ', classes, mapping.props.length ,classes.length);
+          console.log('range?', hasRange(mapping));
    var a = classes.join('');
    if (a != ""){
-    filtered_arr = el_arr.filter(a);
+    filtered_arr = $(el_arr).filter(a);
    }
    else{
     filtered_arr = el_arr;   
    }
    if (hasRange(mapping)== true){
-            filtered_arr = mappingRange2classes(mapping, filtered_arr);
+    filtered_arr = mappingRange2classes(mapping, filtered_arr);
    }
-   return filtered_arr
+   if (filtered_arr.length > 0){
+    var style = $("<style>."+mapping.name+ " {border-left: solid 5px"+ bg_color[mapping.priority] +"; border-radius: 3px }</style>");
+    document.styleSheets[0].addRule("."+mapping.name, "border-left: solid 5px"+ bg_color[mapping.priority] +"; border-radius: 2px");
+    $('html > head').append(style);
+   }
+   console.timeEnd('getPreviewsArray')
+ }
+ return filtered_arr
 }
 function createPopover(id){
   var obj = getMapping(id),
@@ -473,10 +481,10 @@ function createPopover(id){
               return table
 }
 function countDocElements(){
-  var count_p = $('#sm-page').find('p[srcpath]').length,
-      count_span = $('#sm-page').find('span[srcpath]').length;
-      document_stat.para = count_p;
-      document_stat.inline = count_span;
+      g_p_arr = $('#sm-page > p[srcpath][style]');
+      g_span_arr = $('#sm-page > span[srcpath][style]')
+      document_stat.para = g_p_arr.length;
+      document_stat.inline = g_span_arr.length;
 }
 function showMaps(){
     $('#rulename-list').children('ul').remove();
@@ -517,7 +525,7 @@ if ($(mapping_set).children().length === 0){
             $(ul_rules).append(li);
             $(ul_rnames).append(li_name);
         }
-        $sub_menu.append(ul_rules);
+        $('#sub-rules').append(ul_rules);
         $rlist.append(ul_rnames);
             $('.ui-sortable-handle > td.point > a').popover(
               {
@@ -603,7 +611,6 @@ function importMappings(file, event){
       }
   }
   sortByPriority();
-/*  showMaps();*/
   if (len){
       handleContent('rules', 'open');
       createSuccess('Rules successfully imported.');
@@ -657,7 +664,7 @@ function createTargetStyles(uri, targettype){
         name = $(this).attr('w:styleId') |  $(this).attr('Name');
         if ($(this).attr('target-type') == targettype){
           if ($(this).attr('w:styleId')){
-          $(opt).html($(this).attr('w:styleId'));
+            $(opt).html($(this).attr('w:styleId'));
           }
           else if
           ($(this).attr('Name')){
@@ -676,7 +683,7 @@ function createTargetStyles(uri, targettype){
   $('select#target-style').html($(select).html());
 }
 function getPropById(id){
-     var result = $.grep(temp_props, function(e){return e.id == id})
+     var result = $.grep(g_temp_props, function(e){return e.id == id})
      return result[0];
 }
 function sortByPriority(){
@@ -780,8 +787,9 @@ function initPriority(){
     input.attr('max', (map_num +1));
     input.attr('value', (map_num+1));
 }
-function isMatching(target_element,rule_id){
-  var element_obj = createPropObject(target_element);
+/* deprecated since the matching system changed => now the matching is done by jquery selections built from the rule properties converted to class values*/
+/*function isMatching(target_element,rule_id){
+  var element_obj = createPropsObject(target_element);
       rule = getMapping(rule_id);
        for (var i=0; i < rule.props.length; i++){
         if (rule.props[i]['relevant'] == 'false'){
@@ -794,7 +802,7 @@ function isMatching(target_element,rule_id){
             if (prop === rule.props[l].name){
                             if  (rule.props[l]['regex'] == "" || !(rule.props[l]['regex'])){
                                 if  ((rule.props[l]['minvalue'] == "") || (rule.props[l]['maxvalue'] == "")|| (rule.props[l]['maxvalue'] == null)||(rule.props[l]['minvalue'] == null)){
-/*                                  console.log('ruuule props', rule.props[l]["value"], element_obj[prop]);*/
+/\*                                  console.log('ruuule props', rule.props[l]["value"], element_obj[prop]);*\/
                                         if (rule.props[l]['value'] =="" || rule.props[l]['value'] == null){
                                         }
                                         else {
@@ -803,15 +811,15 @@ function isMatching(target_element,rule_id){
                                                   }
                                                   else if (prop == 'color' || prop == 'background-color'){
                                                       if (!(element_obj[prop].indexOf('rgb(') > -1)){
-/*                                                  console.log('FARBENWERT  ', name2rgb(element_obj[prop]))*/
-/*                                                  console.log((element_obj[prop].indexOf('rgb(') > -1));*/
+/\*                                                  console.log('FARBENWERT  ', name2rgb(element_obj[prop]))*\/
+/\*                                                  console.log((element_obj[prop].indexOf('rgb(') > -1));*\/
                                                           ele_val = rgb2array(name2rgb(element_obj[prop]));
                                                       }
                                                       else{
                                                       ele_val = rgb2array(element_obj[prop]);
                                                       }
                                                       ele_val_hsl = rgb2Hsl(ele_val[0],ele_val[1],ele_val[2])
-/*                                                      console.log('endwert    ', rule.props[l]["value"]);*/
+/\*                                                      console.log('endwert    ', rule.props[l]["value"]);*\/
                                                       prop_val = rgb2array(rule.props[l]["value"]);
                                                       prop_val_hsl = rgb2Hsl(prop_val[0],prop_val[1],prop_val[2]);
                                                       if ((prop_val_hsl[0] === ele_val_hsl[0])&&(prop_val_hsl[1] === ele_val_hsl[1])&&(prop_val_hsl[2] === ele_val_hsl[2])
@@ -831,14 +839,14 @@ function isMatching(target_element,rule_id){
                                         }
                                     }
                                     else if (((rule.props[l]['value'] =="")||(rule.props[l]['value'] == null)) && ((rule.props[l]['regex'] =="")||(rule.props[l]['regex'] == null))){
-/*                                    console.log('element_obj ', element_obj);*/
+/\*                                    console.log('element_obj ', element_obj);*\/
                                         ele_val = rgb2array(element_obj[prop]);
                                         ele_val_hsl = rgb2Hsl(ele_val[0],ele_val[1],ele_val[2])
                                         min_val = rgb2array(rule.props[l]['minvalue']);
                                         min_val_hsl = rgb2Hsl(min_val[0],min_val[1], min_val[2]);
                                         max_val = rgb2array(rule.props[l]['maxvalue']);
                                         max_val_hsl = rgb2Hsl(max_val[0],max_val[1],max_val[2]);
-/*                                        console.log('vergleichswerte', ele_val, min_val, max_val);*/
+/\*                                        console.log('vergleichswerte', ele_val, min_val, max_val);*\/
                                          if (min_val_hsl[0] <= ele_val_hsl[0] && ele_val_hsl[0] <= max_val_hsl[0]){
                                             if (min_val_hsl[1] <= ele_val_hsl[1] && ele_val_hsl[1] <= max_val_hsl[1]) {
                                                 if (min_val_hsl[2] <= ele_val_hsl[2] && ele_val_hsl[2] <= max_val_hsl[2]){
@@ -846,7 +854,6 @@ function isMatching(target_element,rule_id){
                                                 }
                                             }    
                                          }
-                                         
                                     }
                                 }
                             }
@@ -861,21 +868,21 @@ function isMatching(target_element,rule_id){
             }
           }
       }
-/*      console.log('counts ends', count_matching);*/
-/*      console.log(element_obj);*/
+/\*      console.log('counts ends', count_matching);*\/
+/\*      console.log(element_obj);*\/
       if (count_matching > 0){
-/*          console.log('its NOT matching!');*/
+/\*          console.log('its NOT matching!');*\/
           return false
       }
       else{
-/*          console.log('its matching!');*/
+/\*          console.log('its matching!');*\/
           return true
       }
-}
+}*/
 function rgb2array(rgb){
     var rgb_arr = [],
     string = rgb.replace(/^rgb./, '');
-    string_arr =  string.split(', ');
+    string_arr =  string.split(',');
     for (str in string_arr){
        rgb_num = parseFloat(string_arr[str])
        rgb_arr.push(rgb_num);
@@ -890,7 +897,7 @@ function hex2rgb(hex){
         b: parseInt(result[3], 16)
     } : null;
 }
-function createPropObject(target_element){
+function createPropsObject(target_element){
     var props = new Object;
          if ($(target_element).closest('span')[0]){
           for (var i=0; i < $(target_element).closest('span')[0].style.length; i++){
@@ -913,7 +920,7 @@ function createPropObject(target_element){
               props[prop] = props[prop].replace(/\'$/,'');
           } 
         }
-        return props
+    return props
 }
 function name2rgb(name){
     var arr = []
@@ -946,7 +953,7 @@ function translateElement(target_element){
   return el_name;
 }
 function viewTarget(target_element){
-        var props = createPropObject(target_element),
+        var props = createPropsObject(target_element),
         arr1 = [], 
         par_arr= [];
         override_arr = [];
@@ -968,9 +975,12 @@ function viewTarget(target_element){
          if(prop === 'color'){
            arr1.push("<tr><td>"+ prop + adhoc_status +": "+"</td><td> " + props[prop] +"<div class='form-control colorbox-insp' style='background-color:"+props[prop]+"'></div> " +"</td><td><span id='"+prop+"' value='"+props[prop]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")    
          }
+         else if ($.inArray(prop, cssstyles) == -1) {
+           arr1.push("<tr class='disabled02'><td>"+ prop + adhoc_status +": "+"</td><td>" + props[prop] +"</td><td><span id='"+prop+"' value='"+props[prop]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")
+         }
          else {
            arr1.push("<tr><td>"+ prop + adhoc_status +": "+"</td><td>" + props[prop] +"</td><td><span id='"+prop+"' value='"+props[prop]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")
-         } 
+         }
        }
        }
        else{
@@ -1105,8 +1115,9 @@ function doProgress(step, progress, status){
               $bar.animate({width: progress+'%'}, 500);
             }
 }
-function initDocxStatusRequest(URI){
+function documentStatusRequest(URI){
 doProgress('1', 0, 'progress');
+$('#loading-screen').show();
 statusRequest = function(){
           $.ajax({
             url:URI,
@@ -1120,27 +1131,33 @@ statusRequest = function(){
                     resetInput($("label[for='upload-doc']")[0]);
                     createError('Conversion failed. Please make shure that the document has the right format.');
                     doProgress('1', 0, 'failure');
+                    $('#loading-screen').hide();
                 }
                     else if(data["status"]==="success"){
+                      $('#sub-targets').children().remove();
                       var fileuri = base_uri + username +'/'+filename+'/out/temp/source-content.xhtml';
                       templateuri = base_uri + username +'/'+filename+'/out/temp/template_styles.xml';
-                      var container = document.createElement('div');
-                      var body = '';
-                      target_styles = $(container).load(templateuri)[0], 
-                      styles = $('#ajax-temp').find('style')[0];
-                      body = $('#ajax-temp').children('*:not(title, style, link)');    
-                      $('#sm-page').html(body);
-                      $('#style-container').html($(styles).html());
-                      $('#ajax-temp').children().remove();
-                      $('#sm-page').load(fileuri, function(){
+                      var style_container = document.createElement('div'),
+                          doc_container = document.createElement('div'),
+                          body = '';
+                      target_styles = $(style_container).load(templateuri)[0], 
+                      $('#ajax-temp').load(fileuri, function(){
                          doProgress('1', 33.33, 'success');
                          countDocElements();
+                         clearInterval(timedrequest);
+                         styles = $('#ajax-temp').find('style')[0];
+                         body = $('#ajax-temp').children('*:not(title, style, link)');    
+                         $('#sm-page').html(body);
+                         $('#style-container').html($(styles).html());
+                         ul_para = createTargetStyleList('para');
+                         ul_inline = createTargetStyleList('inline');
+                         $('#sub-targets').append(ul_para, ul_inline);
                       });
+                      $('#loading-screen').hide();
                       clearTable();
                       $('.createrules').removeClass('disabled02');  
                       $('*[role=presentation]').removeClass('disabled02');
                       resultListURI1 = data['result_list_uri'];
-                      clearInterval(timedrequest);
                     }
                   }
                }
@@ -1254,7 +1271,6 @@ $('.sortable').sortable({
 }});
 };
 function clearTable(){
-  cssstyles = getComputedStyleNames();
   $('#properties').children().remove();
   rules_count = $(mapping_set).children().length +1;
   $('#properties').children('a').remove();
@@ -1372,7 +1388,11 @@ function setMapping(){
   })
   adhoc_string = val_arr.join(" ");
   map_obj.removeadhoc = adhoc_string;
-  return map_obj
+  if (checkMapping(map_obj) === true){
+    return map_obj
+  }else{
+    return null
+  }
 }
 function getMapping(name){
   var map1 = $(mapping_set).find("mapping[name='"+name+"']");
@@ -1388,28 +1408,28 @@ function getMapping(name){
     var prop = new Prop();
     prop.name = prop_element[i].getAttribute('name');
     if (prop_element[i].getAttribute('value') != null){
-    prop.value =  prop_element[i].getAttribute('value');
+      prop.value =  prop_element[i].getAttribute('value');
     };
-    prop.minvalue =  prop_element[i].getAttribute('min-value');
-    prop.maxvalue =  prop_element[i].getAttribute('max-value'); 
-    prop.regex =  prop_element[i].getAttribute('regex');
-    prop.relevant =  prop_element[i].getAttribute('relevant');
+      prop.minvalue =  prop_element[i].getAttribute('min-value');
+      prop.maxvalue =  prop_element[i].getAttribute('max-value'); 
+      prop.regex =  prop_element[i].getAttribute('regex');
+      prop.relevant =  prop_element[i].getAttribute('relevant');
     for (a in prop){
-    if (prop_element[i].getAttribute(prop.name+'-h') != null){
-    prop[prop.name+'h'] = prop_element[i].getAttribute(prop.name+'-h');
-    prop[prop.name+'s'] = prop_element[i].getAttribute(prop.name+'-s');
-    prop[prop.name+'l'] = prop_element[i].getAttribute(prop.name+'-l');
+      if (prop_element[i].getAttribute(prop.name+'-h') != null){
+        prop[prop.name+'h'] = prop_element[i].getAttribute(prop.name+'-h');
+        prop[prop.name+'s'] = prop_element[i].getAttribute(prop.name+'-s');
+        prop[prop.name+'l'] = prop_element[i].getAttribute(prop.name+'-l');
+      }
+      if (prop_element[i].getAttribute(prop.name+'-min-h') != null){
+        prop[prop.name+'minh'] = prop_element[i].getAttribute(prop.name+'-min-h');
+        prop[prop.name+'mins'] = prop_element[i].getAttribute(prop.name+'-min-s');
+        prop[prop.name+'minl'] = prop_element[i].getAttribute(prop.name+'-min-l');
+        prop[prop.name+'maxh'] = prop_element[i].getAttribute(prop.name+'-max-h');
+        prop[prop.name+'maxs'] = prop_element[i].getAttribute(prop.name+'-max-s');
+        prop[prop.name+'maxl'] = prop_element[i].getAttribute(prop.name+'-max-l');
+      }
     }
-    if (prop_element[i].getAttribute(prop.name+'-min-h') != null){
-    prop[prop.name+'minh'] = prop_element[i].getAttribute(prop.name+'-min-h');
-    prop[prop.name+'mins'] = prop_element[i].getAttribute(prop.name+'-min-s');
-    prop[prop.name+'minl'] = prop_element[i].getAttribute(prop.name+'-min-l');
-    prop[prop.name+'maxh'] = prop_element[i].getAttribute(prop.name+'-max-h');
-    prop[prop.name+'maxs'] = prop_element[i].getAttribute(prop.name+'-max-s');
-    prop[prop.name+'maxl'] = prop_element[i].getAttribute(prop.name+'-max-l');
-    }
-    }
-    map_obj.props.push(prop);
+      map_obj.props.push(prop);
   }
   return map_obj
   }
@@ -1424,14 +1444,13 @@ function addProps(map_obj){
    /*var prop = getPropById(proplinks[i].id);*/
    var prop = li2prop(proplinks[i]);
    map_obj.props.push(prop);
-   
  }
 }
 function deleteProp(id){
   var listitem = document.getElementById(id);
   var listindex = $('#properties > li').index(listitem);
   $('#'+id).remove();
-  temp_props.splice(listindex, 1)
+  g_temp_props.splice(listindex, 1)
 }
 function setProp(type){
 /*the type parameter must be 'new' or 'change'*/
@@ -1446,7 +1465,7 @@ var prop1 = new Prop();
             }
             else if ($('#r2').prop('checked') == true || $('#pvalue').val() == null || $('#pvalue').val() == 'undefined'){
                 prop1.minvalue =  $('#pmin-value').val();
-                prop1.maxvalue =  $('#pmax-value').val();
+                prop1.maxvalue =  $('#pmax-value').val(); 
             var rgb_min_arr = rgb2array(prop1.minvalue),
             rgb_max_arr = rgb2array(prop1.maxvalue),
             hsl_min_arr = rgb2Hsl(rgb_min_arr[0],rgb_min_arr[1],rgb_min_arr[2]),
@@ -1465,9 +1484,16 @@ var prop1 = new Prop();
                 prop1[maxl] = hsl_max_arr[2];
             }
             else if ($('#r1').prop('checked') == true){
+                var rgb_value_arr = [];
                 prop1.value =  $('#pvalue').val();
-                var rgb_value_arr = rgb2array(prop1.value),
-                hsl_value_arr = rgb2Hsl(rgb_value_arr[0],rgb_value_arr[1],rgb_value_arr[2]),
+                if (prop1.value.indexOf('rgb(') == -1){
+                 var rgb_str = name2rgb(prop1.value);
+                 rgb_value_arr = rgb2array(rgb_str);
+                }else{
+                  rgb_value_arr = rgb2array(prop1.value);  
+                }
+                console.log('RGBNAME', prop1.value, rgb_str, rgb_value_arr); 
+                var hsl_value_arr = rgb2Hsl(rgb_value_arr[0],rgb_value_arr[1],rgb_value_arr[2]),
                 h = name+'h',
                 s = name+'s',
                 l = name+'l';
@@ -1552,78 +1578,82 @@ function checkProp(prop){
       return true
   }  
 }
-function saveMapping(override, type){
-    var mapping = setMapping();
-    addProps(mapping);
+function handleRuleDuplicates(type){
+        if ($(mapping_set).find("mapping[name='"+$('button#change-map').attr('name')+"']")[0] && type == 'change'){
+            deleteMapping($('button#change-map').attr('name'));
+            $(mapping_set).append(temp_rule);
+            sortByPriority()
+            clearTable();
+        }
+        else if ($(mapping_set).find("mapping[name='"+temp_rule.getAttribute('name')+"']")[0] && type == 'new'){
+          $(".modal-content").html("<div class='modal-header'>Attention!</div><div class='modal-body'>Mapping already exists. Do you want to change it?</div><div class='modal-footer'><button type='button' class='btn btn-default' data-dismiss='modal'>No</button><button type='button' class='btn btn-primary' data-dismiss='modal'>Yes</button></div>");
+          $('.modal').modal('show');
+        }else{
+          $(mapping_set).append(temp_rule);
+          sortByPriority()
+          clearTable();
+        }
+}
+function saveMapping(type){
+    var map_obj = setMapping();
 /*    console.log('ruleobj', mapping, 'override  ', override);*/
-    if (checkMapping(mapping, override) == true && $(mapping_set).find("mapping[name='"+mapping.name+"']")[0]){
-        var map_el = $(mapping_set).find("mapping[name='"+mapping.name+"']")[0];
-        $(map_el).remove();
-    }
-    else if (checkMapping(mapping, override) == true && $(mapping_set).find("mapping[name='"+$('button#change-map').attr('name')+"']")[0] && type == 'change'){
-        deleteMapping($('button#change-map').attr('name'));
-    }
-    if ($(mapping_set).find("mapping[name='"+mapping.name+"']")[0] && type == 'new'){
-      $(".modal-content").html("<div class='modal-header'>Attention!</div><div class='modal-body'>Mapping already exists. Do you want to change it?</div><div class='modal-footer'><button type='button' class='btn btn-default override' data-dismiss='modal'>No</button><button type='button' class='btn btn-primary override' data-dismiss='modal'>Yes</button></div>");
-      $('.modal').modal('show');
-    }
-    if ((checkMapping(mapping, override) === true)){
-    
-    var mapping = document.createElement('mapping');
-    mapping.setAttribute('name', map_obj.name);
-    mapping.setAttribute('priority', map_obj.priority);
-    mapping.setAttribute('target-type', map_obj.targettype);
-    mapping.setAttribute('target-style', map_obj.targetstyle);
-    mapping.setAttribute('remove-adhoc', map_obj.removeadhoc);
-
-    $.each($('#properties').find('li'), function(){
-      var property = document.createElement('prop');
-      property.setAttribute('name', $(this).attr('data-name'));
-      property.setAttribute('relevant', $(this).attr('data-relevant'));
-      var name = $(this).attr('data-name');
-/*      console.log('NAME', name);
-      console.log('TYPEOF VALUE', typeof $(this).attr('data-value'), typeof undefined);
-      console.log('TYPEOF MINVALUE', typeof $(this).attr('data-minvalue'), typeof undefined);
-*/      if (name == 'color' || name == 'background-color' && typeof $(this).attr('data-regex') == undefined){
-                  if ((typeof $(this).attr('data-value') == typeof undefined) && (typeof $(this).attr('data-regex') == typeof undefined) ){
-                      property.setAttribute('max-value', $(this).attr('data-maxvalue'));
-                      property.setAttribute('min-value', $(this).attr('data-minvalue'));
-                      property.setAttribute(name+'-min-h', $(this).attr('data-'+name+'-min-h'));
-                      property.setAttribute(name+'-min-s', $(this).attr('data-'+name+'-min-s'));
-                      property.setAttribute(name+'-min-l', $(this).attr('data-'+name+'-min-l'));
-                      property.setAttribute(name+'-max-h', $(this).attr('data-'+name+'-max-h'));
-                      property.setAttribute(name+'-max-s', $(this).attr('data-'+name+'-max-s'));
-                      property.setAttribute(name+'-max-l', $(this).attr('data-'+name+'-max-l'));
-                  }
-                  else{
-                      property.setAttribute('value', $(this).attr('data-value'));
-                      property.setAttribute(name+'-h', $(this).attr('data-'+name+'-h'));
-                      property.setAttribute(name+'-s', $(this).attr('data-'+name+'-s'));
-                      property.setAttribute(name+'-l', $(this).attr('data-'+name+'-l'));
-                  }         
-      }
-      else if (typeof $(this).attr('data-value') != typeof undefined){
-          property.setAttribute('value', $(this).attr('data-value'));
-      }
-      else if (typeof $(this).attr('data-minvalue')!= typeof undefined){
-          property.setAttribute('min-value', $(this).attr('data-minvalue'));
-          property.setAttribute('max-value', $(this).attr('data-maxvalue'));
-      }
-      else if (typeof $(this).attr('data-regex')!= typeof undefined){
-          property.setAttribute('regex', $(this).attr('regex'));
-      }
+    if (map_obj != null){
+         console.log('map', map_obj);
+         addProps(map_obj);
+         var mapping = document.createElement('mapping');
+           mapping.setAttribute('name', map_obj.name);
+           mapping.setAttribute('priority', map_obj.priority);
+           mapping.setAttribute('target-type', map_obj.targettype);
+           mapping.setAttribute('target-style', map_obj.targetstyle);
+           mapping.setAttribute('remove-adhoc', map_obj.removeadhoc);
+       
+         $.each($('#properties').find('li'), function(){
+           var property = document.createElement('prop');
+           property.setAttribute('name', $(this).attr('data-name'));
+           property.setAttribute('relevant', $(this).attr('data-relevant'));
+           var name = $(this).attr('data-name');
+     /*      console.log('NAME', name);
+           console.log('TYPEOF VALUE', typeof $(this).attr('data-value'), typeof undefined);
+           console.log('TYPEOF MINVALUE', typeof $(this).attr('data-minvalue'), typeof undefined);
+     */      if (name == 'color' || name == 'background-color' && typeof $(this).attr('data-regex') == undefined){
+                       if ((typeof $(this).attr('data-value') == typeof undefined) && (typeof $(this).attr('data-regex') == typeof undefined) ){
+                           property.setAttribute('max-value', $(this).attr('data-maxvalue'));
+                           property.setAttribute('min-value', $(this).attr('data-minvalue'));
+                           property.setAttribute(name+'-min-h', $(this).attr('data-'+name+'-min-h'));
+                           property.setAttribute(name+'-min-s', $(this).attr('data-'+name+'-min-s'));
+                           property.setAttribute(name+'-min-l', $(this).attr('data-'+name+'-min-l'));
+                           property.setAttribute(name+'-max-h', $(this).attr('data-'+name+'-max-h'));
+                           property.setAttribute(name+'-max-s', $(this).attr('data-'+name+'-max-s'));
+                           property.setAttribute(name+'-max-l', $(this).attr('data-'+name+'-max-l'));
+                       }
+                       else{
+                           property.setAttribute('value', $(this).attr('data-value'));
+                           property.setAttribute(name+'-h', $(this).attr('data-'+name+'-h'));
+                           property.setAttribute(name+'-s', $(this).attr('data-'+name+'-s'));
+                           property.setAttribute(name+'-l', $(this).attr('data-'+name+'-l'));
+                       }         
+           }
+           else if (typeof $(this).attr('data-value') != typeof undefined){
+               property.setAttribute('value', $(this).attr('data-value'));
+           }
+           else if (typeof $(this).attr('data-minvalue')!= typeof undefined){
+               property.setAttribute('min-value', $(this).attr('data-minvalue'));
+               property.setAttribute('max-value', $(this).attr('data-maxvalue'));
+           }
+           else if (typeof $(this).attr('data-regex')!= typeof undefined){
+               property.setAttribute('regex', $(this).attr('regex'));
+           }
+           
+           mapping.appendChild(property)
+         });
+       temp_rule = mapping;
+       handleRuleDuplicates(type)
       
-      mapping.appendChild(property)
-    });
-    createSuccess('Mapping rule saved!');
-    mapping_set.appendChild(mapping);
-    sortByPriority()
-/*    showMaps();*/
-    handleContent('rules', 'open');
-    clearTable();
+    }else{
+     createError('Mapping rule could not be saved.')
     }
 }
-function checkMapping(mapping, override, type){
+function checkMapping(mapping){
   var table_rows = $('#mapping > tbody').find('tr');
   if (!(mapping.name)){
     createError('Missing mapping name.');
@@ -1810,7 +1840,6 @@ function watchProgress(){
       para_perc = Math.floor(count_matched_p / document_stat.para * 100);
       inline_perc = Math.floor(count_matched_inline / document_stat.inline * 100);
       $progress.html("Matched Elements: <span>¶["+para_perc+"%]</span><span>T["+inline_perc+"%]</span>");
-      
 }
 function asAdhoc(prop, target_element){
   var bool = false;
@@ -1856,7 +1885,7 @@ function toggleConMenuOff(menutype, nav_selection){
      if (sub_menu_state !== 0){
        sub_menu_state = 0;
        $sub_menu.removeClass('sub_menu--active');
-       $('.ul_rules, .ul_inline, .ul_para').hide();
+       $('.ul_rules, .ul_inline, .ul_para, .ul_workflow').hide();
        $(nav_selection).css("background-color", "#efefef");
     }
   }
@@ -1897,13 +1926,12 @@ function positionMenu(e) {
   con_menu_pos = getPosition(e);
 }
 function autoCreateRule(target_el){
-  var map_obj = new Mapping(),
-  document_el = $("*[srcpath='"+ target_el.getAttribute('target-src')+"'")[0],
-  props = createPropObject(document_el);
-  var mapping = document.createElement('mapping');
-  mapping.setAttribute('name', 'Mapping'+ mapping_set.children.length);
+  var document_el = $("*[srcpath='"+ $(target_el).parent().attr('data-srcpath')+"'")[0],
+  props = createPropsObject(document_el),
+  mapping = document.createElement('mapping');
+  mapping.setAttribute('name', 'Mapping'+ (mapping_set.children.length +1));
   mapping.setAttribute('priority', mapping_set.children.length +1);
-  mapping.setAttribute('target-type', $(target_el).attr('data-target-type'));
+  mapping.setAttribute('target-type', $(target_el).parent().attr('data-target'));
   mapping.setAttribute('target-style', $(target_el).attr('target-style'));
   mapping.setAttribute('remove-adhoc', "");
     for (prop in props){
@@ -1914,12 +1942,18 @@ function autoCreateRule(target_el){
           property.setAttribute("name",prop);
           property.setAttribute("relevant","true");
         if (name == 'color' || name == 'background-color'){
-            var ele_val = rgb2array(props[prop]),
-            ele_val_hsl = rgb2Hsl(ele_val[0],ele_val[1],ele_val[2]);
+           var rgb_value_arr = [];
+           if (props[prop].indexOf('rgb(') == -1){
+            var rgb_str = name2rgb(props[prop]);
+            rgb_value_arr = rgb2array(rgb_str);
+           }else{
+             rgb_value_arr = rgb2array(props[prop]);  
+           }
+           var hsl_value_arr = rgb2Hsl(rgb_value_arr[0],rgb_value_arr[1],rgb_value_arr[2]);
             property.setAttribute("value",props[prop]);
-            property.setAttribute(name+'-h', ele_val_hsl[0]);
-            property.setAttribute(name+'-s', ele_val_hsl[1]);
-            property.setAttribute(name+'-l', ele_val_hsl[2]);
+            property.setAttribute(name+'-h', hsl_value_arr[0]);
+            property.setAttribute(name+'-s', hsl_value_arr[1]);
+            property.setAttribute(name+'-l', hsl_value_arr[2]);
         }
         else{
             property.setAttribute("value",props[prop]);
@@ -1927,14 +1961,15 @@ function autoCreateRule(target_el){
         $(mapping).append(property);
       }
     };
-    $(mapping_set).append(mapping);
-      sortByPriority()
-      toggleConMenuOff('sub_menu');
-      toggleConMenuOff('con_menu');
-  
+    temp_rule = mapping;
+    handleRuleDuplicates('new');
+    toggleConMenuOff('sub_menu');
+    toggleConMenuOff('con_menu');
 }
-function createTargetStyleList(srcpath, target_type){
-/*    distinguish whether target style are available after from template document after conversion. if not, some example styles were taken.*/
+  
+
+function createTargetStyleList(target_type){
+/*    distinguish whether target style are available from template document after conversion. if not, some example styles were taken.*/
     if (target_styles == "" && templateuri == ""){
      var target_style_names = $(document.createElement('div')).html(example_target_styles).children().children();
     }else{
@@ -1942,14 +1977,13 @@ function createTargetStyleList(srcpath, target_type){
     }
     var ul = document.createElement('ul');
     $(ul).addClass("ul_"+target_type);
+    $(ul).attr('data-target', target_type);
    $(target_style_names).each(function(){
         var li = document.createElement('li'),
         name = $(this).attr('w:styleId') || $(this).attr('Name');
 /*        console.log($(this).attr('w:styleId'), name);*/
-        $(li).attr('target-src', srcpath);
         $(li).attr('target-style', name );
         $(li).attr('class', 'clickable');
-        $(li).attr('data-target-type', target_type);
         if ($(this).attr('target-type') == target_type){
           if ($(this).attr('w:styleId')){
             $(li).html($(this).attr('w:styleId'));
@@ -1962,6 +1996,7 @@ function createTargetStyleList(srcpath, target_type){
 /*          console.log(this, 'style');*/
         }
     })
+    console.log('lists created');
     return ul;
 }
 function positionMenu(e) {
@@ -1996,7 +2031,9 @@ function positionSubMenu($sub_nav){
   menuChoordsX = menu_position.left;
   menuChoordsY = menu_position.top;
   sub_menuWidth = $('#sub-menu').width();
-  sub_menuHeight = $('#sub-menu').height();/*
+  sub_menuHeight = $('#sub-menu').height();
+  windowWidth = window.innerWidth
+  windowHeight = window.innerHeight;/*
   console.log(
   'windowwidth',windowWidth,
   'windowheight',windowHeight,
@@ -2018,12 +2055,31 @@ function positionSubMenu($sub_nav){
     sub_menu.style.top = menuChoordsY + $sub_nav.position().top + "px";
   }
 }
+function uploadDocument(form_data){
+      $.ajax({
+      url: 'https://transpect.le-tex.de/api/upload_file',
+      type: 'POST',
+      data: form_data,
+      async:true,
+      success: function (data){
+          var callbackURI = data['callback_uri'];
+          documentStatusRequest(callbackURI);
+      },
+      "beforeSend": function(xhr){
+          xhr.setRequestHeader("Authorization", basicHTTPAuthString(username, password));
+      },
+      cache: false,
+      contentType:false,
+      processData:false
+  })
+}
 function computeMatching(){
   matching_arr = []
   $.each($(mapping_set).find('mapping'), function(){
     var par_arr = [];
     rule = getMapping(this.getAttribute('name'));
-    part_arr = mapping2previews(rule);
+    
+    part_arr = getPreviewsArray(rule);
     $.each(part_arr, function(){
       matching_arr.push(this);
     })
@@ -2032,8 +2088,8 @@ function computeMatching(){
 /*  console.log('ALL Matching Elements', arr);*/
 }
 function getTargetStyleName(target_element){
-  var styles_arr = $.map(document.styleSheets[3].cssRules, (x) => {return x.selectorText;}),
-  style_name = "No Style";
+      styles_arr = $.map(document.styleSheets[3].cssRules, (x) => {return x.selectorText;}),
+      style_name = "No Style";
 /*  console.log(styles_arr, 'Stylearr');*/
   $.each(styles_arr, function(index){
      if ($(target_element).hasClass(this.replace(/^\./, ''))){
@@ -2066,7 +2122,13 @@ function generateBreadcrumbs(target_element){
         }  
 }
 /*initialization of the application ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-showMaps();
+/*        in live mode this code should in the ajax callback*/
+countDocElements();
+ul_para = createTargetStyleList('para');1
+ul_inline = createTargetStyleList('inline');
+$('#sub-targets').append(ul_para, ul_inline);
+
+
 clearTable();
 checkSize();
 window.addEventListener("resize", checkSize)
@@ -2119,30 +2181,16 @@ $('select#target-type').on('change', function(){
 $('#remove-insp').on('click', function(){
   $('#insp').trigger('click')  
 })
-$("form#docxfile").submit(function(evt){
+$("#upload-doc-form, #sub-upload-doc-form").submit(function(evt){
     $('#download').children().remove();
     $('#dotsstep3').attr('class', '');
-    filename = document.getElementById('upload-doc').value.replace(/^.*\\/, "");
+    filename = document.getElementById('upload-doc').value.replace(/^.*\\/, "")|| document.getElementById('sub-upload-doc').value.replace(/^.*\\/, "");
 var formData = new FormData($(this)[0]);
     formData.append('type','stylemapper');
     formData.append('add_params', '');
-    $.ajax({
-      url: 'https://transpect.le-tex.de/api/upload_file',
-      type: 'POST',
-      data: formData,
-      async:true,
-      success: function (data){
-          var callbackURI = data['callback_uri'];
-          initDocxStatusRequest(callbackURI);
-      },
-      "beforeSend": function(xhr){
-          xhr.setRequestHeader("Authorization", basicHTTPAuthString(username, password));
-      },
-      cache: false,
-      contentType:false,
-      processData:false
-  })
-  return false
+console.log(formData);
+    uploadDocument(formData)
+    return false
 })  
 $('#attach-prop').on('click', function(){
     setProp('new');
@@ -2168,7 +2216,7 @@ $('#create-rule').on('click', function(){
 $("#save-map").on('click', function(){
       $("#status").hide();
       $("#status").children().remove();
-      saveMapping(false, 'new');
+      saveMapping('new');
 });
 $('ul#properties').on('click', 'li > span.edit-prop', function(event){
         editProp(event.target.getAttribute('data-id'));
@@ -2192,7 +2240,7 @@ $('button#discard-prop').on('click', function(){
     handleContent('add-prop', 'close');
  })
  $('button#change-map').on('click', function(){
-   saveMapping(false, 'change');
+   saveMapping('change');
  })
 $('button#discard-map').on('click', function(){
     $('button#discard-map').hide();
@@ -2230,6 +2278,18 @@ $('#step2').on('click', function(){
     }
     $("#mapping-import")[0].removeEventListener('change', readSingleFile, false);
 })
+$('#sub-mapping-import').on('change', function(){
+    $("#sub-mapping-import")[0].addEventListener('click', readSingleFile, false);
+    var selected_file = $('input[type=file]#sub-mapping-import').filter(function(){
+        return $.trim(this.value) != ''
+    }).length  > 0;
+    if (selected_file){
+        var evt = document.createEvent('HTMLEvents');
+        evt.initEvent('click', readSingleFile, false);
+        $("#sub-mapping-import")[0].dispatchEvent(evt);
+    }
+    $("#mapping-import")[0].removeEventListener('click', readSingleFile, false);
+})
 $('#insp-options1').on('change', 'input#hide-adhoc', function(){
     if (this.checked === false){
       showAdhoc();
@@ -2248,25 +2308,26 @@ $('input.show-type').on('change', function(){
     }
     $("*[srcpath='"+ this.getAttribute('srcp')+"']").trigger('click');
 });
-$('div.modal-content').on('click', 'div.modal-footer > button.override', function(event){
-     if (event.target.innerHTML === 'Yes'){
-      saveMapping(true, 'change');
+$('div.modal-content').on('click', 'div.modal-footer > button', function(evt){
+     if (evt.target.innerHTML === 'Yes'){
+        deleteMapping(temp_rule.getAttribute('name'));
+        $(mapping_set).append(temp_rule);
+        sortByPriority()
      }
-     else if (event.target.innerHTML === 'Store'){
+     else if (evt.target.innerHTML === 'Store'){
         $(conflict_li).attr('data-relevant', 'false');
         $(conflict_li).find('span.relevant').html('false');
         storeProp(prop)
      }
-     else if (event.target.innerHTML === 'Replace')  {
+     else if (evt.target.innerHTML === 'Replace')  {
         storeProp(prop);
         deleteProp($(li).attr('id'))
      }
-     else if (event.target.innerHTML === 'Abort'){
+     else if (evt.target.innerHTML === 'Abort' || evt.target.innerHTML === 'No'){
          return
      }
-     else{
-       return false;
-     }
+       
+     
 });
 $('#rules1 > table > tbody').on('click', '.ui-sortable-handle > td.point > a', function(){
   $(this).trigger('focus');
@@ -2318,13 +2379,13 @@ $('#breadcrumbs').on('click', 'a[srcp]', function(){
   viewTarget($("*[srcpath='"+ this.getAttribute('srcp')+"']")[0]);
 });
 $('#help').on('click', function(){
-  count++
+  g_count++
   function isEven(c){
     return c % 2 == 0
   }
-  if (isEven(count) === true){
+  if (isEven(g_count) === true){
     $('span.glyphicon-info-sign').hide();
-  }else if (isEven(count) === false){
+  }else if (isEven(g_count) === false){
     $('span.glyphicon-info-sign').show();
   };
 });
@@ -2332,7 +2393,7 @@ $('#delete-content').on('click', function(){
   $('#sm-page').children().remove();
   resetInput($("label[for='upload-doc']")[0]);
 })
-$('#step3').on('click', function(){
+$('#step3, #sub-apply').on('click', function(){
   if ($('#sm-page').children().length == 0){
       createError('No document found. Please upload a document before applying.');
   }
@@ -2348,38 +2409,35 @@ $('.clickable').on('click', function(){
 /*TODO - CLICK FEEDBACK FOR CLICKABLE ELEMENTS*/
 });
 $('tbody.mapping-rules').on('change', 'tr > td > label > input.preview-rule', function(event){
-/*  var bg_color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);  <--- */
+console.time('preview-rule'); 
     var filtered_arr = [],
     rule_name = $(event.target).attr('name'),
     rule = getMapping(rule_name);
-    var style = $("<style>."+rule_name+ " { border-left: solid 5px"+ bg_color[rule.priority] +"; border-radius: 3px }</style>");
-    document.styleSheets[0].addRule("."+rule_name, " border-left: solid 5px"+ bg_color[rule.priority] +"; border-radius: 2px");
-    $('html > head').append(style);
     if (this.checked == true){
-      var filtered_arr = mapping2previews(rule);
+      var filtered_arr = getPreviewsArray(rule);
       if (filtered_arr.length !=0){
        $('#'+rule_name).addClass(rule_name);
-       $('#prev'+rule_name).show()
+/*       #prev....show() causes about 400ms (Mapping8 from testfile example_rules2.xml  when its invoked first time*/
+       $('#prev'+rule_name).show() 
       }else{
         $('#prev'+rule_name).hide()
       }
+      console.time('computing matching after priority'); 
       $.each(filtered_arr, function(){
 /*        console.log(rule.priority, 'RULEPRIORITY', $(this).attr('data-view-priority'));*/
-        if (this.hasAttribute('data-view-priority')){
-          if ($(this).attr('data-view-priority') <= rule.priority || $(this).attr('data-active-rule') == ""){
-            $(this).addClass(rule_name);
-            $(this).addClass('matched');
-            $(this).attr('data-active-rule', rule.name);
-            $(this).attr('data-view-priority', rule.priority);
-          }
+        if ($(this).attr('data-view-priority') <= rule.priority || $(this).attr('data-active-rule') == ""){
+          $(this).addClass(rule_name);
+          $(this).addClass('matched');
+          $(this).attr('data-active-rule', rule.name);
+          $(this).attr('data-view-priority', rule.priority);
         }
         else{
          $(this).attr('data-active-rule', rule.name);
-         $(this).attr('data-view-priority', rule.priority);
          $(this).addClass(rule_name);
          $(this).removeClass('matched');
         }
       })
+      console.timeEnd('computing matching after priority');
     }
     else {
         $("*[data-active-rule='" +rule.name+ "'").attr('data-active-rule', "");
@@ -2390,9 +2448,13 @@ $('tbody.mapping-rules').on('change', 'tr > td > label > input.preview-rule', fu
         $('#prev'+rule_name).hide()
 /*        console.log('checked checkboxes', $('.preview-rule:checked'));*/
     }
+console.timeEnd('preview-rule');
 })
 $('.preview-all').change(function(event){
-      var checkboxes = $(document).find('input.preview-rule').toArray();
+console.time('preview-all');
+$('#loading-screen').show();
+      var checkboxes = $(document).find('input.preview-rule').toArray(),
+      rules_arr = $(mapping_set).find('mapping');
 /*      console.log('checkboxes', checkboxes);*/
       if (this.checked == true){
       $('.preview-all').prop('checked', true);
@@ -2405,11 +2467,15 @@ $('.preview-all').change(function(event){
       }
       else{
           $('.preview-all').prop('checked', false);
-          $.each(checkboxes, function(){
+          $.each(checkboxes, function(index){
               $(this).prop('checked', false)
-              $(this).trigger('change');
+              rule_name = rules_arr[index].getAttribute('name')
+              $('.'+ rule_name).removeClass(rule_name);
+              $('#prev'+ rule_name).hide();
           })
-      }
+      }      
+console.timeEnd('preview-all');
+$('#loading-screen').hide();
 })
 /*$('tbody.mapping-rules').on('change', 'tr > td > label > input.preview-rule', function(event){
 /\*  var bg_color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);  <--- *\/
@@ -2420,7 +2486,7 @@ $('.preview-all').change(function(event){
     document.styleSheets[0].addRule("."+rule_name, " border-left: solid 5px"+ bg_color[rule.priority] +"; border-radius: 2px");
     $('html > head').append(style);
       if (this.checked == true){
-      var filtered_arr = mapping2previews(rule);
+      var filtered_arr = getPreviewsArray(rule);
 /\*    console.log(filtered_arr, filtered_arr.length, 'FILTERED ELEMENTS FOR MAPPING');*\/
       if (filtered_arr.length !=0){
         $('#'+rule_name).addClass(rule_name);
@@ -2509,37 +2575,54 @@ $('.preview-all').change(function(event){
 $('#download-rules').on('click', function(){
   downloadRules();
 })
-$('#sm-page').on('contextmenu', $(this).find('*'), function(evt){
-  if (clickForContext(evt.target, 'srcpath')){
-    $sub_menu.children().not('.ul_rules').remove();
-    evt.preventDefault();
-/*    generating target styles, not shure if thats the best place yet */
-    ul_para = createTargetStyleList($(evt.target).attr('srcpath'), 'para');
-    ul_inline = createTargetStyleList($(evt.target).attr('srcpath'), 'inline');
+$('#wrapper').on('contextmenu' , function(evt){
+  evt.preventDefault();
+  console.log(evt.target);
+  var src = evt.target.hasAttribute('srcpath') || null;
+    $('#menu').attr('target-src', src);
+    
+  if ($('#menu').attr('target-src') == null){
+    $('#con-inline, #con-para').addClass('disabled02')
+  }
+  else{
+    $('#con-inline, #con-para').removeClass('disabled02')
+  }
+/*    ein eventhandler für alle contextevents.... dann unterscheidung ob target einen src hat oder nicht daran dann die disabled klasse attachen.*/
+    $('.ul_para, .ul_inline').attr('data-srcpath', $(evt.target).attr('srcpath'));
+/*  generating target styles, not shure if thats the best place yet */
     $con_menu.attr('target-src', $(evt.target).attr('srcpath'));
-    $sub_menu.append(ul_para, ul_inline);
     positionMenu(evt);
-    toggleConMenuOn('con_menu');
     $('#sm-page *[srcpath]').removeClass('inspected');
     $("*[srcpath='"+$(evt.target).attr("srcpath")+"']").addClass('inspected');
-  }else{
+    toggleConMenuOn('con_menu');
+/*  if (clickForContext(evt.target, 'srcpath')){*/
+ /* }else{
     toggleConMenuOff('con_menu');
-  }
+  }*/
 })
-$('#menu > ul > li').on('click', function(evt){
-  var target_type = $(evt.target).attr('data-target-type');
-/*   console.log($('.ul_'+target_type)[0], 'hallooooo');*/
-   $('.ul_'+target_type).show();
-   positionSubMenu($('#con-'+target_type));
-   toggleConMenuOn('sub_menu', "#con-"+target_type);
+$('#wrapper').on('contextmenu', function(){
+    $con_menu.attr('target-src', '');
+    toggleConMenuOn('con_menu');
+    return false
 })
-$('#menu > ul > li[data-target-type]').hover(function(evt){
+$('#sub-upload-doc').on('change', function(){
+     $('#download').children().remove();
+    $('#dotsstep3').attr('class', '');
+    $('#sub-upload-doc-form').submit();
+})
+$('#menu > ul > li[data-target]').on('click', function(evt){
+  var target = $(evt.target).attr('data-target');
+   $('.ul_'+target).show();
+   positionSubMenu($('#con-'+target));
+   toggleConMenuOn('sub_menu', "#con-"+target);
+})
+$('#menu > ul > li[data-target]').hover(function(evt){
   $(evt.target).trigger('click')}, function(evt){
-   var target_type = $(evt.target).attr('data-target-type');
-   $('.ul_'+target_type).hide();
+   var target = $(evt.target).attr('data-target');
+   $('.ul_'+target).hide();
    if ($('#sub-menu').is(":hover") === true){
    }else{
-    toggleConMenuOff('sub_menu', "#con-rules, #con-inline, #con-para");  
+    toggleConMenuOff('sub_menu', "#con-rules, #con-inline, #con-para, #con-workflow");  
    }; 
   }
 )
@@ -2551,13 +2634,13 @@ $('#unmatched').on('click', function(e){
     };
 /*    console.log('UNMATCHED ELEMENT', $unmatched_element.get(0));*/
     $('#main-wrapper').animate({
-        scrollTop: $unmatched_element.get(0).scrollHeight + 30
+        scrollTop: $unmatched_element.get(0).scrollHeight - 100
     }, 1000);
     return false;
 });
 $('div').not('#menu, #sub-menu').on('click', function(){
-  toggleConMenuOff('sub_menu', "#con-rules, #con-inline, #con-para");
-  toggleConMenuOff('con_menu', "#con-rules, #con-inline, #con-para");
+  toggleConMenuOff('sub_menu', "#con-rules, #con-inline, #con-para, #con-workflow");
+  toggleConMenuOff('con_menu', "#con-rules, #con-inline, #con-para, #con-workflow");
 })
 $('#sub-menu').on('click', '.ul_para > li, .ul_inline > li', function(evt){
     autoCreateRule(evt.target);
@@ -2581,8 +2664,20 @@ $('#hide-workflow > input').on('change',function(){
   }
 })
 $(document).not('#menu').on("click", function(){
-  toggleConMenuOff('con_menu', "#con-rules, #con-inline, #con-para");
+  toggleConMenuOff('con_menu', "#con-rules, #con-inline, #con-para, #con-workflow");
 })
+
+/*~~~~~~~~~~ help functions for developement*/
+
+function messureTime(_function, message){
+  var start, end;
+  start = new Date().getMilliseconds()
+  _function
+  end = new Date().getMilliseconds()
+  res = end - start;
+  console.log('Message: ', message, 'Duration: ', res); 
+  return _function
+}
 /*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
 var saveAs=saveAs||function(view){"use strict";if(typeof navigator!=="undefined"&&/MSIE [1-9]\./.test(navigator.userAgent)){return}var doc=view.document,get_URL=function(){return view.URL||view.webkitURL||view},save_link=doc.createElementNS("http://www.w3.org/1999/xhtml","a"),can_use_save_link="download"in save_link,click=function(node){var event=new MouseEvent("click");node.dispatchEvent(event)},is_safari=/Version\/[\d\.]+.*Safari/.test(navigator.userAgent),webkit_req_fs=view.webkitRequestFileSystem,req_fs=view.requestFileSystem||webkit_req_fs||view.mozRequestFileSystem,throw_outside=function(ex){(view.setImmediate||view.setTimeout)(function(){throw ex},0)},force_saveable_type="application/octet-stream",fs_min_size=0,arbitrary_revoke_timeout=500,revoke=function(file){var revoker=function(){if(typeof file==="string"){get_URL().revokeObjectURL(file)}else{file.remove()}};if(view.chrome){revoker()}else{setTimeout(revoker,arbitrary_revoke_timeout)}},dispatch=function(filesaver,event_types,event){event_types=[].concat(event_types);var i=event_types.length;while(i--){var listener=filesaver["on"+event_types[i]];if(typeof listener==="function"){try{listener.call(filesaver,event||filesaver)}catch(ex){throw_outside(ex)}}}},auto_bom=function(blob){if(/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)){return new Blob(["\ufeff",blob],{type:blob.type})}return blob},FileSaver=function(blob,name,no_auto_bom){if(!no_auto_bom){blob=auto_bom(blob)}var filesaver=this,type=blob.type,blob_changed=false,object_url,target_view,dispatch_all=function(){dispatch(filesaver,"writestart progress write writeend".split(" "))},fs_error=function(){if(target_view&&is_safari&&typeof FileReader!=="undefined"){var reader=new FileReader;reader.onloadend=function(){var base64Data=reader.result;target_view.location.href="data:attachment/file"+base64Data.slice(base64Data.search(/[,;]/));filesaver.readyState=filesaver.DONE;dispatch_all()};reader.readAsDataURL(blob);filesaver.readyState=filesaver.INIT;return}if(blob_changed||!object_url){object_url=get_URL().createObjectURL(blob)}if(target_view){target_view.location.href=object_url}else{var new_tab=view.open(object_url,"_blank");if(new_tab==undefined&&is_safari){view.location.href=object_url}}filesaver.readyState=filesaver.DONE;dispatch_all();revoke(object_url)},abortable=function(func){return function(){if(filesaver.readyState!==filesaver.DONE){return func.apply(this,arguments)}}},create_if_not_found={create:true,exclusive:false},slice;filesaver.readyState=filesaver.INIT;if(!name){name="download"}if(can_use_save_link){object_url=get_URL().createObjectURL(blob);setTimeout(function(){save_link.href=object_url;save_link.download=name;click(save_link);dispatch_all();revoke(object_url);filesaver.readyState=filesaver.DONE});return}if(view.chrome&&type&&type!==force_saveable_type){slice=blob.slice||blob.webkitSlice;blob=slice.call(blob,0,blob.size,force_saveable_type);blob_changed=true}if(webkit_req_fs&&name!=="download"){name+=".download"}if(type===force_saveable_type||webkit_req_fs){target_view=view}if(!req_fs){fs_error();return}fs_min_size+=blob.size;req_fs(view.TEMPORARY,fs_min_size,abortable(function(fs){fs.root.getDirectory("saved",create_if_not_found,abortable(function(dir){var save=function(){dir.getFile(name,create_if_not_found,abortable(function(file){file.createWriter(abortable(function(writer){writer.onwriteend=function(event){target_view.location.href=file.toURL();filesaver.readyState=filesaver.DONE;dispatch(filesaver,"writeend",event);revoke(file)};writer.onerror=function(){var error=writer.error;if(error.code!==error.ABORT_ERR){fs_error()}};"writestart progress write abort".split(" ").forEach(function(event){writer["on"+event]=filesaver["on"+event]});writer.write(blob);filesaver.abort=function(){writer.abort();filesaver.readyState=filesaver.DONE};filesaver.readyState=filesaver.WRITING}),fs_error)}),fs_error)};dir.getFile(name,{create:false},abortable(function(file){file.remove();save()}),abortable(function(ex){if(ex.code===ex.NOT_FOUND_ERR){save()}else{fs_error()}}))}),fs_error)}),fs_error)},FS_proto=FileSaver.prototype,saveAs=function(blob,name,no_auto_bom){return new FileSaver(blob,name,no_auto_bom)};if(typeof navigator!=="undefined"&&navigator.msSaveOrOpenBlob){return function(blob,name,no_auto_bom){if(!no_auto_bom){blob=auto_bom(blob)}return navigator.msSaveOrOpenBlob(blob,name||"download")}}FS_proto.abort=function(){var filesaver=this;filesaver.readyState=filesaver.DONE;dispatch(filesaver,"abort")};FS_proto.readyState=FS_proto.INIT=0;FS_proto.WRITING=1;FS_proto.DONE=2;FS_proto.error=FS_proto.onwritestart=FS_proto.onprogress=FS_proto.onwrite=FS_proto.onabort=FS_proto.onerror=FS_proto.onwriteend=null;return saveAs}(typeof self!=="undefined"&&self||typeof window!=="undefined"&&window||this.content);if(typeof module!=="undefined"&&module.exports){module.exports.saveAs=saveAs}else if(typeof define!=="undefined"&&define!==null&&define.amd!=null){define([],function(){return saveAs})}
 })

@@ -1,7 +1,6 @@
 body {
     padding-top: 0px;
     overflow: hidden;
-    
 }
 #wrapper {
     min-height: 100%;
@@ -107,17 +106,19 @@ padding:0px;
 input{
     font-size: 8pt;
 }
-.inputfile + label {
+/*.inputfile + label {
     font-size: 1.25em;
     font-weight: 700;
     color: white;
     display: inline-block;
-}
+}*/
 
 .clickable, .glyphicon-info-sign{
     cursor: pointer;
 }
-
+.sub-label{
+  font-weight: normal!important;
+}
 .inputfile {
 	width: 0.1px;
 	height: 0.1px;
@@ -300,6 +301,9 @@ display:none;
   border-radius: 4px;
   box-shadow: 0 0 10px #337ab7;
 }
+#sm-page{
+  position:absolute;
+}
 
 .inspected {
   border-radius: 4px;
@@ -341,7 +345,7 @@ height: 15pt;
 /*    vertical-align: central;*/
     width:100%;
 }
-#rules1 > table{
+#rules1 > th {
     font-size: 0.9 vw;
 }
 .propbutton{
@@ -426,6 +430,7 @@ coltd{
   text-decoration: line-through;
 }
 .disabled02{
+pointer-events: none;
 opacity: 0.2!important;
 }
 span.glyphicon-info-sign{
@@ -480,10 +485,10 @@ bottom:0px;
   height:auto;
   overflow-y: auto;
 }
-.con_menu > ul > li, .sub_menu > ul > li{
+.con_menu > ul > li, #sub-rules > ul > li, #sub-targets > ul > li, #sub-workflow > ul > li{
   border-bottom: 1px solid #ddd;
 }
-.con_menu > ul > li:hover, .sub_menu > ul > li:hover{
+.con_menu > ul > li:hover, #sub-rules > ul > li:hover, #sub-targets > ul > li:hover, #sub-workflow > ul > li:hover{
   background-color: #ddd;
 }
 .con_menu > ul > li > span.glyphicon, .con_menu > ul > li > input, .ul_rules > li > span.glyphicon, input#hide-adhoc, input#show-type{
@@ -549,4 +554,27 @@ img{
   float:left;
   margin-top: 2px;
   margin-right:5px;
+}
+#loading-screen{
+  display:none;
+  background-color: #fff;
+  width:100%;
+  height:100px;
+  bottom:0px;
+  position:fixed;
+}
+#loading-screen > span{
+   display:block;
+   width:100px;
+   height: 200px;
+   margin: 0 auto;
+   top:30%;
+}
+#sub-upload-doc {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
 }
