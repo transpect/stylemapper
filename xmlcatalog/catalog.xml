@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
   
@@ -18,4 +19,10 @@
   <nextCatalog catalog="../docx2hub/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../idml2xml/xmlcatalog/catalog.xml"/>
   <nextCatalog catalog="../docx_modify-lib/xmlcatalog/catalog.xml"/>
+=======
+<?xml version="1.0"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <rewriteURI uriStartString="http://transpect.io/stylemapper/" rewritePrefix="../"/>
+    <rewriteURI uriStartString="http://transpect.le-tex.de/stylemapper/" rewritePrefix="../"/>
+>>>>>>> 713abf0877d895fe0a929e3cad0e7778b2edea9b
 </catalog>

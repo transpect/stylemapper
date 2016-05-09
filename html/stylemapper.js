@@ -1453,6 +1453,7 @@ function deleteProp(id){
   g_temp_props.splice(listindex, 1)
 }
 function setProp(type){
+/*same system like the old mapping one, either improve by making shure it works, or build a system like the new mapping system. means, moduliing the ckeing function and store the props in a global array or object and nevermind the change and new type*/
 /*the type parameter must be 'new' or 'change'*/
 var prop1 = new Prop();
     prop1.name =  $('select#pname').val();
@@ -1522,7 +1523,8 @@ var prop1 = new Prop();
             }
         }
         else if (type == 'change'){
-            storeProp(prop1);
+/*         vielleicht ist hier die stelle an der man ansetzen muss um die bedingung einer property zu speichern, wahrscheinlich wird hier einfach die immer der durchlauf erfolgen*/
+         storeProp(prop1);
             $('button#change-prop').hide().attr('data-id',event.target.getAttribute('data-id')); 
             $('button#discard-prop').hide();
             $('button#attach-prop').show();
@@ -2424,7 +2426,7 @@ console.time('preview-rule');
       }
       console.time('computing matching after priority'); 
       $.each(filtered_arr, function(){
-/*        console.log(rule.priority, 'RULEPRIORITY', $(this).attr('data-view-priority'));*/
+        console.log(rule.priority, 'RULEPRIORITY', $(this).attr('data-view-priority'), filtered_arr);
         if ($(this).attr('data-view-priority') <= rule.priority || $(this).attr('data-active-rule') == ""){
           $(this).addClass(rule_name);
           $(this).addClass('matched');
@@ -2432,8 +2434,6 @@ console.time('preview-rule');
           $(this).attr('data-view-priority', rule.priority);
         }
         else{
-         $(this).attr('data-active-rule', rule.name);
-         $(this).addClass(rule_name);
          $(this).removeClass('matched');
         }
       })

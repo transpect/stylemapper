@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <start>
+    <element name="mapping-set">
+      <attribute name="date">
+        <data type="date"/>
+      </attribute>
+      <zeroOrMore>
+        <element name="mapping">
+          <ref name="mapping"/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </start>
+
+  <define name="mapping">
+    <attribute name="name"/>
+    <attribute name="priority"/>
+    <attribute name="target-style"/>
+    <optional>
+      <attribute name="target-type">
+        <choice>
+        <value>para</value>
+        <value>inline</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="remove-adhoc">
+      <optional>
+      <list>
+        <oneOrMore>
+          <choice>
+            <value>#props</value>
+            <value>#all</value>
+            <oneOrMore>
+              <ref name="layout-props"/>
+            </oneOrMore>
+          </choice>
+        </oneOrMore>
+      </list>
+    </optional>
+    </attribute>
+    </optional>
+      <zeroOrMore>
+      <element name="prop">
+        <attribute name="name"/>
+        <optional>
+          <choice>
+            <attribute name="value"/>
+            <group>
+              <attribute name="min-value"/>
+              <attribute name="max-value"/>
+            </group>
+          </choice>
+        </optional>
+        <optional>
+          <choice>
+            <group>
+              <attribute name="color-h"/>
+              <attribute name="color-s"/>
+              <attribute name="color-l"/>
+              <attribute name="background-color-h"/>
+              <attribute name="background-color-s"/>
+              <attribute name="background-color-l"/>
+            </group>
+            <optional>
+              <group>
+                <attribute name="color-min-h"/>
+                <attribute name="color-min-s"/>
+                <attribute name="color-min-l"/>
+                <attribute name="color-max-h"/>
+                <attribute name="color-max-s"/>
+                <attribute name="color-max-l"/>
+                <attribute name="background-color-min-h"/>
+                <attribute name="background-color-min-s"/>
+                <attribute name="background-color-min-l"/>
+                <attribute name="background-color-max-h"/>
+                <attribute name="background-color-max-s"/>
+                <attribute name="background-color-max-l"/>
+              </group>
+            </optional>
+          </choice>
+        </optional>
+        <optional>
+          <attribute name="regex"/>
+        </optional>
+        <attribute name="relevant"/>
+      </element>
+    </zeroOrMore>
+  </define>
+
+  <define name="layout-props">
+    <choice>
+      <value>font-size</value>
+      <value>font-weight</value>
+      <value>font-family</value>
+      <value>font-style</value>
+      <value>margin-top</value>
+      <value>margin-bottom</value>
+      <value>margin-left</value>
+      <value>margin-right</value>
+      <value>text-align</value>
+      <value>numbering</value>
+      <value>text-decoration-line</value>
+      <value>text-decoration-style</value>
+    </choice>
+  </define>
+</grammar>
