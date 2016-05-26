@@ -81,7 +81,7 @@ target_styles = '';
 username='admin';
 password='admin';
 base_uri = 'https://transpect.le-tex.de/data/stylemapper/'
-cssstyles = ['color', 'font-size', 'color', 'font-weight', 'background-color', 'text-indent', 'margin-left', 'font-style', 'line-height', 'font-family', 'text-align'];
+cssstyles = ['color', 'font-size', 'font-weight', 'background-color', 'text-indent', 'margin-left', 'font-style', 'line-height', 'font-family', 'text-align'];
 templateuri = '';
 actual_mappings = $('#rules').find('a');
 temp_rule = null;
@@ -455,34 +455,47 @@ function getPreviewsArray(mapping){
 function createPopover(id){
   var obj = getMapping(id),
       row_arr = [],
-                    table = document.createElement('table');
-                table.setAttribute('class', 'spec table table-striped');
-                for (var l=0; l < obj.props.length; l++){
-                 var prop_row = document.createElement('tr'),
-                     gly = '';
-                if (obj.props[l].relevant == 'true'){
-                    gly = "<span class='glyphicon glyphicon-ok'></span>"
-                }
-                else{
-                    $(prop_row).addClass('linethrough');
-                }
-                if (obj.props[l].value){
-                  prop_row.innerHTML = "<td>"+ obj.props[l].name+":</td><td>" + obj.props[l].value + gly + "</td>"
-                }
-                else if (obj.props[l].minvalue){
-                  prop_row.innerHTML = "<td>"+ obj.props[l].name+":</td><td>" + obj.props[l].minvalue + " - "+ obj.props[l].maxvalue + gly +"</td>"
-                }
-                else if (obj.props[l].regex){
-                  prop_row.innerHTML = "<td>"+ obj.props[l].name+":</td><td>Regex: " + obj.props[l].regex + gly +"</td>"
-                }
-                row_arr.push($(prop_row));
-                table.appendChild(prop_row);
-              }
-              return table
+      table = document.createElement('table');
+      table.setAttribute('class', 'spec table');
+      if (obj.targetstyle){
+       target_row = "<tr><td>Target Style:</td><td>" + obj.targetstyle + "</td></tr>"
+       row_arr.push(target_row);
+      }
+      for (var l=0; l < obj.props.length; l++){
+      
+       var prop_row = document.createElement('tr'),
+           gly = '';
+      if (obj.props[l].relevant == 'true'){
+          gly = "<span class='glyphicon glyphicon-ok'></span>"
+      }
+      else{
+          $(prop_row).addClass('linethrough');
+      }
+      if (obj.props[l].value){
+        prop_row.innerHTML = "<td>"+ obj.props[l].name+":</td><td>" + obj.props[l].value + gly + "</td>"
+      }
+      else if (obj.props[l].minvalue){
+        prop_row.innerHTML = "<td>"+ obj.props[l].name+":</td><td>" + obj.props[l].minvalue + " - "+ obj.props[l].maxvalue + gly +"</td>"
+      }
+      else if (obj.props[l].regex){
+        prop_row.innerHTML = "<td>"+ obj.props[l].name+":</td><td>Regex: " + obj.props[l].regex + gly +"</td>"
+      }
+      row_arr.push($(prop_row)[0]);
+    }
+    if (obj.removeadhoc){
+      var removeadhoc_row = "<tr><td>Remove Ad Hoc:</td><td>" + obj.removeadhoc.split(' ').join(', ') + "</td></tr>";
+      row_arr.push(removeadhoc_row);
+    }
+    console.log(row_arr);
+    $.each(row_arr, function(index){
+      $(table).append(row_arr[index]);
+    })
+    console.log(table);
+    return table
 }
 function countDocElements(){
       g_p_arr = $('#sm-page > p[srcpath][style]');
-      g_span_arr = $('#sm-page > span[srcpath][style]')
+      g_span_arr = $($('#sm-page').find('span[srcpath][style]'));
       document_stat.para = g_p_arr.length;
       document_stat.inline = g_span_arr.length;
 }
@@ -787,98 +800,6 @@ function initPriority(){
     input.attr('max', (map_num +1));
     input.attr('value', (map_num+1));
 }
-/* deprecated since the matching system changed => now the matching is done by jquery selections built from the rule properties converted to class values*/
-/*function isMatching(target_element,rule_id){
-  var element_obj = createPropsObject(target_element);
-      rule = getMapping(rule_id);
-       for (var i=0; i < rule.props.length; i++){
-        if (rule.props[i]['relevant'] == 'false'){
-        rule.props.splice(i, 1);
-        }
-      }
-      var count_matching = rule.props.length;
-      for (prop in element_obj){
-          for (var l=0; l < rule.props.length; l++){
-            if (prop === rule.props[l].name){
-                            if  (rule.props[l]['regex'] == "" || !(rule.props[l]['regex'])){
-                                if  ((rule.props[l]['minvalue'] == "") || (rule.props[l]['maxvalue'] == "")|| (rule.props[l]['maxvalue'] == null)||(rule.props[l]['minvalue'] == null)){
-/\*                                  console.log('ruuule props', rule.props[l]["value"], element_obj[prop]);*\/
-                                        if (rule.props[l]['value'] =="" || rule.props[l]['value'] == null){
-                                        }
-                                        else {
-                                                  if  (rule.props[l]['value'] == element_obj[prop]){
-                                                      count_matching = count_matching -1
-                                                  }
-                                                  else if (prop == 'color' || prop == 'background-color'){
-                                                      if (!(element_obj[prop].indexOf('rgb(') > -1)){
-/\*                                                  console.log('FARBENWERT  ', name2rgb(element_obj[prop]))*\/
-/\*                                                  console.log((element_obj[prop].indexOf('rgb(') > -1));*\/
-                                                          ele_val = rgb2array(name2rgb(element_obj[prop]));
-                                                      }
-                                                      else{
-                                                      ele_val = rgb2array(element_obj[prop]);
-                                                      }
-                                                      ele_val_hsl = rgb2Hsl(ele_val[0],ele_val[1],ele_val[2])
-/\*                                                      console.log('endwert    ', rule.props[l]["value"]);*\/
-                                                      prop_val = rgb2array(rule.props[l]["value"]);
-                                                      prop_val_hsl = rgb2Hsl(prop_val[0],prop_val[1],prop_val[2]);
-                                                      if ((prop_val_hsl[0] === ele_val_hsl[0])&&(prop_val_hsl[1] === ele_val_hsl[1])&&(prop_val_hsl[2] === ele_val_hsl[2])
-                                                      || (prop_val_hsl[0] === 0 && prop_val_hsl[1] === 0 && prop_val_hsl[2] === 0 && element_ob[prop] == 'black')){
-                                                          count_matching = count_matching -1
-                                                      }
-                                                  }
-                                        }
-                                }
-                                else{
-                                    if (element_obj[prop].match(/^.+pt$/)){
-                                        ele_val = parseFloat(element_obj[prop]);
-                                        min_val = parseFloat(rule.props[l]['minvalue']);
-                                        max_val = parseFloat(rule.props[l]['minvalue']);
-                                        if  ((min_val < ele_val < max_val)){
-                                         count_matching = count_matching -1
-                                        }
-                                    }
-                                    else if (((rule.props[l]['value'] =="")||(rule.props[l]['value'] == null)) && ((rule.props[l]['regex'] =="")||(rule.props[l]['regex'] == null))){
-/\*                                    console.log('element_obj ', element_obj);*\/
-                                        ele_val = rgb2array(element_obj[prop]);
-                                        ele_val_hsl = rgb2Hsl(ele_val[0],ele_val[1],ele_val[2])
-                                        min_val = rgb2array(rule.props[l]['minvalue']);
-                                        min_val_hsl = rgb2Hsl(min_val[0],min_val[1], min_val[2]);
-                                        max_val = rgb2array(rule.props[l]['maxvalue']);
-                                        max_val_hsl = rgb2Hsl(max_val[0],max_val[1],max_val[2]);
-/\*                                        console.log('vergleichswerte', ele_val, min_val, max_val);*\/
-                                         if (min_val_hsl[0] <= ele_val_hsl[0] && ele_val_hsl[0] <= max_val_hsl[0]){
-                                            if (min_val_hsl[1] <= ele_val_hsl[1] && ele_val_hsl[1] <= max_val_hsl[1]) {
-                                                if (min_val_hsl[2] <= ele_val_hsl[2] && ele_val_hsl[2] <= max_val_hsl[2]){
-                                                  count_matching = count_matching -1
-                                                }
-                                            }    
-                                         }
-                                    }
-                                }
-                            }
-                            else{
-                                  var regex = new RegExp(rule.props[l]['regex'])
-                                  if (element_obj[prop].match(regex)){
-                                      count_matching = count_matching - 1;
-                                  };
-                            }
-            }
-            else{
-            }
-          }
-      }
-/\*      console.log('counts ends', count_matching);*\/
-/\*      console.log(element_obj);*\/
-      if (count_matching > 0){
-/\*          console.log('its NOT matching!');*\/
-          return false
-      }
-      else{
-/\*          console.log('its matching!');*\/
-          return true
-      }
-}*/
 function rgb2array(rgb){
     var rgb_arr = [],
     string = rgb.replace(/^rgb./, '');
@@ -1143,7 +1064,6 @@ statusRequest = function(){
                       target_styles = $(style_container).load(templateuri)[0], 
                       $('#ajax-temp').load(fileuri, function(){
                          doProgress('1', 33.33, 'success');
-                         countDocElements();
                          clearInterval(timedrequest);
                          styles = $('#ajax-temp').find('style')[0];
                          body = $('#ajax-temp').children('*:not(title, style, link)');    
@@ -1152,6 +1072,7 @@ statusRequest = function(){
                          ul_para = createTargetStyleList('para');
                          ul_inline = createTargetStyleList('inline');
                          $('#sub-targets').append(ul_para, ul_inline);
+                         countDocElements();
                       });
                       $('#loading-screen').hide();
                       clearTable();
@@ -1968,8 +1889,6 @@ function autoCreateRule(target_el){
     toggleConMenuOff('sub_menu');
     toggleConMenuOff('con_menu');
 }
-  
-
 function createTargetStyleList(target_type){
 /*    distinguish whether target style are available from template document after conversion. if not, some example styles were taken.*/
     if (target_styles == "" && templateuri == ""){
@@ -2126,7 +2045,7 @@ function generateBreadcrumbs(target_element){
 /*initialization of the application ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*        in live mode this code should in the ajax callback*/
 countDocElements();
-ul_para = createTargetStyleList('para');1
+ul_para = createTargetStyleList('para');
 ul_inline = createTargetStyleList('inline');
 $('#sub-targets').append(ul_para, ul_inline);
 
