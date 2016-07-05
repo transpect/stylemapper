@@ -1374,7 +1374,7 @@ function deleteProp(id){
   g_temp_props.splice(listindex, 1)
 }
 function setProp(type){
-/*same system like the old mapping one, either improve by making shure it works, or build a system like the new mapping system. means, moduliing the ckeing function and store the props in a global array or object and nevermind the change and new type*/
+/*same system like the old mapping one, either improving it by making shure it works, or build a system like the new mapping system. means, moduling the checking function and store the props in a global array or object and nevermind the change and new type*/
 /*the type parameter must be 'new' or 'change'*/
 var prop1 = new Prop();
     prop1.name =  $('select#pname').val();
