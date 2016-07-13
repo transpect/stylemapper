@@ -19,7 +19,7 @@
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
       <defs>
         <filter id="blur">
-          <feGaussianBlur stdDeviation="5"></feGaussianBlur>
+          <feGaussianBlur stdDeviation="5"/>
         </filter>
       </defs>
     </svg>
@@ -33,14 +33,14 @@
                 <div class="wstep3 wfc1">
                   <form id="upload-doc-form" enctype="multipart/form-data" class="wstep1 wfc1">
                     <div class="step">Upload a Document <a class="my-popover" data-toggle="popover" tabindex="0"
-                  data-trigger="hover" title="1. Step: Upload a Word or IDML File" data-container="body"
-                  data-content="Select a DOCX or a IDML document from your local storage for the conversion via the CHOOSE A FILE.. BUTTON. &lt;br&gt; Upload it via the UPLOAD BUTTON." data-html='true'
-                  ><span class="glyphicon glyphicon-info-sign"></span></a><span id="dotsstep1"></span></div>
-                    <input id="upload-doc" class="inputfile" name="input_file"
-                      type="file"></input>
-                    <label for="upload-doc" class="label1"><span class="btn btn-default btn-inline"><span>Choose a file...</span></span></label>
-                    <button id="step1" type="submit" class="btn btn-default btn-inline btnwf2"
-                      >Upload</button>
+                        data-trigger="hover" title="1. Step: Upload a Word or IDML File" data-container="body"
+                        data-content="Select a DOCX or a IDML document from your local storage for the conversion via the CHOOSE A FILE.. BUTTON. &lt;br&gt; Upload it via the UPLOAD BUTTON."
+                        data-html="true"><span class="glyphicon glyphicon-info-sign"></span></a><span id="dotsstep1"
+                      ></span></div>
+                    <input id="upload-doc" class="inputfile" name="input_file" type="file" />
+                    <label for="upload-doc" class="label1"><span class="btn btn-default btn-inline"><span>Choose a
+                          file...</span></span></label>
+                    <button id="step1" type="submit" class="btn btn-default btn-inline btnwf2">Upload</button>
                   </form>
                 </div>
                 <div class="triangle"><span class="trisym glyphicon glyphicon-triangle-right"></span></div>
@@ -49,15 +49,15 @@
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 wf">
               <div class="wfc">
                 <div class="wstep4 wfc1">
-                  <div class="step createrules">Create or Import Mapping Rules <a class="my-popover" data-toggle="popover" tabindex="0"
-                  data-trigger="hover" title="2. Step: Create or Import Mapping Rules" data-container="body"
-                  data-content="Create mapping rules via the CREATE RULE BUTTON or import existent mapping rules via the IMPORT MAPPING RULES BUTTON to map styles." data-html='true'
-                  ><span class="glyphicon glyphicon-info-sign"></span></a><span id="dotsstep2"></span></div>
+                  <div class="step createrules">Create or Import Mapping Rules <a class="my-popover" data-toggle="popover"
+                      tabindex="0" data-trigger="hover" title="2. Step: Create or Import Mapping Rules" data-container="body"
+                      data-content="Create mapping rules via the CREATE RULE BUTTON or import existent mapping rules via the IMPORT MAPPING RULES BUTTON to map styles."
+                      data-html="true"><span class="glyphicon glyphicon-info-sign"></span></a><span id="dotsstep2"></span></div>
                   <button id="create-rule" class="btn btn-default">Create</button>
-                  <input name="file" id="mapping-import" class="mrstep1 inputfile" type="file"></input>
-                  <label for="mapping-import" class="label2"><span class="btn btn-default btn-inline"><span>Choose a file...</span></span></label>
-                  <button id="step2" class="btn btn-default">Import
-                  </button>
+                  <input name="file" id="mapping-import" class="mrstep1 inputfile" type="file" />
+                  <label for="mapping-import" class="label2"><span class="btn btn-default btn-inline"><span>Choose a
+                        file...</span></span></label>
+                  <button id="step2" class="btn btn-default">Import </button>
                 </div>
                 <div class="triangle"><span class="trisym glyphicon glyphicon-triangle-right"></span></div>
               </div>
@@ -66,28 +66,28 @@
               <div class="wfc">
                 <div class="wstep5 wfc3">
                   <div class="step">Apply Mapping Rules <a class="my-popover" data-toggle="popover" tabindex="0"
-                  data-trigger="hover" title="3. Step: Apply Mapping Rules" data-container="body"
-                  data-content="Press the APPLY MAPPING RULES to complete the mapping workflow and let the stylemapper do its magic." data-html='true'
-                  ><span class="glyphicon glyphicon-info-sign"></span></a><span id="dotsstep3"></span></div>
+                      data-trigger="hover" title="3. Step: Apply Mapping Rules" data-container="body"
+                      data-content="Press the APPLY MAPPING RULES to complete the mapping workflow and let the stylemapper do its magic."
+                      data-html="true"><span class="glyphicon glyphicon-info-sign"></span></a><span id="dotsstep3"></span></div>
                   <div class="btnwf3c" role="group" aria-label="...">
                     <button class="btn btn-default btnwf3" id="step3">Apply</button>
                   </div>
                 </div>
                 <div class="dlc">
                   <div class="triangledl"><span class="trisym glyphicon glyphicon-download"></span></div>
-                  <div>Download Results <a class="my-popover" data-toggle="popover" tabindex="0"
-                  data-trigger="hover" title="Download Area" data-placement="left"
-                  data-content="Here you will receive your mapping rules as a XML file and a modified version of your input Word or IDML file" data-html='true'
-                  ><span class="glyphicon glyphicon-info-sign"></span></a></div>
-                  <div id="download" class="btnwf3dl">
-                  </div>
+                  <div>Download Results <a class="my-popover" data-toggle="popover" tabindex="0" data-trigger="hover"
+                      title="Download Area" data-placement="left"
+                      data-content="Here you will receive your mapping rules as a XML file and a modified version of your input Word or IDML file"
+                      data-html="true"><span class="glyphicon glyphicon-info-sign"></span></a></div>
+                  <div id="download" class="btnwf3dl"> </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <div id="progress-bar"><div id="progress1" class="progress"></div><div id="progress2" class="progress"></div><div id="progress3" class="progress"></div></div>
+              <div id="progress-bar"><div id="progress1" class="progress"></div><div id="progress2" class="progress"></div><div
+                  id="progress3" class="progress"></div></div>
             </div>
           </div>
         </div>
@@ -96,7 +96,8 @@
     <div id="wrapper">
       <div id="sidebar-wrapper" class="col-sm-4 col-md-3 col-lg-3">
         <div id="sm-menu" class="col-sm-12 col-md-12 col-lg-12">
-          <div id="rule" class="navpoint clickable "><h1 class="navhl">Rule Editor</h1><span class="glyphicon glyphicon-menu-left navsym"></span></div>
+          <div id="rule" class="navpoint clickable "><h1 class="navhl">Rule Editor</h1><span
+              class="glyphicon glyphicon-menu-left navsym"></span></div>
           <div id="rule1">
             <table id="mapping" class="table table-striped table-condensed">
               <tr class="estep3">
@@ -105,35 +106,33 @@
               </tr>
               <tr class="estep4">
                 <td>Priority* </td>
-                <td><input class="form-control" type="number" min="0" max="0" step="1" id="priority"/></td>
+                <td><input class="form-control" type="number" min="0" max="0" step="1" id="priority" /></td>
               </tr>
               <tr class="estep5">
                 <td>Target Type* </td>
                 <td><select class="form-control" id="target-type">
-                  <option value="" selected="" disabled="">Select Target Type</option>
-                  <option value="para">para</option>
-                  <option value="inline">inline</option>
-                </select></td>
+                    <option value="" selected="" disabled="">Select Target Type</option>
+                    <option value="para">para</option>
+                    <option value="inline">inline</option>
+                  </select></td>
               </tr>
               <tr class="estep6">
-                <td>Target Style <a class="my-popover" data-toggle="popover" tabindex="0"
-                  data-trigger="hover" title="What means target style?"
-                  data-content="Its a new style you can select from template document for the matching elements.">
-                  <span class="glyphicon glyphicon-info-sign"></span></a></td>
+                <td>Target Style <a class="my-popover" data-toggle="popover" tabindex="0" data-trigger="hover"
+                    title="What means target style?"
+                    data-content="Its a new style you can select from template document for the matching elements.">
+                    <span class="glyphicon glyphicon-info-sign"></span></a></td>
                 <td><select class="form-control" id="target-style">
-                  <option value="" selected="" disabled="">Select Target Style First</option>
-                </select></td>
+                    <option value="" selected="" disabled="">Select Target Style First</option>
+                  </select></td>
               </tr>
               <tr class="estep7">
-                <td>Remove Ad Hoc <a class="my-popover" data-toggle="popover" tabindex="0"
-                  data-trigger="hover" title="Removing External(Ad Hoc) Style Properties"
-                  data-content="Choose one or more properties whose will be deleted during the mapping process."
-                  ><span class="glyphicon glyphicon-info-sign"></span></a></td>
-                <td><span id="expandboxes" class="clickable"><span
-                  class="glyphicon glyphicon-triangle-right"></span><span>Show
-                    Properties</span></span>
-                  <span id="collapseboxes" class="clickable"><span
-                    class="glyphicon glyphicon-triangle-bottom"></span><span>Hide
+                <td>Remove Ad Hoc <a class="my-popover" data-toggle="popover" tabindex="0" data-trigger="hover"
+                    title="Removing External(Ad Hoc) Style Properties"
+                    data-content="Choose one or more properties whose will be deleted during the mapping process."><span
+                      class="glyphicon glyphicon-info-sign"></span></a></td>
+                <td><span id="expandboxes" class="clickable"><span class="glyphicon glyphicon-triangle-right"></span><span>Show
+                      Properties</span></span>
+                  <span id="collapseboxes" class="clickable"><span class="glyphicon glyphicon-triangle-bottom"></span><span>Hide
                       Properties</span></span>
                   <ul id="remove-adhoc"></ul></td>
               </tr>
@@ -141,107 +140,289 @@
                 <td>Properties</td>
                 <td><ul id="properties"></ul></td>
               </tr>
-            </table><div id="add-prop" class="navpoint subnavpoint clickable"><h2 class="navhl">Rule
-              Property </h2><a class="my-popover" data-toggle="popover" tabindex="0"
-                data-trigger="hover" title="New rule property"
-                data-content="Click on this bar to set up a new rule property."><span
-                  class="glyphicon glyphicon-info-sign"></span></a>
-              <span class="glyphicon glyphicon-menu-left estep8 navsym"></span></div><div
-                id="add-prop1">
-                <table id="prop_form" class="table table-striped table-condensed">
-                  <tr class="estep10">
-                    <td>Name*:</td>
-                    <td><select id="pname" class="form-control"></select></td>
-                  </tr>
-                  <tr class="estep11">
-                    <td id="value_check1">Value*</td>
-                    <td><input id="pvalue" type="text" class="form-control valgroup val1" value="" /></td>
-                  </tr>
-                  <tr class="estep12 minv">
-                    <td id="value_check2">Minimum Value*</td>
-                    <td><input id="pmin-value" type="text" class="form-control valgroup val2" value="" /></td>
-                  </tr>
-                  <tr class="estep13 maxv">
-                    <td>Maximum Value*</td>
-                    <td><input id="pmax-value" type="text" class="form-control valgroup val2" value="" /></td>
-                  </tr>
-                  <tr class="estep14">
-                    <td>Filter By Regex <a class="my-popover" data-toggle="popover" tabindex="0"
-                      data-trigger="hover" title="Filter by regular expression"
-                      data-content="Type in a regular expression to match styles by filtered property values."
-                      ><span class="glyphicon glyphicon-info-sign"></span></a></td>
-                    <td><input id="pregex" class="form-control valgroup val3" type="text" value="" /></td>
-                  </tr>
-                  <tr class="estep15">
-                    <td>Is it Relevant? <a class="my-popover" data-toggle="popover" tabindex="0"
-                      data-trigger="hover" title="Does the rule property matter?"
-                      data-content="Decide whether the rule property is active during the matching process or not."
-                      ><span class="glyphicon glyphicon-info-sign"></span></a></td>
-                    <td><select id="prelevant" class="form-control">
+              <tr>
+                <td>Attached Elements <span class="glyphicon glyphicon-plus add_selected clickable"></span></td>
+                <td><ul id="attached"></ul></td>
+              </tr>
+            </table><div id="add-prop" class="navpoint subnavpoint clickable"><h2 class="navhl">Rule Property </h2><a
+                class="my-popover" data-toggle="popover" tabindex="0" data-trigger="hover" title="New rule property"
+                data-content="Click on this bar to set up a new rule property."><span class="glyphicon glyphicon-info-sign"
+                ></span></a>
+              <span class="glyphicon glyphicon-menu-left estep8 navsym"></span></div><div id="add-prop1">
+              <table id="prop_form" class="table table-striped table-condensed">
+                <tr class="estep10">
+                  <td>Name*:</td>
+                  <td><select id="pname" class="form-control"></select></td>
+                </tr>
+                <tr class="estep11">
+                  <td id="value_check1">Value*</td>
+                  <td><input id="pvalue" type="text" class="form-control valgroup val1" value="" /></td>
+                </tr>
+                <tr class="estep12 minv">
+                  <td id="value_check2">Minimum Value*</td>
+                  <td><input id="pmin-value" type="text" class="form-control valgroup val2" value="" /></td>
+                </tr>
+                <tr class="estep13 maxv">
+                  <td>Maximum Value*</td>
+                  <td><input id="pmax-value" type="text" class="form-control valgroup val2" value="" /></td>
+                </tr>
+                <tr class="estep14">
+                  <td>Filter By Regex <a class="my-popover" data-toggle="popover" tabindex="0" data-trigger="hover"
+                      title="Filter by regular expression"
+                      data-content="Type in a regular expression to match styles by filtered property values."><span
+                        class="glyphicon glyphicon-info-sign"></span></a></td>
+                  <td><input id="pregex" class="form-control valgroup val3" type="text" value="" /></td>
+                </tr>
+                <tr class="estep15">
+                  <td>Is it Relevant? <a class="my-popover" data-toggle="popover" tabindex="0" data-trigger="hover"
+                      title="Does the rule property matter?"
+                      data-content="Decide whether the rule property is active during the matching process or not."><span
+                        class="glyphicon glyphicon-info-sign"></span></a></td>
+                  <td><select id="prelevant" class="form-control">
                       <option value="true">Yes</option>
                       <option value="false">No</option>
                     </select></td>
-                  </tr>
-                </table><p id="prop-buttons" class="right"><button id="attach-prop"
-                  class="btn btn-sm btn-default estep9">Add</button><button id="change-prop"
-                    class="btn btn-sm btn-default estep9">Change</button><button id="discard-prop"
-                      class="btn btn-sm btn-default estep9">Discard</button></p> </div><p
-                        class="right"><button class="btn btn-sm btn-default estep2" id="save-map"
-                          >Save</button><button id="change-map"
-                            class="btn btn-sm btn-default">Change</button><button id="discard-map"
-                              class="btn btn-sm btn-default">Discard</button></p>
-              </div>
-          <div id="rules" class="navpoint clickable "><h1 class="navhl">Rules</h1><span class="glyphicon glyphicon-menu-left navsym"></span></div>
+                </tr>
+              </table><p id="prop-buttons" class="right"><button id="attach-prop" class="btn btn-sm btn-default estep9"
+                  >Add</button><button id="change-prop" class="btn btn-sm btn-default estep9">Change</button><button
+                  id="discard-prop" class="btn btn-sm btn-default estep9">Discard</button></p>
+            </div><p class="right"><button class="btn btn-sm btn-default estep2" id="save-map">Save</button><button
+                id="change-map" class="btn btn-sm btn-default">Change</button><button id="discard-map"
+                class="btn btn-sm btn-default">Discard</button></p>
+          </div>
+          <div id="rules" class="navpoint clickable "><h1 class="navhl">Rules</h1><span
+              class="glyphicon glyphicon-menu-left navsym"></span></div>
           <div id="rules1" class="inner-content mstep2">
             <div class="progress_stats">
               <p class="progress_stats"></p>
             </div>
-            <table class="table table-striped table-condensed"><thead><tr><th class="center">Priority</th><th>Rule</th><th class="center">Properties</th><th class="center"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"><span></span></span></th><th class="center"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"><span><input type="checkbox" class="preview-all"/></span></span></th></tr></thead><tbody class="sortable mapping-rules ui-sortable"></tbody></table>
+            <table class="table table-striped table-condensed">
+              <thead>
+                <tr>
+                  <th class="center">Priority</th>
+                  <th>Rule</th>
+                  <th class="center">Properties</th>
+                  <th class="center"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"
+                    ><span></span></span></th>
+                  <th class="center"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"><span><input type="checkbox"
+                          class="preview-all" /></span></span></th>
+                </tr>
+              </thead>
+              <tbody class="sortable mapping-rules ui-sortable"></tbody>
+            </table>
             <p class="right">
               <button class="btn btn-sm btn-default estep2" id="download-rules">Download Rules</button>
             </p>
           </div>
-          <div id="insp" class="navpoint clickable "><h1 class="navhl">Inspector</h1><span class="glyphicon glyphicon-menu-left navsym"></span></div>
+          <div id="insp" class="navpoint clickable "><h1 class="navhl">Inspector</h1><span
+              class="glyphicon glyphicon-menu-left navsym"></span></div>
         </div>
-          <div id="insp1" class="col-sm-12 col-md-12 col-lg-12">
-            <div id="insptable"><h1 class="navhl">Inspected style Properties</h1><span class="glyphicon glyphicon-info-sign" title="No inspected styles yet." data-content="You have nothing inspected, yet. Click on the document elements of your uploaded document to get style information."></span><span id="remove-insp" class="glyphicon glyphicon-remove navsym clickable"></span></div>
-            <div id="insp-options" class="navpoint subnavpoint clickable"><h2 class="navhl">Options</h2><span class="glyphicon glyphicon-menu-left navsym"/></div>
-            <div id="insp-options1">
-              <p>
-                <label class="control-label">Remove Ad Hoc Styles</label>
-                <input id="hide-adhoc" type="checkbox" value="false" class="form-group hide-adhoc" />
-              </p>
-              <p>
-                <label class="control-label">Advanced View</label>
-                <input type="checkbox" value="false" class="form-group show-type" />
-              </p>
-            </div>
-            <p id="breadcrumbs"></p>
-            <div id="style-info"></div>
-            <table class="inspect-prop table table-striped table-condensed"><thead><tr><th>Property</th><th>Value</th><th>Add</th></tr></thead><tbody>
-            </tbody></table>
+        <div id="insp1" class="col-sm-12 col-md-12 col-lg-12">
+          <div id="insptable"><h1 class="navhl">Inspected style Properties</h1><span class="glyphicon glyphicon-info-sign"
+              title="No inspected styles yet."
+              data-content="You have nothing inspected, yet. Click on the document elements of your uploaded document to get style information."
+              ></span><span id="remove-insp" class="glyphicon glyphicon-remove navsym clickable"></span></div>
+          <div id="insp-options" class="navpoint subnavpoint clickable"><h2 class="navhl">Options</h2><span
+              class="glyphicon glyphicon-menu-left navsym"></span></div>
+          <div id="insp-options1">
+            <p>
+              <label class="control-label">Remove Ad Hoc Styles</label>
+              <input id="hide-adhoc" type="checkbox" value="false" class="form-group hide-adhoc" />
+            </p>
+            <p>
+              <label class="control-label">Advanced View</label>
+              <input type="checkbox" value="false" class="form-group show-type" />
+            </p>
           </div>
+          <p id="breadcrumbs"></p>
+          <div id="style-info"></div>
+          <table class="inspect-prop table table-striped table-condensed">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Value</th>
+                <th>Add</th>
+              </tr>
+            </thead>
+            <tbody> </tbody>
+          </table>
         </div>
+      </div>
       <div id="main-wrapper" class="col-sm-8 col-md-9 col-lg-9 pull-right">
         <div id="sm-content" class="istep1 wstep2">
           <div id="delete-content"><span class="glyphicon glyphicon-remove clickable"></span></div>
           <div id="sm-page">
             <!--              BEGIN OF CONTENT                       -->
-<!--    <div class="info">
-        
-      </div><p class="SpStandard fm_ArialUnicodeMS fs_10 r_fs_10 c_h_0 r_c_h_0 c_s_0 r_c_s_0 c_l_0 r_c_l_0" style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; line-height: 13pt; text-align: left; font-family: &#34;Arial Unicode MS&#34;; color: black; font-size: 10pt; margin-top: 0pt; margin-bottom: 6pt" xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[1]" data-view-priority=""><span xmlns="" class="prev pa"> ¶ 
-      </span></p><p xmlns:orig="http://www.le-tex.de/namespace" class="SpStandard fm_ArialUnicodeMS fs_10 r_fs_10 c_h_0 r_c_h_0 c_s_0 r_c_s_0 c_l_0 r_c_l_0" style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; line-height: 13pt; text-align: left; font-family: &#34;Arial Unicode MS&#34;; color: black; font-size: 10pt; margin-top: 146pt; margin-bottom: 6pt" orig:margin-top="0pt" xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[2]" data-view-priority=""><span xmlns="" class="prev pa"> ¶ 
-      </span>((Widmung))</p><p class="SpStandard fm_ArialUnicodeMS fs_10 r_fs_10 c_h_0 r_c_h_0 c_s_0 r_c_s_0 c_l_0 r_c_l_0" style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; line-height: 13pt; text-align: left; font-family: &#34;Arial Unicode MS&#34;; color: black; font-size: 10pt; margin-top: 0pt; margin-bottom: 6pt" xml:lang="de" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[3]" data-view-priority=""><span xmlns="" class="prev pa"> ¶ 
-      </span>Für meine Töchter</p><p xmlns:adhcss="http://transpect.io/adhcss" class="_berschrift_1 fm_TimesNewRoman fw_bold fs_16 r_fs_16 c_h_0 r_c_h_0 c_s_100 r_c_s_100 c_l_50 r_c_l_50" style="orphans: 2; widows: 2; hyphens: manual; line-height: 19pt; margin-top: 12pt; margin-bottom: 6pt; font-family: &#34;Times New Roman&#34;; font-weight: bold; color: #FF0000; font-size: 16pt; margin-left: 79.35pt; text-indent: -79.35pt" xml:lang="de" adhcss:margin-left="79.35pt" adhcss:text-indent="-79.35pt" srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[4]" data-view-priority=""><span xmlns="" class="prev pa"> ¶ 
-      </span></p>-->
+            <div class="info"> </div><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="_berschrift_1 fm_LiberationSans fs_14 r_fs_14 fw_bold c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Sans&#34;; color: #00000A; font-size: 14pt; margin-top: 97pt; margin-bottom: 6pt; font-weight: bold; line-height: 1; orig-margin-top: 12pt"
+              xml:lang="de" adhcss:line-height="1" adhcss:margin-top="12pt" adhcss:margin-bottom="6pt" data-view-priority=""
+              data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[3]"><span xmlns="" class="prev pa"> ¶ <input
+                  type="checkbox" class="check_select" /></span>ATestüberschrift1</p><p
+              class="Text fm_LiberationSerif fs_12 r_fs_12 fst_italic c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Serif&#34;; color: #00000A; font-size: 12pt; margin-top: 6pt; margin-bottom: 6pt; font-style: italic"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[4]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>ATextbeispiel1 Textbeispiel1
+              Textbeispiel1 Textbeispiel1 Textbeispiel1.</p><p
+              class="_berschrift_2 fm_LiberationSans fs_12 r_fs_12 fw_bold fst_italic c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Sans&#34;; color: #00000A; font-size: 12pt; margin-top: 12pt; margin-bottom: 6pt; font-weight: bold; font-style: italic"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[5]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>ATestüberschrift1</p><p
+              class="Textk_rper fm_ArialBlack fs_12 r_fs_12 fw_normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Arial Black&#34;; color: #00000A; font-size: 12pt; line-height: 1.2; margin-top: 0pt; margin-bottom: 7pt; font-weight: normal"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[6]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>ATextbeispiel1 Textbeispiel1
+              Textbeispiel1 Textbeispiel1 Textbeispiel1.</p><p
+              class="_berschrift_3 fm_LiberationSans fs_11 r_fs_11 fw_bold c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Sans&#34;; color: #00000A; font-size: 11pt; margin-top: 12pt; margin-bottom: 6pt; font-weight: bold"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[7]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>ATestüberschrift2</p><p
+              class="Textk_rper_Einzug fm_ArialBlack fs_12 r_fs_12 fw_normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Arial Black&#34;; color: #00000A; font-size: 12pt; line-height: 1.2; margin-top: 0pt; margin-bottom: 7pt; font-weight: normal; margin-left: 28.35pt; margin-right: 0pt; text-indent: 0pt"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[8]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>ATextbeispiel2 Textbeispiel2
+              Textbeispiel2 Textbeispiel2Textbeispiel2.</p><p
+              class="_berschrift_1 fm_LiberationSans fs_14 r_fs_14 fw_bold c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Sans&#34;; color: #00000A; font-size: 14pt; margin-top: 12pt; margin-bottom: 6pt; font-weight: bold"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[9]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>ATestüberschrift2</p><p
+              class="Text2 fm_CourierNew fs_12 r_fs_12 fw_normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Courier New&#34;; color: #00000A; font-size: 12pt; line-height: 1.2; margin-top: 0pt; margin-bottom: 7pt; font-weight: normal; text-decoration-style: solid; text-decoration-line: underline"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[10]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>ATextbeispiel2 Textbeispiel2
+              Textbeispiel2 Textbeispiel2Textbeispiel2.</p><p
+              class="_berschrift_4 fm_LiberationSans fs_13 r_fs_13 c_h_357 r_c_h_350 c_s_100 r_c_s_100 c_l_39 r_c_l_30"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Sans&#34;; color: #C5000B; font-size: 13pt; margin-top: 12pt; margin-bottom: 6pt"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[11]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>ATestüberschrift3</p><p
+              class="Textk_rper_Einzug_negativ fm_LiberationSerif fs_12 r_fs_12 fw_normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Serif&#34;; color: #00000A; font-size: 12pt; line-height: 1.2; margin-top: 0pt; margin-bottom: 7pt; font-weight: normal; margin-left: -28.35pt; margin-right: 0pt; text-indent: 0pt"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[12]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span><span
+                xmlns:adhcss="http://transpect.io/adhcss" data-view-priority="" class="fst_italic"
+                style="font-style: italic; display: inline" adhcss:font-style="italic"
+                data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[12]/w:r[1]"><span xmlns="" class="prev in"> T
+                    <input type="checkbox" class="check_select" /></span>ATextbeispiel3 Textbeispiel3 Textbeispiel3
+                Textbeispiel3 Textbeispiel3. ( ad hoc kursiv)</span></p><p
+              class="_berschrift_3 fm_LiberationSans fs_11 r_fs_11 fw_bold c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Sans&#34;; color: #00000A; font-size: 11pt; margin-top: 12pt; margin-bottom: 6pt; font-weight: bold"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[13]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span><span
+                xmlns:adhcss="http://transpect.io/adhcss" data-view-priority=""
+                class="c_h_120 r_c_h_120 c_s_100 r_c_s_100 c_l_40 r_c_l_40" style="color: #00CC00; display: inline"
+                adhcss:color="#00CC00" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[13]/w:r[1]"><span
+                  xmlns="" class="prev in"> T <input type="checkbox" class="check_select" /></span>ATestüberschrift3 (inline ad
+                hoc farbig)</span></p><p
+              class="Normal fm_LiberationSerif fs_12 r_fs_12 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Serif&#34;; color: #00000A; font-size: 12pt"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[14]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>ATextbeispiel3 Textbeispiel3
+              Textbeispiel3 Textbeispiel3 Textbeispiel3.</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="_berschrift_1 fm_LiberationSans fs_14 r_fs_14 fw_bold c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: justify; font-family: &#34;Liberation Sans&#34;; color: #00000A; font-size: 14pt; margin-top: 12pt; margin-bottom: 6pt; font-weight: bold"
+              xml:lang="de" adhcss:text-align="justify" data-view-priority=""
+              data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[15]"><span xmlns="" class="prev pa"> ¶ <input
+                  type="checkbox" class="check_select" /></span>BTestüberschrift1 <span data-view-priority="" class="fst_italic"
+                style="font-style: italic; display: inline" adhcss:font-style="italic"
+                data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[15]/w:r[2] word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[15]/w:r[3] word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[15]/w:r[4]"
+                  ><span xmlns="" class="prev in"> T <input type="checkbox" class="check_select" /></span>( inline ad hoc
+                kursiv)</span></p><p
+              class="Text fm_LiberationSerif fs_12 r_fs_12 fst_italic c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Serif&#34;; color: #00000A; font-size: 12pt; margin-top: 6pt; margin-bottom: 6pt; font-style: italic"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[16]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>BTextbeispiel1 Textbeispiel1
+              Textbeispiel1 Textbeispiel1 Textbeispiel1.</p><p
+              class="_berschrift_2 fm_LiberationSans fs_12 r_fs_12 fw_bold fst_italic c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Sans&#34;; color: #00000A; font-size: 12pt; margin-top: 12pt; margin-bottom: 6pt; font-weight: bold; font-style: italic"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[17]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>BTestüberschrift1</p><p
+              class="Textk_rper fm_ArialBlack fs_12 r_fs_12 fw_normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Arial Black&#34;; color: #00000A; font-size: 12pt; line-height: 1.2; margin-top: 0pt; margin-bottom: 7pt; font-weight: normal"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[18]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>BTextbeispiel1 Textbeispiel1
+              Textbeispiel1 Textbeispiel1 Textbeispiel1.(darunter Absatz ohne Formatvorlage mit Text +
+              Zeichenformatvorlage)</p><p
+              class="Normal fm_LiberationSerif fs_12 r_fs_12 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Serif&#34;; color: #00000A; font-size: 12pt"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[19]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>BText<span
+                data-view-priority="" class="Rubys fs_13 r_fs_13 c_h_300 r_c_h_300 c_s_100 r_c_s_100 c_l_60 r_c_l_60"
+                style="color: #FF33FF; font-size: 13pt; display: inline"
+                data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[19]/w:r[2]"><span xmlns="" class="prev in"> T
+                    <input type="checkbox" class="check_select" /></span>Beispiel1</span></p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="_berschrift_3 fm_LiberationSans fs_11 r_fs_11 fw_bold c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Sans&#34;; color: #00000A; font-size: 11pt; margin-top: 12pt; margin-bottom: 131.5pt; font-weight: bold; line-height: 1.5; orig-margin-bottom: 6pt"
+              xml:lang="de" adhcss:line-height="1.5" data-view-priority=""
+              data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[20]"><span xmlns="" class="prev pa"> ¶ <input
+                  type="checkbox" class="check_select" /></span>BTestüberschrift2( darunter drei leere Absätze)</p><p
+              class="Textk_rper_Einzug fm_ArialBlack fs_12 r_fs_12 fw_normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Arial Black&#34;; color: #00000A; font-size: 12pt; line-height: 1.2; margin-top: 0pt; margin-bottom: 7pt; font-weight: normal; margin-left: 28.35pt; margin-right: 0pt; text-indent: 0pt"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[24]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>BTextbeispiel2 Textbeispiel2
+              Textbeispiel2 Textbeispiel2Textbeispiel2.</p><p
+              class="_berschrift_1 fm_LiberationSans fs_14 r_fs_14 fw_bold c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Sans&#34;; color: #00000A; font-size: 14pt; margin-top: 12pt; margin-bottom: 6pt; font-weight: bold"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[25]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>BTestüberschrift2</p><p
+              xmlns:adhcss="http://transpect.io/adhcss"
+              class="Normal fm_LiberationSerif fs_12 r_fs_12 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Serif&#34;; color: #00000A; font-size: 12pt; margin-left: 35.45pt; text-indent: 0pt"
+              xml:lang="de" adhcss:margin-left="35.45pt" adhcss:text-indent="0pt" data-view-priority=""
+              data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[26]"><span xmlns="" class="prev pa"> ¶ <input
+                  type="checkbox" class="check_select" /></span>BTextbeispiel2 Textbeispiel2 Textbeispiel2
+              Textbeispiel2Textbeispiel2. (ad hoc eingezogen)</p><p xmlns:adhcss="http://transpect.io/adhcss"
+              class="_berschrift_4 fm_LiberationSans fs_13 r_fs_13 c_h_357 r_c_h_350 c_s_100 r_c_s_100 c_l_39 r_c_l_30"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: right; font-family: &#34;Liberation Sans&#34;; color: #C5000B; font-size: 13pt; margin-top: 12pt; margin-bottom: 6pt"
+              xml:lang="de" adhcss:text-align="right" data-view-priority=""
+              data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[27]"><span xmlns="" class="prev pa"> ¶ <input
+                  type="checkbox" class="check_select" /></span>BTestüberschrift3( ad hoc rechts ausgerichtet)</p><p
+              class="Textk_rper_Einzug_negativ fm_LiberationSerif fs_12 r_fs_12 fw_normal c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Serif&#34;; color: #00000A; font-size: 12pt; line-height: 1.2; margin-top: 0pt; margin-bottom: 7pt; font-weight: normal; margin-left: -28.35pt; margin-right: 0pt; text-indent: 0pt"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[28]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span><span
+                xmlns:adhcss="http://transpect.io/adhcss" data-view-priority="" class="fst_italic"
+                style="font-style: italic; display: inline" adhcss:font-style="italic"
+                data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[28]/w:r[1]"><span xmlns="" class="prev in"> T
+                    <input type="checkbox" class="check_select" /></span>BTextbeispiel3 Textbeispiel3 Textbeispiel3
+                Textbeispiel3 Textbeispiel3. (ad hoc kursiv)</span></p><p
+              class="_berschrift_3 fm_LiberationSans fs_11 r_fs_11 fw_bold c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Sans&#34;; color: #00000A; font-size: 11pt; margin-top: 12pt; margin-bottom: 6pt; font-weight: bold"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[29]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span><span
+                xmlns:adhcss="http://transpect.io/adhcss" data-view-priority=""
+                class="c_h_120 r_c_h_120 c_s_100 r_c_s_100 c_l_40 r_c_l_40 fst_italic"
+                style="font-style: italic; color: #00CC00; display: inline" adhcss:font-style="italic" adhcss:color="#00CC00"
+                data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[29]/w:r[1]"><span xmlns="" class="prev in"> T
+                    <input type="checkbox" class="check_select" /></span>BTestüberschrift3 (inline ad hoc farbig und
+                kursiv)</span></p><p
+              class="Normal fm_LiberationSerif fs_12 r_fs_12 c_h_240 r_c_h_240 c_s_100 r_c_s_100 c_l_2 r_c_l_0"
+              style="orphans: 1; widows: 1; hyphens: manual; direction: ltr; text-align: left; font-family: &#34;Liberation Serif&#34;; color: #00000A; font-size: 12pt; orig-margin-bottom: ; margin-bottom: 24pt"
+              xml:lang="de" data-view-priority="" data-srcpath="word/document.xml?xpath=/w:document[1]/w:body[1]/w:p[30]"><span
+                xmlns="" class="prev pa"> ¶ <input type="checkbox" class="check_select" /></span>BTextbeispiel3 Textbeispiel3
+              Textbeispiel3 Textbeispiel3 Textbeispiel3.(darunter zwei leere Absätze)</p>
           </div>
         </div>
       </div>
-    <div id="loading-screen"><span class="dots"></span></div>
+      <div id="loading-screen"><span class="dots"></span></div>
     </div>
+    <div id="advanced-menu">
     <div id="rulename-list">
+      <p class="add_selection add_sel_para clickable">Add Selected Paragraph To</p>
+      <p class="add_selection add_sel_inline clickable">Add Selected Inlines To</p>
       <p id="unmatched" class="clickable">Jump To Unmatched Element</p>
     </div>
+    <div id="sel-menu">
+      <ul>
+        <li class="new_sel_rule clickable" data-target=""> New Rule</li>
+      </ul>
+      <div class="rule_targets" data-target=""></div>
+    </div>
+    <div id="sel-targets" class="sub_targets">
+      <div id="add-sel-to-editor" class="clickable">
+        <p>Send to Editor</p></div>
+    </div>
+   </div>
     <div id="help"><label class="label label-default clickable">Help</label></div>
     <div id="ajax-temp"></div>
     <div id="menu" class="con_menu">
@@ -256,48 +437,46 @@
           <span>Rules</span><span class="glyphicon glyphicon-triangle-right"></span>
         </li>
         <li id="hide-sidebar" class="con_menu_item">
-          <span>Hide Sidebar</span><input type="checkbox"></input>          
+          <span>Hide Sidebar</span><input type="checkbox" />
         </li>
-        <li  id="hide-workflow" class="con_menu_item">
-          <span>Hide Workflow</span><input type="checkbox"></input>          
-        </li>
-        <li class="con_menu_item">
-          <span>Advanced View</span><input class="show-type" type="checkbox"/>          
+        <li id="hide-workflow" class="con_menu_item">
+          <span>Hide Workflow</span><input type="checkbox" />
         </li>
         <li class="con_menu_item">
-          <span>Show Matching Rules</span><input class="preview-all" type="checkbox"/>
+          <span>Advanced View</span><input class="show-type" type="checkbox" />
+        </li>
+        <li class="con_menu_item">
+          <span>Show Matching Rules</span><input class="preview-all" type="checkbox" />
         </li>
         <li id="con-workflow" class="con_menu_item" data-target="workflow">
           <span>Workflow</span><span class="glyphicon glyphicon-triangle-right"></span>
         </li>
         <li class="con_menu_item">
-                <p class="progress_stats"></p>
+          <p class="progress_stats"></p>
         </li>
       </ul>
     </div>
     <div id="sub-menu" class="sub_menu">
       <div id="sub-rules"></div>
-      <div id="sub-targets"></div>
+      <div id="con-targets" class="sub_targets"></div>
       <div id="sub-workflow">
         <ul class="ul_workflow">
           <li class="sub_menu_item">
-                  <form id="sub-upload-doc-form" enctype="multipart/form-data">
-                  <input id="sub-upload-doc" type="file" name="input_file"></input>
-                   <p> 
-                    <label for="sub-upload-doc" class="sub-label">Upload A Document</label>
-                   </p>
-                  </form>
+            <form id="sub-upload-doc-form" enctype="multipart/form-data">
+              <input id="sub-upload-doc" type="file" name="input_file" />
+              <p>
+                <label for="sub-upload-doc" class="sub-label">Upload A Document</label>
+              </p>
+            </form>
           </li>
           <li class="sub_menu_item clickable">
-                <p id="sub-importrules">
-                  <input name="file" id="sub-mapping-import" class="inputfile" type="file"></input>
-                  <label for="sub-mapping-import" class="sub-label">Import Rules</label>
-                </p>
+            <p id="sub-importrules">
+              <input name="file" id="sub-mapping-import" class="inputfile" type="file" />
+              <label for="sub-mapping-import" class="sub-label">Import Rules</label>
+            </p>
           </li>
           <li class="sub_menu_item clickable">
-                <p id="sub-apply">
-                  Apply Rules
-                </p>
+            <p id="sub-apply"> Apply Rules </p>
           </li>
         </ul>
       </div>
@@ -306,12 +485,13 @@
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="Information">
       <div class="modal-dialog modal-sm">
         <div class="modal-content"> </div></div></div>
-      <script type="text/javascript" src="externals/jquery-2.1.3.js"></script>
-      <script type="text/javascript" src="externals/bootstrap/js/bootstrap.min.js"></script>
-      <script type="text/javascript" src="externals/jquery-ui.min.js"></script> <!--Only using sortable. Notice: optimizing jquery ui-package-->
-      <!--   <script type="text/javascript" src="externals/tracelytics-pageguide-d820679/dist/js/pageguide.min.js"></script>-->
-      <script type="text/javascript" src="externals/jquery-colorpicksliders/tinycolor.js"></script>
-      <script type="text/javascript" src="externals/jquery-colorpicksliders/jquery.colorpickersliders.js"></script>
-      <script type="text/javascript" src="stylemapper.js"></script>
+    <script type="text/javascript" src="externals/jquery-2.1.3.js"></script>
+    <script type="text/javascript" src="externals/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="externals/jquery-ui.min.js"></script>
+    <!--Only using sortable. Notice: optimizing jquery ui-package-->
+    <!--   <script type="text/javascript" src="externals/tracelytics-pageguide-d820679/dist/js/pageguide.min.js"></script>-->
+    <script type="text/javascript" src="externals/jquery-colorpicksliders/tinycolor.js"></script>
+    <script type="text/javascript" src="externals/jquery-colorpicksliders/jquery.colorpickersliders.js"></script>
+    <script type="text/javascript" src="stylemapper.js"></script>
   </body>
 </html>

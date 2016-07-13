@@ -66,6 +66,8 @@ Mapping = function(){
 /*~~~~~~~~~~ global variables section*/
 g_count = 0;
 g_temp_props = [];
+g_temp_sel_para = [];
+g_temp_sel_inline = [];
 $inspector = $('#insp1');
 $menu = $('#sm-menu');
 $sidebar = $('#sidebar-wrapper');
@@ -73,6 +75,8 @@ $header = $('#header');
 $doc = $('#main-wrapper');
 $con_menu = $('#menu');
 $sub_menu = $('#sub-menu');
+$sel_menu = $('#sel-menu');
+$sel_targets = $('#sel-targets');
 $rlist = $("#rulename-list");
 timedrequest = null;
 matching_arr = []
@@ -87,6 +91,8 @@ actual_mappings = $('#rules').find('a');
 temp_rule = null;
 con_menu_state = 0;
 sub_menu_state = 0;
+sel_menu_state = 0;
+sel_targets_state = 0;
 con_menu_pos = 0;
 con_menu_pos_x = 0;
 con_menu_pos_y = 0;
@@ -156,7 +162,7 @@ var ruleobserver =  new MutationObserver(function (mutations) {
       })
 /*       initGuide('mrules');*/
 })
- ruleobserver.observe(mapping_set, {childList: true});
+ruleobserver.observe(mapping_set, {childList: true});
 modal_form = "<div class='modal fade bs-example-modal-sm' tabindex='-1' role='dialog' aria-labelledby=''>"+
                 "<div class='modal-dialog modal-sm'>"+
                 "<div class='modal-content'>"+"</div></div></div>"
@@ -461,6 +467,10 @@ function createPopover(id){
        target_row = "<tr><td>Target Style:</td><td>" + obj.targetstyle + "</td></tr>"
        row_arr.push(target_row);
       }
+      if (obj.attached){
+       target_row = "<tr><td>Attached Elements:</td><td>" + obj.attached.length + "</td></tr>"
+       row_arr.push(target_row);
+      }
       for (var l=0; l < obj.props.length; l++){
       
        var prop_row = document.createElement('tr'),
@@ -494,14 +504,15 @@ function createPopover(id){
     return table
 }
 function countDocElements(){
-      g_p_arr = $('#sm-page > p[srcpath][style]');
-      g_span_arr = $($('#sm-page').find('span[srcpath][style]'));
+      g_p_arr = $('#sm-page > p[data-srcpath][style]');
+      g_span_arr = $($('#sm-page').find('span[data-srcpath][style]'));
       document_stat.para = g_p_arr.length;
       document_stat.inline = g_span_arr.length;
 }
+/* function that generates representation of the mapping rules*/
 function showMaps(){
     $('#rulename-list').children('ul').remove();
-    $('#rules1 > table > tbody').children().remove();
+    $('#rules1 > table > tbody, .rule_targets').children().remove();
     $('.ul_rules').remove();
 if ($(mapping_set).children().length === 0){
         $('#rules1 > table').find('tbody').html('<td>No mapping in list.</td>');
@@ -512,7 +523,6 @@ if ($(mapping_set).children().length === 0){
           ul_rules.setAttribute('class','ul_rules');
           ul_rnames = document.createElement('ul');
           ul_rnames.setAttribute('class','ul_rulenames');
-      /*    $('#inv').children().remove();*/
           for (var i=0; i < mappings.length; i++){    
             var row = document.createElement('tr'),
                 li = document.createElement('li'),
@@ -573,7 +583,11 @@ if ($(mapping_set).children().length === 0){
                $(".preview-all").first().trigger('change');
              }
   }
-}
+/* list for selected document element in advanced section */
+     var ul_rule_para = createTargetRuleList('para'),
+     ul_rule_inline = createTargetRuleList('inline');
+     $('.rule_targets').append(ul_rule_para,ul_rule_inline);
+ }
 /*function handlePreviews(){
     var element = document.getElementById('sm-page');
     pageobserver = new MutationObserver(function(mutations){
@@ -931,8 +945,8 @@ function viewTarget(target_element){
     
     $('table.inspect-prop > tbody > tr > td').children('span').first().addClass('istep2');        
 /*    initGuide('inspector');*/
-    $('#sm-page *[srcpath]').removeClass('inspected');
-    $(target_element).closest('*[srcpath]').addClass('inspected');
+    $('#sm-page *[data-srcpath]').removeClass('inspected');
+    $(target_element).closest('*[data-srcpath]').addClass('inspected');
 }
 function readSingleFile(evt){
   var file = evt.target.files[0]; 
@@ -1055,12 +1069,12 @@ statusRequest = function(){
                     $('#loading-screen').hide();
                 }
                     else if(data["status"]==="success"){
-                      $('#sub-targets').children().remove();
+                      $('.sub_targets').children('ul').remove();
                       var fileuri = base_uri + username +'/'+filename+'/out/temp/source-content.xhtml';
                       templateuri = base_uri + username +'/'+filename+'/out/temp/template_styles.xml';
                       var style_container = document.createElement('div'),
                           doc_container = document.createElement('div'),
-                          body = '';
+                          body = '';  
                       target_styles = $(style_container).load(templateuri)[0], 
                       $('#ajax-temp').load(fileuri, function(){
                          doProgress('1', 33.33, 'success');
@@ -1068,10 +1082,12 @@ statusRequest = function(){
                          styles = $('#ajax-temp').find('style')[0];
                          body = $('#ajax-temp').children('*:not(title, style, link)');    
                          $('#sm-page').html(body);
-                         $('#style-container').html($(styles).html());
-                         ul_para = createTargetStyleList('para');
-                         ul_inline = createTargetStyleList('inline');
-                         $('#sub-targets').append(ul_para, ul_inline);
+                          ul_con_para = createTargetStyleList('para', 'con_menu');
+                          ul_sel_para = createTargetStyleList('para', 'sel_menu');
+                          ul_con_inline = createTargetStyleList('inline', 'con_menu');
+                          ul_sel_inline = createTargetStyleList('inline', 'sel_menu');
+                          $('#con-targets').append(ul_con_para, ul_con_inline);
+                          $('#sel-targets').append(ul_sel_para, ul_sel_inline);
                          countDocElements();
                       });
                       $('#loading-screen').hide();
@@ -1237,12 +1253,18 @@ function resetEditor(){
 }
 function editMapping(name){
   clearTable();
-  var map_obj = getMapping(name);
+  var map_obj = getMapping(name),
+  length = 0;
   $('#name').val(map_obj.name);
   $('#priority').val(map_obj.priority);
   $('#target-type').val(map_obj.targettype);
   $('#target-type').trigger('change');
   $('#target-style').val(map_obj.targetstyle);
+  if (map_obj.attached){
+    createSelectionEntry(map_obj.name, map_obj.attached)
+  }else{
+    $('.attached_op').hide()
+  }
   var adhoc_arr = map_obj.removeadhoc.split(" ");
 /*  console.log(adhoc_arr);*/
   for (var i=0; i < cssstyles.length; i++){
@@ -1258,7 +1280,10 @@ function editMapping(name){
       map_obj.props[prop].id = guid();
   }
   $ul_content = $(props2ul(map_obj.props));
-  $('#properties').html($ul_content.html());  
+  $('#properties').html($ul_content.html());
+}  
+function createSelectionEntry(rule_name, srcpath_arr){
+  $('#attached').html("<li data-attached='"+ srcpath_arr.join(' ') +"'>"+ srcpath_arr.length+ "<span class='attached_op'><span class='glyphicon glyphicon-edit clickable show-attached' data-rule-name='"+ rule_name +"'></span><span class='glyphicon glyphicon-remove clickable delete-attached' data-rule-name='"+ rule_name +"'></span></span></li>");
 }
 function editProp(id){
   $li_prop = $("li[id='"+ id + "']");
@@ -1300,7 +1325,7 @@ function setMapping(){
   map_obj.priority = document.getElementById('priority').value;
   map_obj.targetstyle = document.getElementById('target-style').value;
   map_obj.targettype = document.getElementById('target-type').value;
-  
+  map_obj.attached = $('#attached > li').attr('data-attached');
   var adhoc_arr = [];
   adhoc_arr = $('#remove-adhoc > li').find('input:checked');
   var val_arr = [];
@@ -1324,6 +1349,10 @@ function getMapping(name){
   map_obj.targetstyle = map1[0].getAttribute('target-style');
   map_obj.targettype = map1[0].getAttribute('target-type');
   map_obj.removeadhoc = map1[0].getAttribute('remove-adhoc');
+/*  handle attached document elements */
+  if (map1[0].getAttribute('attached')){
+    map_obj.attached = map1[0].getAttribute('attached').split(' ');
+  }
   var prop_element = $(map1[0]).find('prop');
   for (var i=0; i < $(map1[0]).children().length ; i++){
     var prop = new Prop();
@@ -1529,7 +1558,7 @@ function saveMapping(type){
            mapping.setAttribute('target-type', map_obj.targettype);
            mapping.setAttribute('target-style', map_obj.targetstyle);
            mapping.setAttribute('remove-adhoc', map_obj.removeadhoc);
-       
+           mapping.setAttribute('attached', map_obj.attached);
          $.each($('#properties').find('li'), function(){
            var property = document.createElement('prop');
            property.setAttribute('name', $(this).attr('data-name'));
@@ -1785,12 +1814,24 @@ function getAdhocs(target){
   return adhcss_arr;
 }
 function toggleConMenuOn(menutype, nav_selection){
+/*console.log('TYPE: ', menutype, '  NAV  ', nav_selection); */
   if (menutype == 'con_menu'){
       if (con_menu_state !== 1){
         con_menu_state = 1;
         $con_menu.addClass('con_menu--active');
       }
-  }else{
+  }else if (menutype == 'sel_menu'){
+      if (sel_menu_state !== 1){
+        sel_menu_state = 1;
+        $sel_menu.addClass('sel_menu--active');
+      }
+  }else if (menutype == 'sel_targets'){
+      if (sel_targets_state !== 1){
+        sel_targets_state = 1;
+        $sel_targets.addClass('sel_targets--active');
+      }
+  }
+  else{
       if (sub_menu_state !== 1){
         sub_menu_state = 1;
         $sub_menu.addClass('sub_menu--active');
@@ -1804,16 +1845,32 @@ function toggleConMenuOff(menutype, nav_selection){
       con_menu_state = 0;
       $con_menu.removeClass('con_menu--active');
     }
-  }else{
+  }else if (menutype == 'sel_menu'){
+      if (sel_menu_state !== 0){
+        sel_menu_state = 0;
+        $sel_menu.removeClass('sel_menu--active');
+/*        $('.ul_sel_inline').removeClass("ul_sel_inline--active")
+        $('.ul_sel_para').removeClass("ul_sel_para--active")*/
+      }
+  }else if (menutype == 'sel_targets'){
+      console.log('toggle menu off');
+      if (sel_targets_state !== 0){
+        sel_targets_state = 0;
+        $sel_targets.removeClass('sel_targets--active');
+/*        $('.ul_sel_inline').removeClass("ul_sel_inline--active")*/
+/*        $('.ul_sel_para').removeClass("ul_sel_para--active")*/
+      }
+  }
+  else{
      if (sub_menu_state !== 0){
        sub_menu_state = 0;
        $sub_menu.removeClass('sub_menu--active');
-       $('.ul_rules, .ul_inline, .ul_para, .ul_workflow').hide();
+       $('.ul_rules, .ul_con_inline, .ul_con_para, .ul_workflow').hide();
        $(nav_selection).css("background-color", "#efefef");
     }
   }
 }
-function clickForContext(el, attributeName){
+function clickForContext(el, attributeName){ 
   if (el.hasAttribute(attributeName) == true){
     return el
   }else{
@@ -1848,8 +1905,75 @@ function getPosition(e) {
 function positionMenu(e) {
   con_menu_pos = getPosition(e);
 }
+function autoCreateRuleBySelected(srcpath_arr, target_style, target_type){
+console.log(srcpath_arr, target_style, target_type);
+  var src_arr;
+  if (target_type == 'para'){
+    src_arr = g_temp_sel_para;
+  }
+  else if (target_type == 'inline'){
+    src_arr = g_temp_sel_inline;
+  }
+  mapping = document.createElement('mapping');
+  mapping.setAttribute('name', 'Mapping'+ (mapping_set.children.length +1));
+  mapping.setAttribute('priority', mapping_set.children.length +1);
+  mapping.setAttribute('target-type', target_type);
+  mapping.setAttribute('target-style', target_style);
+  mapping.setAttribute('remove-adhoc', "");
+  mapping.setAttribute('attached', src_arr.join(' '));
+  $(mapping_set).append(mapping);
+  sortByPriority()
+}
+function setCheckboxesFromSrcpath(rule_name){
+  var srcpaths_from_editor = $('#attached > li').attr("data-attached").split(' ');
+  $('input.check_select').prop('checked', false);
+  createInfo('Previous selections will be removed.')
+  $.each(srcpaths_from_editor, function(index){
+/*    may for the future: warn the user that previous element selections were deleted if the view function for attached elements has been invoked*/
+    var checkbox = $("*[data-srcpath='" + this + "']").find("input.check_select")[0];
+      $(checkbox).prop('checked', true);
+    })
+}
+function deleteAttachedSrcpaths(rule_name, deletion_type){
+  if (deletion_type === 'editor'){
+    $('#attached').children().remove();
+  }
+}
+function getSelectionArrayByType(type){
+  if (type === 'para'){
+    arr = g_temp_sel_para
+  }else if (type === 'inline'){
+    arr = g_temp_sel_inline
+  }
+  return arr;
+}
+function getMergedSrcpathsArray(old_srcpaths_arr, target_type){
+  arr = getSelectionArrayByType(target_type);
+  console.log(old_srcpaths_arr, arr)
+  for (a in old_srcpaths_arr) {
+    arr.push(old_srcpaths_arr[a]);
+  }
+  console.log(arr, jQuery.unique(arr));
+  return jQuery.unique(arr);
+}
+function addSelectedToRule(rule_name, target_type){
+  var rule = $(mapping_set).find("mapping[name='"+rule_name+"'][target-type='"+target_type+"']")[0],
+  arr,
+  attached_old;
+  if (rule.getAttribute('attached')){
+    attached_old = rule.getAttribute('attached').split(' ');
+  }else {
+    attached_old = [];
+  }
+  arr = getMergedSrcpathsArray(attached_old, target_type);  
+  rule.setAttribute('attached', arr.join(' '));
+/* workaround to syncronize the attached selection with the editor in case the actual rule name of the addition destination is the same  */
+  if ($('#name').val() === rule_name){
+    createSelectionEntry(rule_name, arr);
+  }
+}
 function autoCreateRule(target_el){
-  var document_el = $("*[srcpath='"+ $(target_el).parent().attr('data-srcpath')+"'")[0],
+  var document_el = $("*[data-srcpath='"+ $(target_el).parent().attr('data-srcpath')+"'")[0],
   props = createPropsObject(document_el),
   mapping = document.createElement('mapping');
   mapping.setAttribute('name', 'Mapping'+ (mapping_set.children.length +1));
@@ -1857,6 +1981,7 @@ function autoCreateRule(target_el){
   mapping.setAttribute('target-type', $(target_el).parent().attr('data-target'));
   mapping.setAttribute('target-style', $(target_el).attr('target-style'));
   mapping.setAttribute('remove-adhoc', "");
+  mapping.setAttribute('attached', "");
     for (prop in props){
       var name = prop;
 /*      place for setting up the necessary properties for the auto rule*/
@@ -1889,15 +2014,35 @@ function autoCreateRule(target_el){
     toggleConMenuOff('sub_menu');
     toggleConMenuOff('con_menu');
 }
-function createTargetStyleList(target_type){
-/*    distinguish whether target style are available from template document after conversion. if not, some example styles were taken.*/
+function createTargetRuleList(target_type){
+    var ul = document.createElement('ul');
+    $(ul).addClass("ul_target_sel_"+target_type);
+    $(ul).attr('data-target', target_type);
+   $($(mapping_set).find("mapping[target-type='"+target_type+"']")).each(function(){
+        var li = document.createElement('li'),
+        name = $(this).attr('name');
+        $(li).attr('data-rule-name', name);
+        $(li).attr('class', 'clickable');
+        $(li).html($(this).attr('name'));
+        $(ul).append(li);
+    })
+    console.log('rule lists created for ', target_type);
+    return ul;
+}
+/*todo: get click event from target rule list and invoke a function that adds the attach attribute to a rule */
+function createTargetStyleList(target_type, list_type){
     if (target_styles == "" && templateuri == ""){
      var target_style_names = $(document.createElement('div')).html(example_target_styles).children().children();
     }else{
       var target_style_names = target_styles.children[0].children;
     }
     var ul = document.createElement('ul');
-    $(ul).addClass("ul_"+target_type);
+    if (list_type == 'sel_menu'){
+      var prefix = '_sel_';
+    }else if (list_type == 'con_menu'){
+       var prefix = '_';
+    }
+    $(ul).addClass("ul"+prefix+target_type);
     $(ul).attr('data-target', target_type);
    $(target_style_names).each(function(){
         var li = document.createElement('li'),
@@ -1944,28 +2089,36 @@ function positionMenu(e) {
     menu.style.top = clickCoordsY + "px";
   }
 }
-function positionSubMenu($sub_nav){
-  var menu_position = $('#menu').position(),
-  menuWidth = $('#menu').width(),
-  menuHeight = $('#menu').height(),
-  sub_menu = $('#sub-menu')[0];
+/*wichtiger unterschied ist, dass im normalen context menü die höhe der menüpunkte gesucht wird, und im selectiven fall die höhe ja bei den menüpunkten der paras und inline ist
+TO DO, anpassen der positionSubMenu um sie in beiden fällen zu benutzen, variabel halten und den die parameter der bisherigen funktionen verändern*/
+function positionSubMenu($nav_point, $actual_menu, $menu_to_open, direction){
+/*  console.log('positionSubMenuParameter',$nav_point, $actual_menu, $menu_to_open, direction, origin_menu_width);*/
+  var menu_position = $actual_menu.position(),
+  direction = direction || 0,
+  origin_menu_width = origin_menu_width || 0,
+  menuWidth = $actual_menu.width(),
+  menuHeight = $actual_menu.height(),
+  sub_menu = $menu_to_open[0];
+  console.log(sub_menu);
   menuChoordsX = menu_position.left;
   menuChoordsY = menu_position.top;
-  sub_menuWidth = $('#sub-menu').width();
-  sub_menuHeight = $('#sub-menu').height();
+  sub_menuWidth = $menu_to_open.width();
+  sub_menuHeight = $menu_to_open.height();
   windowWidth = window.innerWidth
-  windowHeight = window.innerHeight;/*
-  console.log(
+  windowHeight = window.innerHeight;
+ /* console.log(
+  'direction', direction,
   'windowwidth',windowWidth,
   'windowheight',windowHeight,
   'menuwidth',menuWidth,
   'menuheight',menuHeight,
   'menuchoordsx',menuChoordsX,
   'menuchoordsy',menuChoordsY,
+  'submenuwidth', sub_menuWidth,
   sub_menuWidth,
   sub_menuHeight,
-  sub_menu.style.left, sub_menu.style.top)*/
-  if (windowWidth - menuChoordsX - menuWidth < sub_menuWidth){
+   sub_menu.style.top)*/
+  if ((windowWidth - menuChoordsX - menuWidth < sub_menuWidth) || direction == 'right'){
      sub_menu.style.left = menuChoordsX - sub_menuWidth + "px";
   }else{
     sub_menu.style.left = menuChoordsX + menuWidth + "px";
@@ -1973,7 +2126,7 @@ function positionSubMenu($sub_nav){
   if (windowHeight - menuChoordsY < sub_menuHeight){
      sub_menu.style.top = menuChoordsY - sub_menuHeight + menuHeight + "px";
   }else{
-    sub_menu.style.top = menuChoordsY + $sub_nav.position().top + "px";
+    sub_menu.style.top = menuChoordsY + $nav_point.position().top + "px";
   }
 }
 function uploadDocument(form_data){
@@ -2025,10 +2178,10 @@ function getTargetStyle(target_element, style_name){
   return styles_arr[0];
 }
 function generateBreadcrumbs(target_element){
-  var parents = $($(target_element).parents('*[srcpath]')),
+  var parents = $($(target_element).parents('*[data-srcpath]')),
    el_name = '',
    target_name = translateElement(target_element);
-        if ($("#breadcrumbs > a[srcp='"+$(target_element).attr('srcpath')+"']").attr('srcp') == $(target_element).attr('srcpath')){
+        if ($("#breadcrumbs > a[srcp='"+$(target_element).attr('data-srcpath')+"']").attr('srcp') == $(target_element).attr('data-srcpath')){
         }
          else{
            $('#breadcrumbs').children().remove();
@@ -2036,18 +2189,21 @@ function generateBreadcrumbs(target_element){
            $.each(parents, function(){
                el_name = translateElement(this);
              if (el_name != ''){
-               $('#breadcrumbs').prepend("<a href='#' class='clickable' srcp='"+ $(this).attr('srcpath') +"'>"+el_name+"</a><span> &gt </span> ");
+               $('#breadcrumbs').prepend("<a href='#' class='clickable' srcp='"+ $(this).attr('data-srcpath') +"'>"+el_name+"</a><span> &gt </span> ");
              }
            });
-           $('#breadcrumbs').append("<a href='#' class='clickable' srcp='"+ $(target_element).attr('srcpath')+"'>"+target_name+ "</a>");
+           $('#breadcrumbs').append("<a href='#' class='clickable' srcp='"+ $(target_element).attr('data-srcpath')+"'>"+target_name+ "</a>");
         }  
 }
 /*initialization of the application ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*        in live mode this code should in the ajax callback*/
 countDocElements();
-ul_para = createTargetStyleList('para');
-ul_inline = createTargetStyleList('inline');
-$('#sub-targets').append(ul_para, ul_inline);
+ ul_con_para = createTargetStyleList('para', 'con_menu');
+ ul_sel_para = createTargetStyleList('para', 'sel_menu');
+ ul_con_inline = createTargetStyleList('inline', 'con_menu');
+ ul_sel_inline = createTargetStyleList('inline', 'sel_menu');
+ $('#con-targets').append(ul_con_para, ul_con_inline);
+ $('#sel-targets').append(ul_sel_para, ul_sel_inline);
 
 
 clearTable();
@@ -2217,17 +2373,17 @@ $('#insp-options1').on('change', 'input#hide-adhoc', function(){
     }else if(this.checked === true){
       hideAdhoc();
     }
-    $("*[srcpath='"+ this.getAttribute('srcp')+"']").trigger('click');
+    $("*[data-srcpath='"+ this.getAttribute('srcp')+"']").trigger('click');
 });
 $('input.show-type').on('change', function(){
     if (this.checked === false){
       $('input.show-type').prop('checked', false);
-      $('.prev, #unmatched').hide();
+      $('.prev, #advanced-menu').hide();
     }else if(this.checked === true){
       $('input.show-type').prop('checked', true);
-      $('.prev, #unmatched').show();
+      $('.prev, #advanced-menu').show();
     }
-    $("*[srcpath='"+ this.getAttribute('srcp')+"']").trigger('click');
+    $("*[data-srcpath='"+ this.getAttribute('srcp')+"']").trigger('click');
 });
 $('div.modal-content').on('click', 'div.modal-footer > button', function(evt){
      if (evt.target.innerHTML === 'Yes'){
@@ -2260,18 +2416,18 @@ $('#prop_form > tbody').on('click', 'tr > td >#r1, tr > td > #r2, tr > td > #r3,
   makeValueLonely(evt.target);
 /*  $(this).next().trigger('change');*/
 })
-$('#sm-page').on('click','span[style][srcpath], p[style][srcpath], *[srcpath] > a, a[srcpath]',function(event) {
+$('#sm-page').on('click','span[style][data-srcpath], p[style][data-srcpath], *[data-srcpath] > a, a[data-srcpath]',function(event) {
         console.log($(this), 'clicked element', event.target);
-        if ($(this).is('span') && $(this).parent('a')){
+        if ($(this).is('span') && $(this).parent('a').is('a')){
           event.preventDefault();
         }
         event.stopImmediatePropagation();
         generateBreadcrumbs(this);
-        $('#hide-adhoc').attr('srcp', this.getAttribute('srcpath'));
+        $('#hide-adhoc').attr('srcp', this.getAttribute('data-srcpath'));
         if ($('#insp1').css('display') == 'none'){
           $('#insp').trigger('click');
         }
-        $("a[srcp='"+ this.getAttribute('srcpath')+"']").trigger('click');
+        $("a[srcp='"+ this.getAttribute('data-srcpath')+"']").trigger('click');
             toggleConMenuOff('sub_menu');
             toggleConMenuOff('con_menu');
 })
@@ -2297,7 +2453,7 @@ $('#breadcrumbs').on('click', 'a[srcp]', function(){
   $("#breadcrumbs > a").not(this).css('font-weight', 'normal')
   $(this).css('font-weight', 'bold')
 /*  console.log(this.getAttribute('srcp'));*/
-  viewTarget($("*[srcpath='"+ this.getAttribute('srcp')+"']")[0]);
+  viewTarget($("*[data-srcpath='"+ this.getAttribute('srcp')+"']")[0]);
 });
 $('#help').on('click', function(){
   g_count++
@@ -2497,7 +2653,7 @@ $('#download-rules').on('click', function(){
 $('#wrapper').on('contextmenu' , function(evt){
   evt.preventDefault();
   console.log(evt.target);
-  var src = evt.target.hasAttribute('srcpath') || null;
+  var src = evt.target.hasAttribute('data-srcpath') || null;
     $('#menu').attr('target-src', src);
     
   if ($('#menu').attr('target-src') == null){
@@ -2507,18 +2663,19 @@ $('#wrapper').on('contextmenu' , function(evt){
     $('#con-inline, #con-para').removeClass('disabled02')
   }
 /*    ein eventhandler für alle contextevents.... dann unterscheidung ob target einen src hat oder nicht daran dann die disabled klasse attachen.*/
-    $('.ul_para, .ul_inline').attr('data-srcpath', $(evt.target).attr('srcpath'));
+    $('.ul_para, .ul_inline').attr('data-srcpath', $(evt.target).attr('data-srcpath'));
 /*  generating target styles, not shure if thats the best place yet */
-    $con_menu.attr('target-src', $(evt.target).attr('srcpath'));
+    $con_menu.attr('target-src', $(evt.target).attr('data-srcpath'));
     positionMenu(evt);
-    $('#sm-page *[srcpath]').removeClass('inspected');
-    $("*[srcpath='"+$(evt.target).attr("srcpath")+"']").addClass('inspected');
+    $('#sm-page *[data-srcpath]').removeClass('inspected');
+    $("*[data-srcpath='"+$(evt.target).attr("data-srcpath")+"']").addClass('inspected');
     toggleConMenuOn('con_menu');
 /*  if (clickForContext(evt.target, 'srcpath')){*/
  /* }else{
     toggleConMenuOff('con_menu');
   }*/
 })
+/* context menu handling*/
 $('#wrapper').on('contextmenu', function(){
     $con_menu.attr('target-src', '');
     toggleConMenuOn('con_menu');
@@ -2532,7 +2689,7 @@ $('#sub-upload-doc').on('change', function(){
 $('#menu > ul > li[data-target]').on('click', function(evt){
   var target = $(evt.target).attr('data-target');
    $('.ul_'+target).show();
-   positionSubMenu($('#con-'+target));
+   positionSubMenu($('#con-'+target), $con_menu, $('#sub-menu'));
    toggleConMenuOn('sub_menu', "#con-"+target);
 })
 $('#menu > ul > li[data-target]').hover(function(evt){
@@ -2545,8 +2702,143 @@ $('#menu > ul > li[data-target]').hover(function(evt){
    }; 
   }
 )
+/* menu handling for selective mapping in the advanced view, same architecture as above in the contextmenu*/
+$('.add_selection').on('click', function(evt){
+  var target = $(evt.target).attr('class').replace(/(^.*add_sel_)/, '').replace(/\sclickable/, '');;
+/*  console.log('sniffsniff',target, $('.ul_'+target));*/
+   $('.rule_targets, .new_sel_rule').attr('data-target', target);
+   $('.ul_target_sel_'+target).addClass("ul_target_sel_"+target+"--active");
+   $('.ul_sel_'+target).addClass("ul_sel_"+target+"--active");
+   positionSubMenu($(evt.target), $('#rulename-list'), $('#sel-menu'));
+   toggleConMenuOn('sel_menu', $sel_menu);
+})
+$('.add_selection').hover(
+    function(evt){
+/*    console.log('rin');*/
+      $(evt.target).trigger('click')}, 
+    function(evt){
+      var target = $(evt.target).attr('class').replace(/(^.*add_sel_)/, '').replace(/\sclickable/, '');
+/*      var target = $(evt.target).attr('class').replace(/(^.*add_)|(\s.*)/, ''); obsolete moved one menu level down*/
+/*      $('.ul_'+target).hide() obsolete moved one menu level down;*/
+      if ($('#sel-menu').is(":hover") === true || $('#sel-targets').is(":hover") === true){
+      }else{
+       toggleConMenuOff('sel_menu');
+       toggleConMenuOff('sel_targets');
+       console.log($('.ul_target_'+target), 'removeClass from add_selection');
+       $('.ul_target_sel_'+target).removeClass("ul_target_sel_"+target+"--active");
+      $('.ul_sel_'+target).removeClass("ul_sel_"+target+"--active");
+      }; 
+    }
+)
+$("input[type='checkbox'].check_select").on('change', function(evt){
+  var $target = $(this).closest("*[data-srcpath]"),
+  span = $(evt.target).parent('span'),
+  srcpath_str = $target.attr('data-srcpath');
+  if ($(evt.target).is(':checked') == true){
+    if (span.hasClass('in')){
+      g_temp_sel_inline.push(srcpath_str);
+    }
+    else if (span.hasClass('pa')){
+      g_temp_sel_para.push(srcpath_str);
+    } 
+    else{
+      console.log('Theres no parental span with a class-attribute.')
+    }
+  }
+  else if ($(evt.target).is(':checked') == false){
+     if (span.hasClass('in')){
+        $.each(g_temp_sel_inline, function(index){
+           console.log(srcpath_str,'this', this);
+           if (this == srcpath_str){
+           console.log(this)
+             g_temp_sel_inline.splice(index, 1)
+           }
+         })
+     }else if (span.hasClass('pa')){
+      $.each(g_temp_sel_para, function(index){
+           if (this == srcpath_str){
+             g_temp_sel_para.splice(index, 1)
+           }
+       })
+    } 
+    else{
+      console.log('Theres no srcpath in the global and temporary array to remove.')
+    }
+  }
+});
+$('.new_sel_rule').on('click', function(evt){
+  var target = $(evt.target).attr('data-target');
+  console.log('lalalala', target, $('.ul_'+target));
+   $('.ul_'+target).addClass("ul_"+target+"--active");
+   positionSubMenu($(evt.target), $('#sel-menu'), $('#sel-targets'), 'right');
+   toggleConMenuOn('sel_targets', $sel_menu);
+})
+$('.new_sel_rule').hover(
+    function(evt){
+      $(evt.target).trigger('click')}, 
+    function(evt){
+      var target = $('.rule_targets').attr('data-target');
+    console.log($('.rule_targets').attr('data-target'));
+      if (($('#sel-targets').is(":hover") === true )){
+      }else{
+       console.log('new rule button not hovering  itself or sel targets');
+       toggleConMenuOff('sel_targets');
+       $('.ul_'+target).removeClass("ul_"+target+"--active");
+      }; 
+    }
+)
+/* rules where document elements can be put to*/
+/*$('.rule-target').on('click', function(evt){
+  var target = $('.rule_targets').attr('data-target');
+  console.log('lalalala', target, $('.ul_'+target));
+  
+   /\*$('.ul_'+target).addClass("ul_"+target+"--active");*\/
+   positionSubMenu($(evt.target), $('#sel-menu'), $('#sel-targets'), 'right');
+   toggleConMenuOn('sel_targets', $sel_menu);
+})*/
+$('#sel-targets').on('click', '.ul_sel_para > li, .ul_sel_inline > li', function(evt){
+  var $target = $(evt.target),
+  target_style = $target.attr('target-style'),
+  target_type = $target.parent('ul').attr('data-target');
+/*  console.log('lalalala', target, $('.ul_'+target));*/
+/*   INPUT PARAMETERS: all srcpaths from checkboxes, target-style-name*/
+/*   $('.ul_'+target).show();*/
+   if ($(evt.target).parent('ul').hasClass('ul_sel_para')){
+     autoCreateRuleBySelected(g_temp_sel_para, target_style, target_type)
+   }else if ($(evt.target).parent('ul').hasClass('ul_sel_inline')){
+     autoCreateRuleBySelected(g_temp_sel_inline, target_style, target_type);
+   } 
+   positionSubMenu($(evt.target), $('#sel-menu'), $('#sel-targets'), 'right');
+   toggleConMenuOff('sel_targets', $sel_menu);
+})
+$('.rule_targets').on('click', '.ul_target_sel_para > li, .ul_target_sel_inline > li', function(evt){
+      console.log(this, 'HHHHHHHH', $(evt.target).parent('ul').attr('data-target'), $(evt.target));
+     addSelectedToRule($(evt.target).attr('data-rule-name'), $(evt.target).parent('ul').attr('data-target'));
+})
+$('#attached').on('click', '.show-attached', function(){
+  $('input.show-type').trigger('change');
+  setCheckboxesFromSrcpath($(this).attr('data-rule-name'));
+})
+$('#attached').on('click', '.delete-attached', function(){
+  $('input.show-type').trigger('change');
+  deleteAttachedSrcpaths($(this).attr('data-rule-name'), 'editor');
+})
+$('.add_selected').on('click', function(){
+  $('input.show-type').prop('checked', true);
+  $('input.show-type').trigger('change');
+})
+$('#add-sel-to-editor').on('click',function(){
+/* in general the editor needs an attribute to store selected elements before the rule is saved*/
+   var type = $('.new_sel_rule').attr('data-target'),
+   actual_attached =[];
+   if ($('#attached > li').attr('data-attached') && $('#attached > li').attr('data-attached') !== ""){
+     actual_attached = $('#attached > li').attr('data-attached').split(' ');
+   }
+   arr = getMergedSrcpathsArray(actual_attached, type);
+   createSelectionEntry('', arr)
+})
 $('#unmatched').on('click', function(e){
-    $unmatched_element = $('*[srcpath]').not('.matched').first();
+    $unmatched_element = $('*[data-srcpath]').not('.matched').first();
     $unmatched_element.trigger('click');
     if ($unmatched_element.is('span, a')){
       $unmatched_element = $unmatched_element.parent('p');

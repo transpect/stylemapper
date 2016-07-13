@@ -336,7 +336,7 @@ table#propform > tbody > td{
 .li_name{
     float:left;
 }
-.li_op{
+.attached_op, .li_op{
  float:right;   
 }
 ul#properties > li{
@@ -485,19 +485,19 @@ bottom:0px;
   height:auto;
   overflow-y: auto;
 }
-.con_menu > ul > li, #sub-rules > ul > li, #sub-targets > ul > li, #sub-workflow > ul > li{
+.con_menu > ul > li, #sub-rules > ul > li, #con-targets > ul > li, #sub-workflow > ul > li{
   border-bottom: 1px solid #ddd;
 }
-.con_menu > ul > li:hover, #sub-rules > ul > li:hover, #sub-targets > ul > li:hover, #sub-workflow > ul > li:hover{
+.con_menu > ul > li:hover, #sub-rules > ul > li:hover, #con-targets > ul > li:hover, #sub-workflow > ul > li:hover{
   background-color: #ddd;
 }
 .con_menu > ul > li > span.glyphicon, .con_menu > ul > li > input, .ul_rules > li > span.glyphicon, input#hide-adhoc, input#show-type{
   float:right;
 }
-.con_menu--active, .sub_menu--active{
-  display:block;
+.con_menu--active, .sub_menu--active, .sel_menu--active, .sel_targets--active, .ul_sel_inline--active, .ul_sel_para--active, .ul_target_sel_para--active, .ul_target_sel_inline--active{
+  display:block!important;
 }
-.ul_para, .ul_inline, .ul_rules{
+.ul_para, .ul_inline, .ul_rules, .ul_sel_para, .ul_sel_inline, .ul_target_sel_para, .ul_target_sel_inline, #advanced-menu{
   display:none;
 }
 img{
@@ -526,11 +526,11 @@ img{
   overflow:auto;
 }
 .ul_rulenames{
+  display:none;
   border-top-left-radius : 3px;
   border-bottom-left-radius : 3px;
 }
-.ul_rulenames > li, #unmatched {
-  display:none;
+.ul_rulenames > li, #unmatched, .add_selection{
   border-top-left-radius : 3px;
   border-bottom-left-radius : 3px;
   padding-left:5px;
@@ -541,6 +541,17 @@ img{
 }
 #unmatched {
   text-align: center
+}
+#sel-menu, #rule-targets, #sel-targets {
+  display:none;
+  position:absolute;
+  border-top-left-radius : 3px;
+  border-bottom-left-radius : 3px;
+  padding-left:5px;
+  margin-bottom: 5px;
+  box-shadow: 1px 0 2px black;
+  background-color: #194454;
+  color:#fff;
 }
 .colorbox-insp{
   width:25px;
