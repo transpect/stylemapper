@@ -147,13 +147,13 @@ var ruleobserver =  new MutationObserver(function (mutations) {
         initPriority();
         if ($(mapping_set).find('mapping').length > 0) {
           doProgress('2', 33.33, 'success');
-          $('#con-rules').removeClass('disabled02');
+          $('#con-rules').removeClass('disabled');
           $('#download-rules').show();
         }
         else if ($(mapping_set).find('mapping').length == 0){
             doProgress('2', 0, 'failure');
             $('#download-rules').hide();
-            $('#con-rules').addClass('disabled02');
+            $('#con-rules').addClass('disabled');
         }
         else{
                       
@@ -240,7 +240,6 @@ function prop2li(prop){
                 li.setAttribute('data-bg-l', prop.backgroundcolorl);
             }
             else if (prop.name == 'color' && prop.minvalue){
-/*                console.log(prop, 'SPEICHERUNG DER MIN UND MAX IN LISTE')*/
                 li.setAttribute('data-color-min-h', prop.colorminh);
                 li.setAttribute('data-color-min-s', prop.colormins);
                 li.setAttribute('data-color-min-l', prop.colorminl);
@@ -320,7 +319,6 @@ function checkSize(){
 function mappingVal2classes(mapping){
     var str_arr = []; 
     for (i = 0; i < mapping.props.length; i++){
-/*        console.log('rrr ', mapping.props[i].name);*/
         var prop = mapping.props[i];
         if (prop.value != ''){
             if (prop.name == 'font-weight' && prop.value != ''){
@@ -375,7 +373,6 @@ function mappingRange2classes(mapping, pre_filtered_elements){
         var prop = mapping.props[i];
             if (hasRange(mapping) == true){
 /*              Generate range classes refering to hsl color values*/
-/*                console.log('PROPNAME', prop.name, typeof prop.value);*/
                 if (prop.name == 'color' && (prop.value == "")){
                     var class_arr =[],
                     h_arr=[],
@@ -408,8 +405,6 @@ function mappingRange2classes(mapping, pre_filtered_elements){
                             class_arr.push('.r_fs_'+ l);
                   }
                   el_arr = el_arr.filter(class_arr.join(','));
-                  console.log('ELEARRAY', el_arr);
-                  console.log('class_arr', class_arr.join(','));
                 }
            }
    }
@@ -684,8 +679,6 @@ function createTargetStyles(uri, targettype){
         plholder = $("<option value='' disabled='' selected=''>Select Target Style</option>");
     $(select).append(plholder);
   if (uri != ''){
-/*    console.log(target_styles, 'TARGET STYLES');*/
-/*    console.log('w:styleeeeeee', styles);*/
     $(styles).each(function(){
         var opt = document.createElement('option'),
         name = $(this).attr('w:styleId') |  $(this).attr('Name');
@@ -698,10 +691,8 @@ function createTargetStyles(uri, targettype){
             $(opt).html($(this).attr('Name'));
           }
           $(select).append(opt);
-/*        console.log(this, 'style');*/
         }
     })
-/*    console.log(select);*/
   }
   else if (targettype == 'clear'){
     plholder = $("<option value='' disabled='' selected=''>Select Target Type First</option>");
@@ -777,16 +768,16 @@ function makeValueLonely(target){
 /*      console.log('classname', class_name, $(target).attr('type'), 'target val: ', $(target).val());*/
       if ($(target).attr('type') == 'radio'){
           console.log('all but this if checked', class_name, $('input.valgroup').not(class_name));
-          $(class_name).next().removeClass('disabled02');
+          $(class_name).next().removeClass('disabled');
           $.each($('input.valgroup').not(class_name), function(){
-            $(this).next().addClass('disabled02');
+            $(this).next().addClass('disabled');
           })
       }
       else if ($(target).val() != "" && $(target).attr('type') == 'text'){
-        $("input.valgroup[type='text']").not(class_name).addClass('disabled02');
+        $("input.valgroup[type='text']").not(class_name).addClass('disabled');
       }
       else if ($(target).attr('type') == 'text' && $('#pmin-value').val() == "" && $('#pmax-value').val() == ""){
-        $("input.valgroup[type='text']").not(class_name).removeClass('disabled02');
+        $("input.valgroup[type='text']").not(class_name).removeClass('disabled');
       }
 }
 function initCheckboxes(){
@@ -911,7 +902,7 @@ function viewTarget(target_element){
            arr1.push("<tr><td>"+ prop + adhoc_status +": "+"</td><td> " + props[prop] +"<div class='form-control colorbox-insp' style='background-color:"+props[prop]+"'></div> " +"</td><td><span id='"+prop+"' value='"+props[prop]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")    
          }
          else if ($.inArray(prop, cssstyles) == -1) {
-           arr1.push("<tr class='disabled02'><td>"+ prop + adhoc_status +": "+"</td><td>" + props[prop] +"</td><td><span id='"+prop+"' value='"+props[prop]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")
+           arr1.push("<tr class='disabled'><td>"+ prop + adhoc_status +": "+"</td><td>" + props[prop] +"</td><td><span id='"+prop+"' value='"+props[prop]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")
          }
          else {
            arr1.push("<tr><td>"+ prop + adhoc_status +": "+"</td><td>" + props[prop] +"</td><td><span id='"+prop+"' value='"+props[prop]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")
@@ -920,7 +911,6 @@ function viewTarget(target_element){
        }
        else{
          var props_arr = $.map(style.style, (x) => {return x});
-/*         console.log('PPROPS', props_arr);*/
          $.each(props_arr, function(){
            if(prop === 'color'){
              arr1.push("<tr><td>"+ this +": "+"</td><td> " + style.style[this] +"<div class='form-control colorbox-insp' style='background-color:"+style.style[this]+"'></div> " +"</td><td><span id='"+this+"' value='"+style.style[this]+"' class='glyphicon glyphicon-plus add-as-prop istep2 clickable' aria-hidden='true'></span></td></tr>")    
@@ -930,7 +920,6 @@ function viewTarget(target_element){
            } 
          })
        }
-/*       console.log('overrideArray', override_arr);*/
        $.each( override_arr, function(){
          var name = this;
          var value= style.style[this];
@@ -1092,8 +1081,8 @@ statusRequest = function(){
                       });
                       $('#loading-screen').hide();
                       clearTable();
-                      $('.createrules').removeClass('disabled02');  
-                      $('*[role=presentation]').removeClass('disabled02');
+                      $('.createrules').removeClass('disabled');  
+                      $('*[role=presentation]').removeClass('disabled');
                       resultListURI1 = data['result_list_uri'];
                     }
                   }
@@ -1924,6 +1913,16 @@ console.log(srcpath_arr, target_style, target_type);
   $(mapping_set).append(mapping);
   sortByPriority()
 }
+function uncheckAllSelections(option){
+  if (option === 'all'){
+    $('.check_select').prop('checked', false);
+  }else if ((option === 'para') || (option === 'inline')){
+    var el_type = option.replace(/(line|ra)/, '')
+    $("span."+ el_type +" > input.check_select").prop('checked', false);
+  }else{
+    console.log("There's no available option set.")
+  }
+}
 function setCheckboxesFromSrcpath(rule_name){
   var srcpaths_from_editor = $('#attached > li').attr("data-attached").split(' ');
   $('input.check_select').prop('checked', false);
@@ -1933,6 +1932,7 @@ function setCheckboxesFromSrcpath(rule_name){
     var checkbox = $("*[data-srcpath='" + this + "']").find("input.check_select")[0];
       $(checkbox).prop('checked', true);
     })
+  $('.check-select').first().trigger('change');  
 }
 function deleteAttachedSrcpaths(rule_name, deletion_type){
   if (deletion_type === 'editor'){
@@ -2029,7 +2029,6 @@ function createTargetRuleList(target_type){
     console.log('rule lists created for ', target_type);
     return ul;
 }
-/*todo: get click event from target rule list and invoke a function that adds the attach attribute to a rule */
 function createTargetStyleList(target_type, list_type){
     if (target_styles == "" && templateuri == ""){
      var target_style_names = $(document.createElement('div')).html(example_target_styles).children().children();
@@ -2657,10 +2656,10 @@ $('#wrapper').on('contextmenu' , function(evt){
     $('#menu').attr('target-src', src);
     
   if ($('#menu').attr('target-src') == null){
-    $('#con-inline, #con-para').addClass('disabled02')
+    $('#con-inline, #con-para').addClass('disabled')
   }
   else{
-    $('#con-inline, #con-para').removeClass('disabled02')
+    $('#con-inline, #con-para').removeClass('disabled')
   }
 /*    ein eventhandler für alle contextevents.... dann unterscheidung ob target einen src hat oder nicht daran dann die disabled klasse attachen.*/
     $('.ul_para, .ul_inline').attr('data-srcpath', $(evt.target).attr('data-srcpath'));
@@ -2705,7 +2704,6 @@ $('#menu > ul > li[data-target]').hover(function(evt){
 /* menu handling for selective mapping in the advanced view, same architecture as above in the contextmenu*/
 $('.add_selection').on('click', function(evt){
   var target = $(evt.target).attr('class').replace(/(^.*add_sel_)/, '').replace(/\sclickable/, '');;
-/*  console.log('sniffsniff',target, $('.ul_'+target));*/
    $('.rule_targets, .new_sel_rule').attr('data-target', target);
    $('.ul_target_sel_'+target).addClass("ul_target_sel_"+target+"--active");
    $('.ul_sel_'+target).addClass("ul_sel_"+target+"--active");
@@ -2714,20 +2712,17 @@ $('.add_selection').on('click', function(evt){
 })
 $('.add_selection').hover(
     function(evt){
-/*    console.log('rin');*/
       $(evt.target).trigger('click')}, 
     function(evt){
       var target = $(evt.target).attr('class').replace(/(^.*add_sel_)/, '').replace(/\sclickable/, '');
-/*      var target = $(evt.target).attr('class').replace(/(^.*add_)|(\s.*)/, ''); obsolete moved one menu level down*/
-/*      $('.ul_'+target).hide() obsolete moved one menu level down;*/
       if ($('#sel-menu').is(":hover") === true || $('#sel-targets').is(":hover") === true){
       }else{
        toggleConMenuOff('sel_menu');
        toggleConMenuOff('sel_targets');
-       console.log($('.ul_target_'+target), 'removeClass from add_selection');
+/*       console.log($('.ul_target_'+target), 'removeClass from add_selection');*/
        $('.ul_target_sel_'+target).removeClass("ul_target_sel_"+target+"--active");
       $('.ul_sel_'+target).removeClass("ul_sel_"+target+"--active");
-      }; 
+      };
     }
 )
 $("input[type='checkbox'].check_select").on('change', function(evt){
@@ -2765,10 +2760,26 @@ $("input[type='checkbox'].check_select").on('change', function(evt){
       console.log('Theres no srcpath in the global and temporary array to remove.')
     }
   }
+   if ($('.check_select:checked').toArray().length > 0){
+      $('.deselect_all').removeClass('disabled');
+    }else{
+      $('.deselect_all').addClass('disabled');
+    }
+    if ($('span.pa > .check_select:checked').toArray().length > 0){
+      $('.add_sel_para').removeClass('disabled');
+    }
+    else{
+      $('.add_sel_para').addClass('disabled');
+    }
+    if ($('span.in > .check_select:checked').toArray().length > 0){
+      $('.add_sel_inline').removeClass('disabled');
+    }
+    else{
+      $('.add_sel_inline').addClass('disabled');
+    }
 });
 $('.new_sel_rule').on('click', function(evt){
   var target = $(evt.target).attr('data-target');
-  console.log('lalalala', target, $('.ul_'+target));
    $('.ul_'+target).addClass("ul_"+target+"--active");
    positionSubMenu($(evt.target), $('#sel-menu'), $('#sel-targets'), 'right');
    toggleConMenuOn('sel_targets', $sel_menu);
@@ -2778,7 +2789,6 @@ $('.new_sel_rule').hover(
       $(evt.target).trigger('click')}, 
     function(evt){
       var target = $('.rule_targets').attr('data-target');
-    console.log($('.rule_targets').attr('data-target'));
       if (($('#sel-targets').is(":hover") === true )){
       }else{
        console.log('new rule button not hovering  itself or sel targets');
@@ -2787,33 +2797,53 @@ $('.new_sel_rule').hover(
       }; 
     }
 )
-/* rules where document elements can be put to*/
-/*$('.rule-target').on('click', function(evt){
-  var target = $('.rule_targets').attr('data-target');
-  console.log('lalalala', target, $('.ul_'+target));
-  
-   /\*$('.ul_'+target).addClass("ul_"+target+"--active");*\/
-   positionSubMenu($(evt.target), $('#sel-menu'), $('#sel-targets'), 'right');
-   toggleConMenuOn('sel_targets', $sel_menu);
-})*/
+$('#sel-menu').hover(
+    function(evt){
+      if (($('#sel-targets').is(":hover") === true )|| ($('#sel-menu').is(":hover") === true ) || ($('.add_selection:hover').length != 0)){
+      }else{
+             window.setTimeout(function(){
+         if (($('#sel-menu').is(":hover") === false ) && ($('.add_selection:hover').length == 0)){
+          toggleConMenuOff('sel_targets');
+          toggleConMenuOff('sel_menu')
+         }
+       }
+       , 800)
+     }
+    }
+)
+$('#sel-targets').hover(
+    '',
+    function(){
+      if (($('#sel-targets').is(":hover") === true ) || ($('#sel-menu').is(":hover") === true )){
+      }else{
+        window.setTimeout(function(){
+         if (($('#sel-targets').is(":hover") === false )){
+          toggleConMenuOff('sel_targets');
+          toggleConMenuOff('sel_menu')
+         }
+        }
+        , 800)
+      }; 
+    }
+)
+$('.deselect_all').on('click', function(evt){
+  uncheckAllSelections('all');
+})
 $('#sel-targets').on('click', '.ul_sel_para > li, .ul_sel_inline > li', function(evt){
   var $target = $(evt.target),
   target_style = $target.attr('target-style'),
   target_type = $target.parent('ul').attr('data-target');
-/*  console.log('lalalala', target, $('.ul_'+target));*/
-/*   INPUT PARAMETERS: all srcpaths from checkboxes, target-style-name*/
-/*   $('.ul_'+target).show();*/
    if ($(evt.target).parent('ul').hasClass('ul_sel_para')){
      autoCreateRuleBySelected(g_temp_sel_para, target_style, target_type)
    }else if ($(evt.target).parent('ul').hasClass('ul_sel_inline')){
      autoCreateRuleBySelected(g_temp_sel_inline, target_style, target_type);
    } 
-   positionSubMenu($(evt.target), $('#sel-menu'), $('#sel-targets'), 'right');
-   toggleConMenuOff('sel_targets', $sel_menu);
+   toggleConMenuOff('sel_targets');
+   toggleConMenuOff('sel_menu');
 })
 $('.rule_targets').on('click', '.ul_target_sel_para > li, .ul_target_sel_inline > li', function(evt){
-      console.log(this, 'HHHHHHHH', $(evt.target).parent('ul').attr('data-target'), $(evt.target));
      addSelectedToRule($(evt.target).attr('data-rule-name'), $(evt.target).parent('ul').attr('data-target'));
+     toggleConMenuOff('sel_menu', $sel_menu);
 })
 $('#attached').on('click', '.show-attached', function(){
   $('input.show-type').trigger('change');
@@ -2835,7 +2865,10 @@ $('#add-sel-to-editor').on('click',function(){
      actual_attached = $('#attached > li').attr('data-attached').split(' ');
    }
    arr = getMergedSrcpathsArray(actual_attached, type);
-   createSelectionEntry('', arr)
+   createSelectionEntry('', arr);
+   handleContent('rule', 'open');
+   toggleConMenuOff('sel_targets', $sel_menu);
+   toggleConMenuOff('sel_menu', $sel_menu);
 })
 $('#unmatched').on('click', function(e){
     $unmatched_element = $('*[data-srcpath]').not('.matched').first();
@@ -2843,7 +2876,6 @@ $('#unmatched').on('click', function(e){
     if ($unmatched_element.is('span, a')){
       $unmatched_element = $unmatched_element.parent('p');
     };
-/*    console.log('UNMATCHED ELEMENT', $unmatched_element.get(0));*/
     $('#main-wrapper').animate({
         scrollTop: $unmatched_element.get(0).scrollHeight - 100
     }, 1000);
