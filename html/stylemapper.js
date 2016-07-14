@@ -1940,6 +1940,7 @@ function deleteAttachedSrcpaths(rule_name, deletion_type){
   }
 }
 function getSelectionArrayByType(type){
+console.log(type);
   if (type === 'para'){
     arr = g_temp_sel_para
   }else if (type === 'inline'){
@@ -2030,11 +2031,8 @@ function createTargetRuleList(target_type){
     return ul;
 }
 function createTargetStyleList(target_type, list_type){
-    if (target_styles == "" && templateuri == ""){
-     var target_style_names = $(document.createElement('div')).html(example_target_styles).children().children();
-    }else{
-      var target_style_names = target_styles.children[0].children;
-    }
+/*     var target_style_names = $(document.createElement('div')).html(example_target_styles).children().children();*/
+      var target_style_names = target_styles.children[0].children || 0
     var ul = document.createElement('ul');
     if (list_type == 'sel_menu'){
       var prefix = '_sel_';
@@ -2197,13 +2195,13 @@ function generateBreadcrumbs(target_element){
 /*initialization of the application ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*        in live mode this code should in the ajax callback*/
 countDocElements();
- ul_con_para = createTargetStyleList('para', 'con_menu');
+/* ul_con_para = createTargetStyleList('para', 'con_menu');
  ul_sel_para = createTargetStyleList('para', 'sel_menu');
  ul_con_inline = createTargetStyleList('inline', 'con_menu');
  ul_sel_inline = createTargetStyleList('inline', 'sel_menu');
  $('#con-targets').append(ul_con_para, ul_con_inline);
  $('#sel-targets').append(ul_sel_para, ul_sel_inline);
-
+*/
 
 clearTable();
 checkSize();
@@ -2725,10 +2723,11 @@ $('.add_selection').hover(
       };
     }
 )
-$("input[type='checkbox'].check_select").on('change', function(evt){
-  var $target = $(this).closest("*[data-srcpath]"),
+$("#sm-page").on('change', $("input[type='checkbox'].check_select"), function(evt){
+  var $target = $(evt.target).closest("*[data-srcpath]"),
   span = $(evt.target).parent('span'),
   srcpath_str = $target.attr('data-srcpath');
+  console.log(srcpath_str, span);
   if ($(evt.target).is(':checked') == true){
     if (span.hasClass('in')){
       g_temp_sel_inline.push(srcpath_str);
