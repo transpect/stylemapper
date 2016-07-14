@@ -551,10 +551,13 @@ img{
   border-top-left-radius : 3px;
   border-bottom-left-radius : 3px;
   padding:5px;
+  max-height:50%;
+  min-width:auto;
   margin-bottom: 5px;
   box-shadow: 1px 0 2px black;
   background-color: #194454;
   color:#fff;
+  overflow:auto;
 }
 .colorbox-insp{
   width:25px;
